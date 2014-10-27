@@ -335,12 +335,6 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     color: #fff;
 }
 
-.devices-row {
-    overflow-x: scroll;
-
-    height: 100%;
-}
-
 .locationBtn {
   text-align:left;
   color: #fff;

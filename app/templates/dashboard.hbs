@@ -3,33 +3,16 @@
 {{/unless}}
 
 <div id="main-content">
-    <div>
-        <div class="devices-row">
-            <div class="col-md-3 device">
-                <div class="device-head">
-                    <h5>{{ device.name }}</h5>
-                </div>
-                <ul>
-                    <li>Device ID <h4>{{device.id}}</h4></li>
-                    <li>Location <h4>{{device.network}}</h4></li>
-                </ul>
+    {{#each}}
+    <div class="devices-row">
+        <div class="col-md-3 device">
+            <div class="device-head">
+                <h5>{{ device.name }}</h5>
             </div>
+            <ul>
+                <li>Device Name <h4>{{name}}</h4></li>
+            </ul>
         </div>
     </div>
-    <div >
-        <div class="devices-row">
-            <div class="col-md-3 device">
-                <div class="device-head">
-                    <h5>{{ device.name }}</h5>
-                </div>
-                <ul>
-                    <li>Device ID <h4>{{device.id}}</h4></li>
-                    <li>Location <h4>{{device.network}}</h4></li>
-                    <li>Timestamp: {{reading.ts}}</li>
-                    <li>{{reading.body}}</li>
-                </ul>
-            </div>
-            <button class="btn btn-default">Done</button>
-        </div>
-    </div>
+    {{/each}}
 </div>
