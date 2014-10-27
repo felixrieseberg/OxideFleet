@@ -148,6 +148,13 @@ span {
     color: #fff;
 }
 
+#panel-menu .fineprint {
+    font-size: 12px;
+    color: #7F8891;
+    padding-top: 10px;
+    padding-left: 25px;
+}
+
 /* Body */
 /* --------------------------------------------------------- */
 
