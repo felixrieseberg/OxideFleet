@@ -1,12 +1,8 @@
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
+export default Ember.ArrayController.extend({
 
     title: 'Dashboard',
-    model: function () {
-        return this.store.find('waterheater');
-    },
-
     actions: {
 
     }

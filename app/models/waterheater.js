@@ -8,14 +8,23 @@ var Waterheater = Device.extend({
 
 Waterheater.reopenClass({
     FIXTURES: [
-        { 
-            name: 'Waterheater 1',
+        {
+            id: 1,
+            name: "Waterheater Guest",
             status: true,
-            public_key: '',
+            public_key: "",
             fahrenheit: 105,
             kilowatt: 24
         },
+        {
+            id: 2,
+            name: "Waterheater Bedroom",
+            status: false,
+            public_key: "",
+            fahrenheit: 102,
+            kilowatt: 23
+        }
     ]
-})
+});
 
 export default Waterheater;
