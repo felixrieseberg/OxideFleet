@@ -127,6 +127,14 @@ span {
     color: #2ecc71;
 }
 
+#panel-menu .fa.dark {
+    color: #182026;
+}
+
+#panel-menu .fa.light {
+    color: #6A737C;
+}
+
 /* Body */
 /* --------------------------------------------------------- */
 

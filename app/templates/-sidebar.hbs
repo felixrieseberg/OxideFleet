@@ -1,5 +1,4 @@
 <div>
-    <!-- Panel Menu -->
     <div id="panel-menu">
         <div id="user-info">
             <img src="assets/img/user.png" width="200px" />
@@ -8,29 +7,39 @@
             <div class="accordion-group">
                 <div class="accordion-heading">
                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#leftMenu" href="#">
-                        <span class="icon fui-home"></span> Dashboard
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle dark fa-stack-2x"></i>
+                            <i class="fa fa-home light fa-stack-1x fa-inverse"></i>
+                        </span> Dashboard
                     </a>
                 </div>
             </div>
             <div class="accordion-group">
                 <div class="accordion-heading">
                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#leftMenu" href="#collapseTwo">
-                        <span class=" icon fui-location">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle dark fa-stack-2x"></i>
+                            <i class="fa fa-map-marker light fa-stack-1x fa-inverse"></i>
                         </span> Locations
                     </a>
                 </div>
                 <div id="collapseTwo" class="accordion-body collapse" style="height: 0px; ">
                     <div class="accordion-inner">
-                        <div class="btn-group-vertical">
-                            <button class="locationBtn" type="button" id="loc{{$index}}" ng-click="FilterLocation(location, $index)">{{location}}</button>
-                        </div>
+                        <ul>
+                            <li>{{fa-icon "map-marker"}} House</li>
+                            <li>{{fa-icon "map-marker"}} Shop</li>
+                            <li>{{fa-icon "map-marker"}} Pool</li>
+                        </ul>
                     </div>
                 </div>
             </div>
             <div class="accordion-group">
                 <div class="accordion-heading">
                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#leftMenu" href="#collapseThree">
-                        <span class="icon fui-gear"></span> Settings
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle dark fa-stack-2x"></i>
+                            <i class="fa fa-gear light fa-stack-1x fa-inverse"></i>
+                        </span> Settings
                     </a>
                 </div>
                 <div id="collapseThree" class="accordion-body collapse" style="height: 0px; ">
@@ -44,11 +53,13 @@
             <div class="accordion-group">
                 <div class="accordion-heading last">
                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#leftMenu" href="#collapseFour">
-                        <span class="icon fui-user"></span> Sign Out
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle dark fa-stack-2x"></i>
+                            <i class="fa fa-sign-out light fa-stack-1x fa-inverse"></i>
+                        </span> Sign Out
                     </a>
                 </div>
             </div>
         </div>
     </div>
-    <!-- /Panel Menu -->
 </div>
