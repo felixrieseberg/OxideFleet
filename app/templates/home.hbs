@@ -1,31 +1,6 @@
-<div id="main-container">
-    <nav id="navbar" class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
-            <span class="sr-only">Toggle navigation</span>
-            </button>
-            <a id="js-openmenubutton" class="navbar-brand" href="#">Device Data</a>
-        </div>
-        <div class="collapse navbar-collapse" id="navbar-collapse-01">
-            <ul class="nav navbar-nav">
-                <div>
-                    <div class="btn-group">
-                        <label class="btn btn-lg" btn-radio="'device.name'">
-                            Device Name
-                            <i class="glyphicon glyphicon-chevron-up"></i>
-                            <i class="glyphicon glyphicon-chevron-down"></i>
-                        </label>
-                        <label class="btn btn-lg" btn-radio="'device.network'">
-                            Location
-                            <i class="glyphicon glyphicon-chevron-up"></i>
-                            <i class="glyphicon glyphicon-chevron-down"></i>
-                        </label>
-                    </div>
-                </div>
-            </ul>
-        </div>
-    </nav>
-</div>
+{{#unless hideNavbar}}
+    {{partial "navbar"}}
+{{/unless}}
 
 <div id="main-content">
     <div>

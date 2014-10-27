@@ -176,6 +176,7 @@ span {
 
     border: none;
     background-color: #e4494c;
+    text-align: center;
 }
 
 #navbar .navbar-brand,
@@ -207,6 +208,11 @@ div#navbar-collapse-01,
 
 form.navbar-form.navbar-right.ng-pristine.ng-valid {
     margin-top: 0;
+}
+
+#navbar .title {
+    color: #fff;
+    font-size: 2rem;
 }
 
 /* Content */
