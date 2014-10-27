@@ -115,14 +115,6 @@ span {
     background-color: #4e6071;
 }
 
-#leftMenu .accordion-heading .active {
-    width: 182px;
-    height: 34px;
-
-    border: 1px solid #5b5b5b; /* inner stroke */
-    background-color: #353535; /* layer fill content */
-}
-
 #leftMenu span.icon {
     color: #2ecc71;
 }
@@ -133,6 +125,27 @@ span {
 
 #panel-menu .fa.light {
     color: #6A737C;
+}
+
+#panel-menu .sidebar-link.active {
+    height: 100%;
+    width: 100%;
+    background-color: #1D272F;
+    background: -moz-linear-gradient(top,  #e5494c 8%, #1D272F 8%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(8%,#e5494c), color-stop(8%,#1D272F)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #e5494c 8%,#1D272F 8%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #e5494c 8%,#1D272F 8%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #e5494c 8%,#1D272F 8%); /* IE10+ */
+    background: linear-gradient(to bottom,  #e5494c 8%,#1D272F 8%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5494c', endColorstr='#1D272F',GradientType=0 ); /* IE6-9 */
+}
+
+#panel-menu .sidebar-link.active .fa.dark {
+    color: #E5494C;
+}
+
+#panel-menu .sidebar-link.active .fa.light {
+    color: #fff;
 }
 
 /* Body */
