@@ -5,7 +5,7 @@ var User = DS.Model.extend({
     password: DS.attr('string'),
     name: DS.attr('string'),
     avatar: DS.attr('string'),
-    devices: DS.hasMany('device')
+    devices: DS.hasMany('device', { async: true })
 });
 
 User.reopenClass({
