@@ -9,7 +9,14 @@ module.exports = function(environment) {
     // Torii authentification w/ google-auth
     torii: {
       providers: {
-        // Removed for security reasons
+        'google-oauth2': {
+          apiKey: '',
+          redirectUri: 'http://localhost:4200'
+        },
+        'facebook-oauth2': {
+          apiKey:      '',
+          redirectUri: 'http://localhost:4200'
+        }
       }
     },
     EmberENV: {
