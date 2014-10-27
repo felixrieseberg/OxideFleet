@@ -9,7 +9,8 @@ module.exports = function(app) {
             "status": true,
             "public_key": "",
             "fahrenheit": 105,
-            "kilowatt": 24
+            "kilowatt": 24,
+            "powerConsumption": 88
         },
         {
             "id": 2,
@@ -17,7 +18,8 @@ module.exports = function(app) {
             "status": false,
             "public_key": "",
             "fahrenheit": 102,
-            "kilowatt": 23
+            "kilowatt": 23,
+            "powerConsumption": 66
         }]
     });
   });
