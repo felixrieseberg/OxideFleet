@@ -220,11 +220,10 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
 
 #main-content {
     height: 100vh;
-    padding-top: 100px;
-}
-
-#main-content div[ng-show] {
-    height: 100%;
+    padding-top: 80px;
+    padding-left: 20px;
+    margin-left: 250px;
+    padding-right: 20px;
 }
 
 /* Device Cards */
@@ -372,4 +371,13 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     width: 100%;
 }
 
+/* Login Form */
+/* --------------------------------------------------------- */
 
+.login-form {
+    text-align: center;
+}
+
+.login-form h3 {
+    margin-top: 0;
+}

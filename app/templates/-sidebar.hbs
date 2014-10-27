@@ -6,7 +6,7 @@
         <div class="accordion" id="leftMenu">
             <div class="accordion-group">
                 <div class="accordion-heading">
-                    {{#link-to 'home' class="accordion-toggle sidebar-link"}}
+                    {{#link-to 'dashboard' class="accordion-toggle sidebar-link"}}
                         <span class="fa-stack fa-lg">
                             <i class="fa fa-circle dark fa-stack-2x"></i>
                             <i class="fa fa-home light fa-stack-1x fa-inverse"></i>
@@ -43,9 +43,10 @@
                     {{/link-to}}
                 </div>
             </div>
+            {{#if session.isAuthenticated}}
             <div class="accordion-group">
                 <div class="accordion-heading last">
-                    <a class="accordion-toggle">
+                    <a class="accordion-toggle" {{ action 'invalidateSession' }}>
                         <span class="fa-stack fa-lg">
                             <i class="fa fa-circle dark fa-stack-2x"></i>
                             <i class="fa fa-sign-out light fa-stack-1x fa-inverse"></i>
@@ -53,6 +54,18 @@
                     </a>
                 </div>
             </div>
+            {{else}}
+            <div class="accordion-group">
+                <div class="accordion-heading last">
+                    {{#link-to 'login' class="accordion-toggle sidebar-link"}}
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle dark fa-stack-2x"></i>
+                            <i class="fa fa-sign-in light fa-stack-1x fa-inverse"></i>
+                        </span> Sing in
+                    {{/link-to}}
+                </div>
+            </div>
+            {{/if}}
         </div>
         <div class="fineprint">
             Support · Privacy Policy
