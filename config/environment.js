@@ -6,6 +6,19 @@ module.exports = function(environment) {
     environment: environment,
     baseURL: '/',
     locationType: 'auto',
+    // Torii authentification w/ google-auth
+    torii: {
+      providers: {
+        'google-oauth2': {
+          apiKey: '',
+          redirectUri: 'http://localhost:4200'
+        },
+        'facebook-oauth2': {
+          apiKey:      '',
+          redirectUri: 'http://localhost:4200'
+        }
+      }
+    },
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -16,14 +29,19 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-    }
+    },
+  };
+
+  ENV['simple-auth'] = {
+    routeAfterAuthentication: 'dashboard',
+    routeIfAlreadyAuthenticated: 'dashboard'
   };
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     ENV.APP.LOG_ACTIVE_GENERATION = true;
-    // ENV.APP.LOG_TRANSITIONS = true;
-    // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
+    ENV.APP.LOG_TRANSITIONS = true;
+    ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.contentSecurityPolicyHeader = 'Disabled-Content-Security-Policy';
   }
