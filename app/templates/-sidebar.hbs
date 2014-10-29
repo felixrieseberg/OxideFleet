@@ -4,6 +4,7 @@
             <img src="assets/img/user.png" width="200px" />
         </div>
         <div class="accordion" id="leftMenu">
+            {{#if session.isAuthenticated}}
             <div class="accordion-group">
                 <div class="accordion-heading">
                     {{#link-to 'dashboard' class="accordion-toggle sidebar-link"}}
@@ -26,9 +27,9 @@
                 <div id="collapseTwo" class="accordion-body collapse" style="height: 0px; ">
                     <div class="accordion-inner">
                         <ul>
-                            <li>{{fa-icon "map-marker"}} House</li>
-                            <li>{{fa-icon "map-marker"}} Shop</li>
-                            <li>{{fa-icon "map-marker"}} Pool</li>
+                            {{#each locations}}
+                            <li>{{fa-icon "map-marker"}} {{name}}</li>
+                            {{/each}}
                         </ul>
                     </div>
                 </div>
@@ -43,7 +44,6 @@
                     {{/link-to}}
                 </div>
             </div>
-            {{#if session.isAuthenticated}}
             <div class="accordion-group">
                 <div class="accordion-heading last">
                     <a class="accordion-toggle" {{ action 'invalidateSession' }}>
