@@ -36,15 +36,18 @@ fixtures.waterheaters = [{
 
 fixtures.locations = [{
         "id": 1,
-        "name": "Guestroom"
+        "name": "Guestroom",
+        "waterheaters": [1]
     },
     {
         "id": 2,
-        "name": "Washroom"
+        "name": "Washroom",
+        "waterheaters": [2]
     },
     {
         "id": 3,
-        "name": "Bedroom"
+        "name": "Bedroom",
+        "waterheaters": [3]
     }];
 
 fixtures.devices = fixtures.waterheaters;

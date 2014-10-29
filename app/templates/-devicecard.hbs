@@ -1,0 +1,31 @@
+<div class="device-head">
+    <h5>{{name}}</h5>
+</div>
+<div class="device box">
+    <div class="device-image" style="background: url('/content/{{unbound image}}')"></div>
+    <ul>
+        <li>
+            <span>Location</span>
+            <h4>{{location.name}}</h4>
+        </li>
+        <li><span>Temperature</span>
+            <h4>{{fahrenheit}}</h4>
+            <div class="progress">
+                <div class="progress-bar progress-bar-danger" role="progressbar" {{bind-attr aria-valuenow=power_consumption}} aria-valuemin="0" aria-valuemax="100" style="width: {{unbound powerConsumption}}%;">
+                    <span class="sr-only">60% Complete</span>
+                </div>
+            </div>
+        </li>
+        <li><span>Kilowatt</span>
+            <h4>{{kilowatt}}</h4>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" {{bind-attr aria-valuenow=power_consumption}} aria-valuemin="0" aria-valuemax="100" style="width: {{unbound powerConsumption}}%;">
+                    <span class="sr-only">60% Complete</span>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="device-instrument">
+        {{!-- <input type="text" {{bind-attr value=fahrenheit }} data-min="0" data-max="120" data-width="150" class="dial"> --}}
+    </div>
+</div>

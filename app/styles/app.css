@@ -151,6 +151,10 @@ body {
     padding-left: 25px;
 }
 
+#panel-menu li {
+    cursor: pointer;
+}
+
 /* Body */
 /* --------------------------------------------------------- */
 
