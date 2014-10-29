@@ -27,4 +27,6 @@ app.import('bower_components/flat-ui/dist/css/flat-ui.css');
 app.import('bower_components/flat-ui/dist/fonts/glyphicons/flat-ui-icons-regular.woff', { destDir: 'fonts/glyphicons' });
 app.import('bower_components/flat-ui/dist/fonts/glyphicons/flat-ui-icons-regular.ttf', { destDir: 'fonts/glyphicons' });
 
+app.import('bower_components/aterrien/jQuery-Knob/dist/jquery.knob.min.js');
+
 module.exports = app.toTree();
