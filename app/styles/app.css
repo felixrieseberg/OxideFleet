@@ -10,17 +10,29 @@
 /* General Style */
 /* --------------------------------------------------------- */
 
-body {
+html {
+    min-height: 100%;
+}
+
+body, html, body > .ember-view {
     font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    position: relative;
 }
 
 /* Menu Panel */
 /* --------------------------------------------------------- */
+#sidebar-container {
+    float: left;
+    height: 100%;
+    position: absolute;
+}
+
 #panel-menu {
     float: left;
 
     width: 250px;
-    height: 100vh;
+    height: 100%;
 
     background-color: #2b3741;
     box-shadow: inset -7px 0 9px -7px rgba(0,0,0,.7);
@@ -219,7 +231,7 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
 /* --------------------------------------------------------- */
 
 #main-content {
-    height: 100vh;
+    height: 100%;
     padding-top: 80px;
     padding-left: 20px;
     margin-left: 250px;
@@ -404,6 +416,10 @@ img.device-instrument {
 
 .device span {
     display: block;
+}
+
+div.device {
+    margin-bottom: 20px;
 }
 
 /* Login Form */
