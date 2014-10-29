@@ -1,5 +1,8 @@
-{{#unless hideSidebar}}
-    {{partial "sidebar"}}
-{{/unless}}
-
+<div id="sidebar-container">
+    {{#unless hideSidebar}}
+        {{partial "sidebar"}}
+    {{/unless}}
+</div>
+<div id="container-outlet">
 {{outlet}}
+</div>
