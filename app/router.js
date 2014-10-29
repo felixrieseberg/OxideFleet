@@ -7,7 +7,7 @@ var Router = Ember.Router.extend({
 
 Router.map(function() {
     this.resource('dashboard', { path: '/' });
-  	this.resource('device', { path: 'devices/:device_id' }, function() { });
+  	this.resource('device', { path: 'device/:device_id' }, function() { });
   	this.resource('user', { path: 'users/:user_id' }, function() { });
 
     this.route('login');

@@ -5,7 +5,7 @@
 <div id="main-content">
     <div class="devices-row">
         {{#each}}
-        <div class="col-md-3 device">
+        {{#link-to 'device' this tagName=div class="col-md-3 device link"}}
             <div class="device-head">
                 <h5>{{name}}</h5>
             </div>
@@ -37,8 +37,7 @@
                     {{!-- <input type="text" {{bind-attr value=fahrenheit }} data-min="0" data-max="120" data-width="150" class="dial"> --}}
                 </div>
             </div>
-            
-        </div>
+        {{/link-to}}
         {{/each}}
     </div>
 </div>

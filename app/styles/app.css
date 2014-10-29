@@ -233,6 +233,10 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     border-radius: 6px;
 }
 
+.device.link {
+    cursor: pointer;
+}
+
 .device.box {
     margin: 0;
     padding: 0;
