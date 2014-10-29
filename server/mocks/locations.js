@@ -1,20 +1,7 @@
 module.exports = function(app) {
     var express = require('express');
     var locationsRouter = express.Router();
-    var locations = [
-        {
-            "id": 1,
-            "name": "Guestroom"
-        },
-        {
-            "id": 2,
-            "name": "Washroom"
-        },
-        {
-            "id": 3,
-            "name": "Bedroom"
-        }
-        ];
+    var locations = require('../fixtures').locations;
 
     locationsRouter.get('/', function(req, res) {
         res.send({ "locations": locations });
