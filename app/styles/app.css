@@ -14,10 +14,6 @@ body {
     font-family: 'Segoe UI', sans-serif;
 }
 
-span {
-    font-style: italic;
-}
-
 /* Menu Panel */
 /* --------------------------------------------------------- */
 #panel-menu {
@@ -237,7 +233,7 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     border-radius: 6px;
 }
 
-.device ul {
+.device.box {
     margin: 0;
     padding: 0;
 
@@ -247,6 +243,22 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     background-color: #ecf0f1;
 }
 
+.device-instrument {
+    padding: 4px 25px 7px 25px;
+}
+
+img.device-instrument {
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.device ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
 .device li {
     font-size: 14px;
     line-height: 1.214;
@@ -254,13 +266,14 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     position: relative;
 
     margin-top: 2px;
-    padding: 4px 42px 7px 25px;
+    padding: 4px 25px 7px 25px;
 
     -webkit-transition: .25s;
             transition: .25s;
 
     background: #ecf0f1;
     background-size: 20px 20px;
+    clear: both;
 }
 
 .device li:first-child {
@@ -269,14 +282,17 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
 }
 
 .device li:last-child {
-    padding-bottom: 21px;
-
     border-radius: 0 0 6px 6px;
+}
+
+.device li:last-child::after {
+    clear: both;
 }
 
 .device li h4 {
     margin-top: 2px;
     margin-bottom: 2px;
+    display: inline-block;
 }
 
 .device-head {
@@ -321,6 +337,12 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     padding: 11px 22px 0 0;
 }
 
+.device-image {
+    width: 100%;
+    height: 120px;
+    background-size: cover;
+}
+
 .device-content {
     overflow: hidden;
 
@@ -363,6 +385,18 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
 
 .btn-group-vertical {
     width: 100%;
+}
+
+.device .progress {
+    background-color: #7F8C8D;
+    margin-top: 9px;
+    float: right;
+    height: 15px;
+    width: 150px;
+}
+
+.device span {
+    display: block;
 }
 
 /* Login Form */
