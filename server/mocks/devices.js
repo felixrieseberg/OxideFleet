@@ -8,7 +8,6 @@ module.exports = function(app) {
     });
 
     devicesRouter.get('/1', function(req, res) {
-        console.log(devices);
         res.send({ "device": devices[0] });
     });
 
