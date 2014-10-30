@@ -9,7 +9,9 @@ fixtures.waterheaters = [{
         "kilowatt": 24,
         "powerConsumption": 88,
         "location": 1,
-        "image": "room1.jpg"
+        "image": "room1.jpg",
+        "temperatureHistory": "temperatureHistory.png",
+        "lastUpdated": Date.now()
     },
     {
         "id": 2,
@@ -20,7 +22,9 @@ fixtures.waterheaters = [{
         "kilowatt": 23,
         "powerConsumption": 66,
         "location": 2,
-        "image": "room2.jpg"
+        "image": "room2.jpg",
+        "temperatureHistory": "temperatureHistory.png",
+        "lastUpdated": Date.now()
     },
     {
         "id": 3,
@@ -31,7 +35,9 @@ fixtures.waterheaters = [{
         "kilowatt": 21,
         "powerConsumption": 44,
         "location": 3,
-        "image": "room3.jpg"
+        "image": "room3.jpg",
+        "temperatureHistory": "temperatureHistory.png",
+        "lastUpdated": Date.now()
     }];
 
 fixtures.locations = [{

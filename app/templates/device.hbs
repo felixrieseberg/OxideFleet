@@ -2,21 +2,21 @@
     {{partial "navbar"}}
 {{/unless}}
 
-<div id="main-content">
+<div id="main-content" class="container-fluid">
     <div class="devices-row">
-        <div class="col-md-3 device">
+        <div class="col-lg-4 device">
             <div class="device-head">
-                <h5>{{name}}</h5>
+                <h5>Overview</h5>
             </div>
             <div class="device box">
-                <div class="device-image" style="background: url('/content/{{unbound image}}')"></div>
+                <div class="device-image cover" style="background-image: url('/content/{{unbound image}}')"></div>
                 <ul>
                     <li>
                         <span>Location</span>
                         <h4>{{location.name}}</h4>
                     </li>
                     <li><span>Temperature</span>
-                        <h4>{{fahrenheit}}</h4>
+                        <h4>{{fahrenheit}} °F</h4>
                         <div class="progress">
                             <div class="progress-bar progress-bar-danger" role="progressbar" {{bind-attr aria-valuenow=power_consumption}} aria-valuemin="0" aria-valuemax="100" style="width: {{unbound powerConsumption}}%;">
                                 <span class="sr-only">60% Complete</span>
@@ -32,11 +32,28 @@
                         </div>
                     </li>
                 </ul>
-                <div class="device-instrument">
-                    {{!-- <input type="text" {{bind-attr value=fahrenheit }} data-min="0" data-max="120" data-width="150" class="dial"> --}}
-                </div>
             </div>
-            
+        </div>
+        <div class="col-lg-8 device">
+            <div class="device-head">
+                <h5>Temperature</h5>
+            </div>
+            <div class="device box">
+                <div class="device-image device-history" style="background-image: url('/content/{{unbound temperatureHistory}}')"></div>
+                <ul>
+                    <li><span>Temperature</span>
+                        <h4>{{fahrenheit}} °F / {{celsius}} C°</h4>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-danger" role="progressbar" {{bind-attr aria-valuenow=power_consumption}} aria-valuemin="0" aria-valuemax="100" style="width: {{unbound powerConsumption}}%;">
+                                <span class="sr-only">60% Complete</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li><span>Last Updated</span>
+                        <h4>{{lastUpdatedReadable}}</h4>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

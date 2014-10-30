@@ -1,15 +1,15 @@
-<div class="device-head">
+<div class="device-head device-power-icon">
     <h5>{{name}}</h5>
 </div>
 <div class="device box">
-    <div class="device-image" style="background-image: url('/content/{{unbound image}}')"></div>
+    <div class="device-image cover" style="background-image: url('/content/{{unbound image}}')"></div>
     <ul>
         <li>
             <span>Location</span>
             <h4>{{location.name}}</h4>
         </li>
         <li><span>Temperature</span>
-            <h4>{{fahrenheit}}</h4>
+            <h4>{{fahrenheit}} °F</h4>
             <div class="progress">
                 <div class="progress-bar progress-bar-danger" role="progressbar" {{bind-attr aria-valuenow=power_consumption}} aria-valuemin="0" aria-valuemax="100" style="width: {{unbound powerConsumption}}%;">
                     <span class="sr-only">60% Complete</span>
