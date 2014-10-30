@@ -2,6 +2,6 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
     model: function (params) {
-        return this.store.find('waterheater', params.device_id);
+        return this.store.find('location', params.location_id);
     }
 });

@@ -1,0 +1,7 @@
+<div class="devices-row">
+    {{#each}}
+    {{#link-to 'device' this tagName=div class="col-lg-4 device link"}}
+        {{partial "devicecard"}}
+    {{/link-to}}
+    {{/each}}
+</div>

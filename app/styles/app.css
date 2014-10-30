@@ -10,21 +10,33 @@
 /* General Style */
 /* --------------------------------------------------------- */
 
-body {
-    font-family: 'Segoe UI', sans-serif;
+html {
+    min-height: 100%;
 }
 
-span {
-    font-style: italic;
+body, html, body > .ember-view {
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    position: relative;
+}
+
+#container-outlet {
+    min-width: 400px;
 }
 
 /* Menu Panel */
 /* --------------------------------------------------------- */
+#sidebar-container {
+    float: left;
+    height: 100%;
+    position: absolute;
+}
+
 #panel-menu {
     float: left;
 
     width: 250px;
-    height: 100vh;
+    height: 100%;
 
     background-color: #2b3741;
     box-shadow: inset -7px 0 9px -7px rgba(0,0,0,.7);
@@ -115,16 +127,48 @@ span {
     background-color: #4e6071;
 }
 
-#leftMenu .accordion-heading .active {
-    width: 182px;
-    height: 34px;
-
-    border: 1px solid #5b5b5b; /* inner stroke */
-    background-color: #353535; /* layer fill content */
-}
-
 #leftMenu span.icon {
     color: #2ecc71;
+}
+
+#panel-menu .fa.dark {
+    color: #182026;
+}
+
+#panel-menu .fa.light {
+    color: #6A737C;
+}
+
+#panel-menu .sidebar-link.active {
+    height: 100%;
+    width: 100%;
+    background-color: #1D272F;
+    background: -moz-linear-gradient(top,  #e5494c 8%, #1D272F 8%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(8%,#e5494c), color-stop(8%,#1D272F)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #e5494c 8%,#1D272F 8%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #e5494c 8%,#1D272F 8%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #e5494c 8%,#1D272F 8%); /* IE10+ */
+    background: linear-gradient(to bottom,  #e5494c 8%,#1D272F 8%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5494c', endColorstr='#1D272F',GradientType=0 ); /* IE6-9 */
+}
+
+#panel-menu .sidebar-link.active .fa.dark {
+    color: #E5494C;
+}
+
+#panel-menu .sidebar-link.active .fa.light {
+    color: #fff;
+}
+
+#panel-menu .fineprint {
+    font-size: 12px;
+    color: #7F8891;
+    padding-top: 10px;
+    padding-left: 25px;
+}
+
+#panel-menu li {
+    cursor: pointer;
 }
 
 /* Body */
@@ -137,10 +181,13 @@ span {
 /* Navbar */
 /* --------------------------------------------------------- */
 
-#js-openmenubutton {
+.hamburger {
     margin-left: 20px;
-
+    font-size: 2rem;
+    float: left;
     color: #fff;
+    margin-top: 10px;
+    cursor: pointer;
 }
 
 #navbar {
@@ -148,6 +195,7 @@ span {
 
     border: none;
     background-color: #e4494c;
+    text-align: center;
 }
 
 #navbar .navbar-brand,
@@ -181,16 +229,20 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     margin-top: 0;
 }
 
+#navbar .title {
+    color: #fff;
+    font-size: 2rem;
+}
+
 /* Content */
 /* --------------------------------------------------------- */
 
 #main-content {
-    height: 100vh;
-    padding-top: 100px;
-}
-
-#main-content div[ng-show] {
     height: 100%;
+    padding-top: 80px;
+    padding-left: 20px;
+    margin-left: 250px;
+    padding-right: 20px;
 }
 
 /* Device Cards */
@@ -204,7 +256,11 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     border-radius: 6px;
 }
 
-.device ul {
+.device.link {
+    cursor: pointer;
+}
+
+.device.box {
     margin: 0;
     padding: 0;
 
@@ -214,14 +270,30 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     background-color: #ecf0f1;
 }
 
-.device li {
+.device-instrument {
+    padding: 4px 25px 7px 25px;
+}
+
+img.device-instrument {
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.device > ul.main-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.device > ul.main-list > li {
     font-size: 14px;
     line-height: 1.214;
 
     position: relative;
 
     margin-top: 2px;
-    padding: 4px 42px 7px 25px;
+    padding: 4px 25px 7px 25px;
 
     -webkit-transition: .25s;
             transition: .25s;
@@ -230,20 +302,25 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     background-size: 20px 20px;
 }
 
-.device li:first-child {
+.device > ul.main-list > li:first-child {
     margin-top: 0;
     padding-top: 15px;
 }
 
-.device li:last-child {
-    padding-bottom: 21px;
-
+.device > ul.main-list > li:last-child {
+    padding-bottom: 20px;
     border-radius: 0 0 6px 6px;
 }
 
-.device li h4 {
+.device > ul.main-list > li:last-child::after {
+    clear: both;
+}
+
+.device > ul.main-list > li h4 {
     margin-top: 2px;
     margin-bottom: 2px;
+    display: inline-block;
+    font-size: 20px;
 }
 
 .device-head {
@@ -257,7 +334,7 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     background-size: 16px 16px;
 }
 
-.device-head:before {
+.device-power-icon:before {
     font-family: 'Flat-UI-Pro-Icons';
     font-size: 16px;
     line-height: 17px;
@@ -271,6 +348,12 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     margin: -.5em 0 0 -1em;
 
     content: '\e634';
+}
+
+.device small {
+    display: block;
+    text-transform: uppercase;
+    line-height: 1.2;
 }
 
 .device-head h5 {
@@ -288,6 +371,11 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     padding: 11px 22px 0 0;
 }
 
+.device-image {
+    width: 100%;
+    height: 120px;
+}
+
 .device-content {
     overflow: hidden;
 
@@ -302,10 +390,9 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     color: #fff;
 }
 
-.devices-row {
-    overflow-x: scroll;
-
-    height: 100%;
+.device-history {
+    background-color: #34495E;
+    background-size: auto 120px;
 }
 
 .locationBtn {
@@ -338,4 +425,96 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
     width: 100%;
 }
 
+.device .progress {
+    background-color: #7F8C8D;
+    margin-top: 9px;
+    float: right;
+    height: 15px;
+    width: 150px;
+}
 
+div.device {
+    margin-bottom: 20px;
+}
+
+.device > .device-generic {
+    font-size: 14px;
+    line-height: 1.214;
+
+    position: relative;
+    padding: 4px 25px 7px 25px;
+
+    -webkit-transition: .25s;
+            transition: .25s;
+
+    margin-top: 0;
+    padding-top: 15px;
+    border-radius: 0 0 6px 6px;
+}
+
+li > .bootstrap-switch-square {
+    float: right;
+    display: inline;
+    margin-top: 2px;
+}
+
+.btn-green, .btn-green:active {
+    color: #1ABC9C;
+    font-weight: bold !important;
+    height: 29px;
+    line-height: 1;
+}
+
+.input-29 {
+    height: 29px;
+    display: inline-block;
+    width: 124px;
+}
+
+.device .selectpicker {
+    background-color: #34495E;
+    color: #1ABC9C;
+    font-weight: bold !important;
+    line-height: 1.5;
+    width: 120px;
+}
+
+.device .selectpicker > button {
+    height: 29px;
+}
+
+.selectpicker.device-select > .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 120px !important;
+}
+
+.btn-save {
+    float: right;
+    display: inline-block;
+    margin-top: -30px;
+}
+
+/* Login Form */
+/* --------------------------------------------------------- */
+
+.login-form {
+    text-align: center;
+}
+
+.login-form h3 {
+    margin-top: 0;
+}
+
+/* Helpers */
+/* --------------------------------------------------------- */
+
+.contain {
+    background-size: contain;
+}
+
+.cover {
+    background-size: cover;
+}
+
+.right {
+    float: right;
+}

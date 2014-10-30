@@ -15,6 +15,10 @@
     "qunit": "~1.15.0",
     "flat-ui": "latest",
     "bootstrap": "latest",
-    "ember-simple-auth": "0.6.7"
+    "ember-simple-auth": "0.6.7",
+    "moment": "~2.8.3",
+    "rangeslider.js": "~0.3.6",
+    "bootstrap-switch": "~3.1.0",
+    "bootstrap-select": "~1.6.3"
   }
 }

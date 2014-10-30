@@ -1,1 +1,14 @@
-{{outlet}}
+<div id="sidebar-container">
+    {{#unless hideSidebar}}
+        {{partial "sidebar"}}
+    {{/unless}}
+</div>
+<div id="container-outlet">
+    {{#unless hideNavbar}}
+        {{partial "navbar"}}
+    {{/unless}}
+
+    <div id="main-content" class="container-fluid">
+        {{outlet}}
+    </div>
+</div>
