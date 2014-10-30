@@ -28,5 +28,7 @@ app.import('bower_components/flat-ui/dist/fonts/glyphicons/flat-ui-icons-regular
 app.import('bower_components/flat-ui/dist/fonts/glyphicons/flat-ui-icons-regular.ttf', { destDir: 'fonts/glyphicons' });
 
 app.import('bower_components/moment/min/moment-with-locales.js');
+app.import('bower_components/sidr/jquery.sidr.min.js');
+
 
 module.exports = app.toTree();

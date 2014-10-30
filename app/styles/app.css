@@ -177,10 +177,13 @@ body, html, body > .ember-view {
 /* Navbar */
 /* --------------------------------------------------------- */
 
-#js-openmenubutton {
+.hamburger {
     margin-left: 20px;
-
+    font-size: 2rem;
+    float: left;
     color: #fff;
+    margin-top: 10px;
+    cursor: pointer;
 }
 
 #navbar {
