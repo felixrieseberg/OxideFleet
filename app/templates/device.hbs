@@ -53,7 +53,7 @@
     <div class="col-lg-12 device">
         <div class="device-head">
             <h5>Settings</h5>
-            <button {{action 'save' this}} class="btn btn-danger btn-save btn-wide"><span class="fui-upload"></span> Save</button>
+            <button {{action 'saveDevice' this}} class="btn btn-danger btn-save btn-wide"><span class="fui-upload"></span> Save</button>
         </div>
         <div class="device box settings">
             <ul class="main-list">
@@ -106,3 +106,35 @@
     </div>
     <div class="col-lg-6"></div>
 </div>
+{{#if preset}}
+<div class="devices-row">
+    <div class="col-lg-12 device">
+        <div class="device-head">
+            <h5>Preset {{preset.name}}</h5>
+            <button {{action 'savePreset' preset}} class="btn btn-danger btn-save btn-wide"><span class="fui-upload"></span> Save</button>
+        </div>
+        <div class="device box settings">
+            <ul class="main-list">
+                <li>
+                    <small>Info</small>
+                    <h4>Name</h4>
+                    {{input type="text" value=preset.name class="form-control input-sm input-29 right" placeholder="120"}}
+                </li>
+                <li>
+                    <small>Temperature</small>
+                    <h4>Target Temperature</h4>
+                    {{input type="text" value=preset.fahrenheit class="form-control input-sm input-29 right" placeholder="120"}}
+                </li>
+                <li>
+                    <small>Timing</small>
+                    <h4>Maximum Duration</h4>
+                </li>
+                <li>
+                    <h4>Day Range</h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-6"></div>
+</div>
+{{/if}}
