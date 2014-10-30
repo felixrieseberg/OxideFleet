@@ -16,6 +16,6 @@
     "flat-ui": "latest",
     "bootstrap": "latest",
     "ember-simple-auth": "0.6.7",
-    "aterrien/jQuery-Knob": "~1.2.11"
+    "moment": "~2.8.3"
   }
 }
