@@ -27,8 +27,16 @@ export default Ember.ObjectController.extend({
 
     actions: {
         selectNewPreset: function (preset) {
+            if (!preset) {
+                return this.set('preset', null);
+            }
+
             var newPreset = this.store.getById('preset', preset.id);
             this.set('preset', newPreset);
+        },
+
+        save: function (device) {
+            device.save();
         }
     }
 

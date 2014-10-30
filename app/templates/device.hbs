@@ -53,6 +53,7 @@
     <div class="col-lg-12 device">
         <div class="device-head">
             <h5>Settings</h5>
+            <button {{action 'save' this}} class="btn btn-danger btn-save btn-wide"><span class="fui-upload"></span> Save</button>
         </div>
         <div class="device box settings">
             <ul class="main-list">
@@ -81,6 +82,7 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-inverse" role="menu">
+                            <li><a {{action 'selectNewPreset' null}}>No preset</a></li>
                             {{#each preset in presets}}
                                 <li><a {{action 'selectNewPreset' preset}}>{{preset.name}}</a></li>
                             {{/each}}

@@ -12,21 +12,7 @@ var Waterheater = Device.extend({
 
     sleepmode: DS.attr('boolean'),
     vacationmode: DS.attr('boolean'),
-    cloudsync: DS.attr('boolean'),
-
-    // Since this is mostly an example app,
-    // we can be bullish and just poll the
-    // server every few seconds.
-    // Also, the 'updated time' is clearly
-    // a hack.
-    didLoad: function () {
-        var self = this;
-
-        setInterval(function () { 
-            self.reload();
-            self.set('lastUpdated', Date.now());
-        }, 3000);
-    }
+    cloudsync: DS.attr('boolean')
 });
 
 export default Waterheater;

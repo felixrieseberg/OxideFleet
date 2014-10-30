@@ -487,6 +487,12 @@ li > .bootstrap-switch-square {
     width: 120px !important;
 }
 
+.btn-save {
+    float: right;
+    display: inline-block;
+    margin-top: -30px;
+}
+
 /* Login Form */
 /* --------------------------------------------------------- */
 
