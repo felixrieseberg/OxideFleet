@@ -4,5 +4,11 @@
     {{/unless}}
 </div>
 <div id="container-outlet">
-{{outlet}}
+    {{#unless hideNavbar}}
+        {{partial "navbar"}}
+    {{/unless}}
+
+    <div id="main-content" class="container-fluid">
+        {{outlet}}
+    </div>
 </div>

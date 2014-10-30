@@ -20,6 +20,10 @@ body, html, body > .ember-view {
     position: relative;
 }
 
+#container-outlet {
+    min-width: 400px;
+}
+
 /* Menu Panel */
 /* --------------------------------------------------------- */
 #sidebar-container {
