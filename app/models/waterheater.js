@@ -3,10 +3,16 @@ import Device from './device';
 
 var Waterheater = Device.extend({
     fahrenheit: DS.attr('number'),
+    targetFahrenheit: DS.attr('number'),
     kilowatt: DS.attr('number'),
     powerConsumption: DS.attr('number'),
     image: DS.attr('string'),
     temperatureHistory: DS.attr('string'),
+    preset: DS.belongsTo('preset', { async: true }),
+
+    sleepmode: DS.attr('boolean'),
+    vacationmode: DS.attr('boolean'),
+    cloudsync: DS.attr('boolean'),
 
     // Since this is mostly an example app,
     // we can be bullish and just poll the
@@ -17,9 +23,9 @@ var Waterheater = Device.extend({
         var self = this;
 
         setInterval(function () { 
-            self.reload()
+            self.reload();
             self.set('lastUpdated', Date.now());
-        }, 1000);
+        }, 3000);
     }
 });
 

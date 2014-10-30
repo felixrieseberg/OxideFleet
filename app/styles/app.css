@@ -280,13 +280,13 @@ img.device-instrument {
     margin-right: auto;
 }
 
-.device ul {
+.device > ul.main-list {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 
-.device li {
+.device > ul.main-list > li {
     font-size: 14px;
     line-height: 1.214;
 
@@ -302,23 +302,25 @@ img.device-instrument {
     background-size: 20px 20px;
 }
 
-.device li:first-child {
+.device > ul.main-list > li:first-child {
     margin-top: 0;
     padding-top: 15px;
 }
 
-.device li:last-child {
+.device > ul.main-list > li:last-child {
+    padding-bottom: 20px;
     border-radius: 0 0 6px 6px;
 }
 
-.device li:last-child::after {
+.device > ul.main-list > li:last-child::after {
     clear: both;
 }
 
-.device li h4 {
+.device > ul.main-list > li h4 {
     margin-top: 2px;
     margin-bottom: 2px;
     display: inline-block;
+    font-size: 20px;
 }
 
 .device-head {
@@ -346,6 +348,12 @@ img.device-instrument {
     margin: -.5em 0 0 -1em;
 
     content: '\e634';
+}
+
+.device small {
+    display: block;
+    text-transform: uppercase;
+    line-height: 1.2;
 }
 
 .device-head h5 {
@@ -425,12 +433,58 @@ img.device-instrument {
     width: 150px;
 }
 
-.device span {
-    display: block;
-}
-
 div.device {
     margin-bottom: 20px;
+}
+
+.device > .device-generic {
+    font-size: 14px;
+    line-height: 1.214;
+
+    position: relative;
+    padding: 4px 25px 7px 25px;
+
+    -webkit-transition: .25s;
+            transition: .25s;
+
+    margin-top: 0;
+    padding-top: 15px;
+    border-radius: 0 0 6px 6px;
+}
+
+li > .bootstrap-switch-square {
+    float: right;
+    display: inline;
+    margin-top: 2px;
+}
+
+.btn-green, .btn-green:active {
+    color: #1ABC9C;
+    font-weight: bold !important;
+    height: 29px;
+    line-height: 1;
+}
+
+.input-29 {
+    height: 29px;
+    display: inline-block;
+    width: 124px;
+}
+
+.device .selectpicker {
+    background-color: #34495E;
+    color: #1ABC9C;
+    font-weight: bold !important;
+    line-height: 1.5;
+    width: 120px;
+}
+
+.device .selectpicker > button {
+    height: 29px;
+}
+
+.selectpicker.device-select > .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 120px !important;
 }
 
 /* Login Form */
@@ -453,4 +507,8 @@ div.device {
 
 .cover {
     background-size: cover;
+}
+
+.right {
+    float: right;
 }

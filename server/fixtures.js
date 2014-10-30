@@ -51,7 +51,7 @@ fixtures.waterheaters = [{
         "lastUpdated": Date.now(),
         "sleepmode": true,
         "vacationmode": false,
-        "cloudsync": false
+        "cloudsync": false,
         "preset": 3
     }];
 

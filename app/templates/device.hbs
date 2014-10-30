@@ -5,24 +5,24 @@
         </div>
         <div class="device box">
             <div class="device-image cover" style="background-image: url('/content/{{unbound image}}')"></div>
-            <ul>
+            <ul class="main-list">
                 <li>
-                    <span>Location</span>
+                    <small>Location</small>
                     <h4>{{location.name}}</h4>
                 </li>
-                <li><span>Temperature</span>
+                <li><small>Temperature</small>
                     <h4>{{fahrenheit}} °F</h4>
                     <div class="progress">
                         <div class="progress-bar progress-bar-danger" role="progressbar" {{bind-attr aria-valuenow=power_consumption}} aria-valuemin="0" aria-valuemax="100" style="width: {{unbound powerConsumption}}%;">
-                            <span class="sr-only">60% Complete</span>
+                            <div class="sr-only">60% Complete</div>
                         </div>
                     </div>
                 </li>
-                <li><span>Kilowatt</span>
+                <li><small>Kilowatt</small>
                     <h4>{{kilowatt}}</h4>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" {{bind-attr aria-valuenow=power_consumption}} aria-valuemin="0" aria-valuemax="100" style="width: {{unbound powerConsumption}}%;">
-                            <span class="sr-only">60% Complete</span>
+                            <div class="sr-only">60% Complete</div>
                         </div>
                     </div>
                 </li>
@@ -35,19 +35,72 @@
         </div>
         <div class="device box">
             <div class="device-image device-history" style="background-image: url('/content/{{unbound temperatureHistory}}')"></div>
-            <ul>
-                <li><span>Temperature</span>
+            <ul class="main-list">
+                <li><small>Current Temperature</small>
                     <h4>{{fahrenheit}} °F / {{celsius}} C°</h4>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-danger" role="progressbar" {{bind-attr aria-valuenow=power_consumption}} aria-valuemin="0" aria-valuemax="100" style="width: {{unbound powerConsumption}}%;">
-                            <span class="sr-only">60% Complete</span>
-                        </div>
-                    </div>
                 </li>
-                <li><span>Last Updated</span>
+                <li><small>Target Temperature</small>
+                    <h4>{{targetFahrenheit}} °F / {{targetCelsius}} C°</h4>
+                </li>
+                <li><small>Last Updated</small>
                     <h4>{{lastUpdatedReadable}}</h4>
                 </li>
             </ul>
         </div>
     </div>
+</div>
+<div class="devices-row">
+    <div class="col-lg-12 device">
+        <div class="device-head">
+            <h5>Settings</h5>
+        </div>
+        <div class="device box settings">
+            <ul class="main-list">
+                <li>
+                    <small>Heaters</small>
+                    <h4>Sleep Mode</h4>
+                    <div class="bootstrap-switch-square">
+                        {{input type="checkbox" checked=sleepmode name="sleepmode-switch" }}
+                    </div>
+                </li>
+                <li>
+                    <h4>Vacation Mode</h4>
+                    <div class="bootstrap-switch-square">
+                        {{input type="checkbox" checked=vacationmode name="vacationmode-switch" }}
+                    </div>
+                </li>
+                <li>
+                    <h4>Use Preset</h4>
+                    <div class="btn-group right">
+                        <a class="btn btn-sm btn-inverse dropdown-toggle btn-green" type="button" data-toggle="dropdown">
+                            {{#if preset}}
+                                {{preset.name}}
+                            {{else}}
+                                Select a preset
+                            {{/if}}
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-inverse" role="menu">
+                            {{#each preset in presets}}
+                                <li><a {{action 'selectNewPreset' preset}}>{{preset.name}}</a></li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <small>Temperature</small>
+                    <h4>Target Temperature</h4>
+                    <input type="text" class="form-control input-sm input-29 right" placeholder="120" />
+                </li>
+                <li>
+                    <small>Cloud</small>
+                    <h4>Sync with Cloud</h4>
+                    <div class="bootstrap-switch-square">
+                        {{input type="checkbox" checked=cloudsync name="cloudsync-switch" }}
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-6"></div>
 </div>

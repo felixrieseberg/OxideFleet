@@ -3,12 +3,12 @@
 </div>
 <div class="device box">
     <div class="device-image cover" style="background-image: url('/content/{{unbound image}}')"></div>
-    <ul>
+    <ul class="main-list">
         <li>
-            <span>Location</span>
+            <small>Location</small>
             <h4>{{location.name}}</h4>
         </li>
-        <li><span>Temperature</span>
+        <li><small>Temperature</small>
             <h4>{{fahrenheit}} °F</h4>
             <div class="progress">
                 <div class="progress-bar progress-bar-danger" role="progressbar" {{bind-attr aria-valuenow=power_consumption}} aria-valuemin="0" aria-valuemax="100" style="width: {{unbound powerConsumption}}%;">
@@ -16,7 +16,7 @@
                 </div>
             </div>
         </li>
-        <li><span>Kilowatt</span>
+        <li><small>Kilowatt</small>
             <h4>{{kilowatt}}</h4>
             <div class="progress">
                 <div class="progress-bar" role="progressbar" {{bind-attr aria-valuenow=power_consumption}} aria-valuemin="0" aria-valuemax="100" style="width: {{unbound powerConsumption}}%;">
