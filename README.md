@@ -6,6 +6,8 @@ This is a bootstrapped app for device-managemet 'Internet of Things' apps using 
 - Authorization flow (based on ember-simple-auth), allowing for both OAuth2 as well as custom authorization against a custom or major provider. Facebook and Google as authentication providers are included.
 - UI/UX based on Bootstrap and FlatUI. It look's pretty good, but will likely need some work around the rough edges.
 
+![Screenshot](https://raw.githubusercontent.com/felixrieseberg/nitrous/master/.screenshot.png)
+
 ## Development
 You will need the following things properly installed on your computer.
 
