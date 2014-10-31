@@ -1,20 +1,14 @@
-{{#unless hideNavbar}}
-{{partial "navbar"}}
-{{/unless}}
-
-<div id="main-content">
-    <div class="login-form">
-        <div>
-            <h3>Welcome to Nitrous</h3>
-            <p>Please login using either Google or Facebook.</p>
-        </div>
-        <div>
-            <a {{ action 'authenticateWithFacebook' }} class="btn btn-hg btn-primary">
-                <i class="fa fa-facebook-square"></i> Facebook
-            </a>
-            <a {{ action 'authenticateWithGoogle' }} class="btn btn-hg btn-primary">
-                <i class="fa fa-google"></i> Google
-            </a>
-        </div>
+<div class="login-form">
+    <div>
+        <h3>Welcome to Nitrous</h3>
+        <p>Please login using either Google or Facebook.</p>
+    </div>
+    <div>
+        <a {{ action 'authenticateWithFacebook' }} class="btn btn-hg btn-primary">
+            <i class="fa fa-facebook-square"></i> Facebook
+        </a>
+        <a {{ action 'authenticateWithGoogle' }} class="btn btn-hg btn-primary">
+            <i class="fa fa-google"></i> Google
+        </a>
     </div>
 </div>

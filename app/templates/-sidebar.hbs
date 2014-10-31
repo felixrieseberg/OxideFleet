@@ -1,74 +1,72 @@
-<div>
-    <div id="panel-menu">
-        <div id="user-info">
-            <img src="assets/img/user.png" width="200px" />
+<div id="panel-menu">
+    <div id="user-info">
+        <img src="assets/img/user.png" width="200px" />
+    </div>
+    <div class="accordion" id="leftMenu">
+        {{#if session.isAuthenticated}}
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                {{#link-to 'dashboard' class="accordion-toggle sidebar-link"}}
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle dark fa-stack-2x"></i>
+                        <i class="fa fa-home light fa-stack-1x fa-inverse"></i>
+                    </span> Dashboard
+                {{/link-to}}
+            </div>
         </div>
-        <div class="accordion" id="leftMenu">
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    {{#link-to 'dashboard' class="accordion-toggle sidebar-link"}}
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle dark fa-stack-2x"></i>
-                            <i class="fa fa-home light fa-stack-1x fa-inverse"></i>
-                        </span> Dashboard
-                    {{/link-to}}
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" class="collapse" data-toggle="collapse" data-parent="#leftMenu" href="#collapseTwo">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle dark fa-stack-2x"></i>
+                        <i class="fa fa-map-marker light fa-stack-1x fa-inverse"></i>
+                    </span> Locations
+                </a>
+            </div>
+            <div id="collapseTwo" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                    <ul>
+                        {{#each locations}}
+                            {{#link-to 'location' id tagName="li" class="sidebar-link"}} {{fa-icon "map-marker"}} {{name}}{{/link-to}}
+                        {{/each}}
+                    </ul>
                 </div>
             </div>
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#leftMenu" href="#collapseTwo">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle dark fa-stack-2x"></i>
-                            <i class="fa fa-map-marker light fa-stack-1x fa-inverse"></i>
-                        </span> Locations
-                    </a>
-                </div>
-                <div id="collapseTwo" class="accordion-body collapse" style="height: 0px; ">
-                    <div class="accordion-inner">
-                        <ul>
-                            <li>{{fa-icon "map-marker"}} House</li>
-                            <li>{{fa-icon "map-marker"}} Shop</li>
-                            <li>{{fa-icon "map-marker"}} Pool</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    {{#link-to 'settings' class="accordion-toggle sidebar-link"}}
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle dark fa-stack-2x"></i>
-                            <i class="fa fa-gear light fa-stack-1x fa-inverse"></i>
-                        </span> Settings
-                    {{/link-to}}
-                </div>
-            </div>
-            {{#if session.isAuthenticated}}
-            <div class="accordion-group">
-                <div class="accordion-heading last">
-                    <a class="accordion-toggle" {{ action 'invalidateSession' }}>
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle dark fa-stack-2x"></i>
-                            <i class="fa fa-sign-out light fa-stack-1x fa-inverse"></i>
-                        </span> Sign Out
-                    </a>
-                </div>
-            </div>
-            {{else}}
-            <div class="accordion-group">
-                <div class="accordion-heading last">
-                    {{#link-to 'login' class="accordion-toggle sidebar-link"}}
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle dark fa-stack-2x"></i>
-                            <i class="fa fa-sign-in light fa-stack-1x fa-inverse"></i>
-                        </span> Sing in
-                    {{/link-to}}
-                </div>
-            </div>
-            {{/if}}
         </div>
-        <div class="fineprint">
-            Support · Privacy Policy
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                {{#link-to 'settings' class="accordion-toggle sidebar-link"}}
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle dark fa-stack-2x"></i>
+                        <i class="fa fa-gear light fa-stack-1x fa-inverse"></i>
+                    </span> Settings
+                {{/link-to}}
+            </div>
         </div>
+        <div class="accordion-group">
+            <div class="accordion-heading last">
+                <a class="accordion-toggle" {{ action 'invalidateSession' }}>
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle dark fa-stack-2x"></i>
+                        <i class="fa fa-sign-out light fa-stack-1x fa-inverse"></i>
+                    </span> Sign Out
+                </a>
+            </div>
+        </div>
+        {{else}}
+        <div class="accordion-group">
+            <div class="accordion-heading last">
+                {{#link-to 'login' class="accordion-toggle sidebar-link"}}
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle dark fa-stack-2x"></i>
+                        <i class="fa fa-sign-in light fa-stack-1x fa-inverse"></i>
+                    </span> Sing in
+                {{/link-to}}
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    <div class="fineprint">
+        Support · Privacy Policy
     </div>
 </div>

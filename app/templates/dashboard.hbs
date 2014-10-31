@@ -1,18 +1,7 @@
-{{#unless hideNavbar}}
-    {{partial "navbar"}}
-{{/unless}}
-
-<div id="main-content">
+<div class="devices-row">
     {{#each}}
-    <div class="devices-row">
-        <div class="col-md-3 device">
-            <div class="device-head">
-                <h5>{{ device.name }}</h5>
-            </div>
-            <ul>
-                <li>Device Name <h4>{{name}}</h4></li>
-            </ul>
-        </div>
-    </div>
+    {{#link-to 'device' this tagName=div class="col-lg-4 device link"}}
+        {{partial "devicecard"}}
+    {{/link-to}}
     {{/each}}
 </div>

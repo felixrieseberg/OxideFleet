@@ -1,25 +1,23 @@
 module.exports = function(app) {
-  var express = require('express');
-  var waterheatersRouter = express.Router();
-  waterheatersRouter.get('/', function(req, res) {
-    res.send({"waterheaters":
-        [{
-            "id": 1,
-            "name": "Waterheater Guest",
-            "status": true,
-            "public_key": "",
-            "fahrenheit": 105,
-            "kilowatt": 24
-        },
-        {
-            "id": 2,
-            "name": "Waterheater Bedroom",
-            "status": false,
-            "public_key": "",
-            "fahrenheit": 102,
-            "kilowatt": 23
-        }]
+    var express = require('express');
+    var waterheatersRouter = express.Router();
+    var waterheaters = require('../fixtures').waterheaters;
+
+    waterheatersRouter.get('/', function(req, res) {
+        res.send({ "waterheaters": waterheaters });
     });
-  });
-  app.use('/api/waterheaters', waterheatersRouter);
+
+    waterheatersRouter.get('/1', function(req, res) {
+        res.send({ "waterheaters": waterheaters[0] });
+    });
+
+    waterheatersRouter.get('/2', function(req, res) {
+        res.send({ "waterheaters": waterheaters[1] });
+    });
+
+    waterheatersRouter.get('/3', function(req, res) {
+        res.send({ "waterheaters": waterheaters[2] });
+    });
+
+    app.use('/api/waterheaters', waterheatersRouter);
 };

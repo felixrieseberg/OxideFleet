@@ -27,4 +27,10 @@ app.import('bower_components/flat-ui/dist/css/flat-ui.css');
 app.import('bower_components/flat-ui/dist/fonts/glyphicons/flat-ui-icons-regular.woff', { destDir: 'fonts/glyphicons' });
 app.import('bower_components/flat-ui/dist/fonts/glyphicons/flat-ui-icons-regular.ttf', { destDir: 'fonts/glyphicons' });
 
+app.import('bower_components/moment/min/moment-with-locales.js');
+app.import('bower_components/rangeslider.js/dist/rangeslider.min.js');
+app.import('bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js');
+app.import('bower_components/bootstrap-select/dist/css/bootstrap-select.min.css');
+app.import('bower_components/bootstrap-select/dist/js/bootstrap-select.js');
+
 module.exports = app.toTree();
