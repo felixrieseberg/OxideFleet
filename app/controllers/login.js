@@ -3,7 +3,8 @@ import LoginControllerMixin from 'simple-auth/mixins/login-controller-mixin';
 
 export default Ember.Controller.extend(LoginControllerMixin, {
     title: 'Sign In',
-    authenticator: 'simple-auth-authenticator:oauth2-password-grant',
+    // authenticator: 'simple-auth-authenticator:oauth2-password-grant',
+    authenticator: 'authenticator:nitrogen',
 
     actions: {
         authenticateWithGoogle: function () {
@@ -26,6 +27,6 @@ export default Ember.Controller.extend(LoginControllerMixin, {
             }, function (error) {
                 console.log(error);
             });
-        }
+        },
     }
 });
