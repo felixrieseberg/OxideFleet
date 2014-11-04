@@ -13,14 +13,16 @@
     </div>
     <br>
     <div>
-        <form {{action 'authenticate' on='submit'}}>
-            <label for="identification">Login</label>
-            {{input id='identification' placeholder='Enter Login' value=identification}}
-            <br>
-            <label for="password">Password</label>
-            {{input id='password' placeholder='Enter Password' type='password' value=password}}
-            <br>
-            <button type="submit">Login</button>
+        <form {{action 'authenticate' on='submit'}} >
+            <div class="form-group">
+                {{input class='form-control login-field' id='identification' placeholder='Enter Login' value=identification}}
+                <label class="login-field-icon fui-user" for="identification"></label>
+            </div>
+            <div class="form-group">
+                {{input class='form-control login-field' id='password' placeholder='Enter Password' type='password' value=password}}
+                <label class="login-field-icon fui-lock" for="password"></label>
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
         </form>
     </div>
 </div>

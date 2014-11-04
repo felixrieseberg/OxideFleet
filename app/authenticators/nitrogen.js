@@ -25,7 +25,18 @@ export default Base.extend({
   restore: function(data) {
     var _this = this;
     return new Ember.RSVP.Promise(function(resolve, reject) {
-      console.log("Nitrogen authenticator restore.");
+      console.log("Nitrogen authenticator restore, with data: " + data);
+      var principal = new nitrogen.User({
+        accessToken: {
+          token: data.accessToken.token
+        },
+        id: data.user.id,
+        nickname: data.user.nickname
+      });
+      nitrogenService.resume(principal, function (err, user, accessToken) {
+        if (err) { reject(err); }
+        resolve({ user: user.principal, accessToken: user.accessToken });
+      });
     });
   },
 
@@ -38,17 +49,16 @@ export default Base.extend({
   authenticate: function(credentials) {
     var _this = this;
     return new Ember.RSVP.Promise(function(resolve, reject) {
+      console.log("Nitrogen authenticator authenticate.");
       var user = new nitrogen.User({
           nickname: 'current',
           email: credentials.identification,
           password: credentials.password
       });
       Ember.run(function () {
-        nitrogenService.authenticate(user, function(err, session, user) {
+        nitrogenService.authenticate(user, function (err, user, accessToken) {
               if (err) { reject(err); }
-              delete session['service']['sessions'];
-              delete session['log']['session'];
-              resolve(session,user);
+              resolve({ user: user.principal, accessToken: user.accessToken });
             });
       });
     });
@@ -63,6 +73,8 @@ export default Base.extend({
   invalidate: function(data) {
    return new Ember.RSVP.Promise(function(resolve, reject) {
       console.log("Nitrogen authenticator invalidate.");
+      nitrogenService = null;
+      resolve({ user: null, accessToken: null });
     });
   },
 
