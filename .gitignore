@@ -18,3 +18,7 @@ testem.log
 
 # Sensitive
 /config/environment.js
+
+# Cordova
+/cordova/platforms
+/cordova/plugins
