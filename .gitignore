@@ -22,3 +22,6 @@ testem.log
 # Cordova
 /cordova/platforms
 /cordova/plugins
+
+# OS X
+.DS_Store
