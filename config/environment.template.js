@@ -2,24 +2,43 @@
 
 module.exports = function (environment) {
     var ENV = {
-        modulePrefix: 'nitrous',
+        modulePrefix: 'oxide',
         environment: environment,
         baseURL: '/',
         locationType: 'auto',
-    };
 
-    ENV['torii'] = {
-        providers: {
-            'google-oauth2': {
-                apiKey: '',
-                redirectUri: 'http://localhost:4200'
-            },
-            'facebook-oauth2': {
-                apiKey:      '',
-                redirectUri: 'http://localhost:4200'
+        torii = {
+            providers: {
+                'google-oauth2': {
+                    apiKey: '',
+                    redirectUri: 'http://localhost:4200'
+                },
+                'facebook-oauth2': {
+                    apiKey:      '',
+                    redirectUri: 'http://localhost:4200'
+                }
             }
-        }
-    };
+        },
+
+        EmberENV: {
+          FEATURES: {
+            // Here you can enable experimental features on an ember canary build
+            // e.g. 'with-controller': true
+          }
+        },
+
+        APP: {
+          // Here you can pass flags/options to your application instance
+          // when it is created
+          nitrogen: {
+            host: 'api.nitrogen.io',
+            protocol: 'https',
+            http_port: 443,
+            log_levels: ['warn', 'error']
+          }
+        },
+      };
+
 
     ENV['simple-auth'] = {
         routeAfterAuthentication: 'dashboard',

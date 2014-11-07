@@ -1,4 +1,4 @@
-# Nitrous
+# Oxide
 This is a bootstrapped app for device-managemet 'Internet of Things' apps using Nitrogen. It's based on Cordova and Ember-Cli and should be considered  a 'starting point' rather than a production-ready application. The following key elements are included:
 
 - Full client MVC architecture with Models, Views and Controllers for IoT Devices with properties, with automatic binding to a REST API.
@@ -6,7 +6,7 @@ This is a bootstrapped app for device-managemet 'Internet of Things' apps using 
 - Authorization flow (based on ember-simple-auth), allowing for both OAuth2 as well as custom authorization against a custom or major provider. Facebook and Google as authentication providers are included.
 - UI/UX based on Bootstrap and FlatUI. It look's pretty good, but will likely need some work around the rough edges.
 
-![Screenshot](https://raw.githubusercontent.com/felixrieseberg/nitrous/master/.screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/irjudson/oxide/master/.screenshot.png)
 
 ## Development
 You will need the following things properly installed on your computer.

@@ -1,14 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.reverse.domain" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Nitrous</name>
+<widget id="io.nitrogen.oxide" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Oxide</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        A mobile/responsive application for Nitrogen's IoT framework.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="ivan.judson@microsoft.com" href="http://irjudson.org/">
+        Ivan R. Judson
     </author>
     <content src="index.html" />
     <access origin="*" />
     <preference name="DisallowOverscroll" value="true" />
-    <icon src="assets/img/logo-small.png" />
+    <icon src="www/assets/img/logo-small.png" />
+    <icon src="www/assets/img/logo-small.png" platform="android" density="ldpi" />
+    <icon src="www/assets/img/logo-small.png" platform="android" density="mdpi" />
+    <icon src="www/assets/img/logo-small.png" platform="android" density="hdpi" />
+    <icon src="www/assets/img/icon.png" platform="android" density="xhdpi" />
 </widget>
