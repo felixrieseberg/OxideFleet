@@ -35,5 +35,6 @@ app.import('bower_components/rangeslider.js/dist/rangeslider.min.js');
 app.import('bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js');
 app.import('bower_components/bootstrap-select/dist/css/bootstrap-select.min.css');
 app.import('bower_components/bootstrap-select/dist/js/bootstrap-select.js');
+app.import('bower_components/JavaScript-MD5/js/md5.js');
 
 module.exports = app.toTree();

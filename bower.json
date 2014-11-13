@@ -19,6 +19,7 @@
     "moment": "~2.8.3",
     "rangeslider.js": "~0.3.6",
     "bootstrap-switch": "~3.1.0",
-    "bootstrap-select": "~1.6.3"
+    "bootstrap-select": "~1.6.3",
+    "JavaScript-MD5": "~1.1.0"
   }
 }

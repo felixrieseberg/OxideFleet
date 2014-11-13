@@ -3,7 +3,10 @@ import DS from 'ember-data';
 var User = DS.Model.extend({
     
     // Oxide
-    avatarUrl: DS.attr('string'),
+    avatarUrl: function () {
+        console.log('http://www.gravatar.com/avatar/' + md5(this.get('email')));
+        return 'http://www.gravatar.com/avatar/' + md5(this.get('email'));
+    }.property('email'),
 
     // Nitrogen
     name: DS.attr('string'),

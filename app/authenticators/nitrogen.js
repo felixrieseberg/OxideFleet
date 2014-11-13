@@ -23,6 +23,7 @@ export default Base.extend({
     @return {Ember.RSVP.Promise} A promise that when it resolves results in the session being authenticated
     */
     restore: function(data) {
+        var self = this;
         return new Ember.RSVP.Promise(function(resolve, reject) {
             console.log("Nitrogen authenticator restore, with data: " + data);
             var principal = new nitrogen.User({
@@ -33,8 +34,46 @@ export default Base.extend({
                 nickname: data.user.nickname
             });
             nitrogenService.resume(principal, function (err, user) {
+                var store, storedUser;
+
                 if (err) { reject(err); }
-                resolve({ user: user.principal, accessToken: user.accessToken });
+
+                store = self.container.lookup('store:main');
+
+                store.find('user', 'me')
+                .then(function (foundUser) {
+                    foundUser.set('name', user.principal.name);
+                    foundUser.set('email', user.principal.email);
+                    foundUser.set('api_key', user.principal.api_key);
+                    foundUser.set('created_at', user.principal.created_at);
+                    foundUser.set('nId', user.principal.id);
+                    foundUser.set('last_connection', user.principal.last_connection);
+                    foundUser.set('last_ip', user.principal.last_ip);
+                    foundUser.set('nickname', user.principal.nickname);
+                    foundUser.set('password', user.principal.password);
+                    foundUser.set('updated_at', user.principal.updated_at);
+
+                    foundUser.save();
+                    resolve({ user: user.principal.email, accessToken: user.accessToken });
+                }, function () {
+
+                    storedUser = store.createRecord('user', {
+                        id: 'me',
+                        name: user.principal.name,
+                        email: user.principal.email,
+                        api_key: user.principal.api_key,
+                        created_at: user.principal.created_at,
+                        nId: user.principal.id,
+                        last_connection: user.principal.last_connection,
+                        last_ip: user.principal.last_ip,
+                        nickname: user.principal.nickname,
+                        password: user.principal.password,
+                        updated_at: user.principal.updated_at
+                    });
+                    storedUser.save();
+
+                    resolve({ user: user.principal.email, accessToken: user.accessToken });
+                });
             });
         });
     },
@@ -62,13 +101,25 @@ export default Base.extend({
 
                     store = self.container.lookup('store:main');
 
-                    store.find('user', { email: user.principal.email })
+                    store.find('user', { id: 'me' })
                     .then(function (foundUser) {
-                        storedUser = foundUser;
-                        resolve({ user: storedUser, accessToken: user.accessToken });
+                        foundUser.set('name', user.principal.name);
+                        foundUser.set('email', user.principal.email);
+                        foundUser.set('api_key', user.principal.api_key);
+                        foundUser.set('created_at', user.principal.created_at);
+                        foundUser.set('nId', user.principal.id);
+                        foundUser.set('last_connection', user.principal.last_connection);
+                        foundUser.set('last_ip', user.principal.last_ip);
+                        foundUser.set('nickname', user.principal.nickname);
+                        foundUser.set('password', user.principal.password);
+                        foundUser.set('updated_at', user.principal.updated_at);
+
+                        foundUser.save();
+                        resolve({ user: user.principal.email, accessToken: user.accessToken });
                     }, function () {
 
                         storedUser = store.createRecord('user', {
+                            id: 'me',
                             name: user.principal.name,
                             email: user.principal.email,
                             api_key: user.principal.api_key,
@@ -80,8 +131,9 @@ export default Base.extend({
                             password: user.principal.password,
                             updated_at: user.principal.updated_at
                         });
+                        storedUser.save();
 
-                        resolve({ user: storedUser, accessToken: user.accessToken });
+                        resolve({ user: user.principal.email, accessToken: user.accessToken });
                     });
                 });
             });

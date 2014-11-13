@@ -1,6 +1,6 @@
 <div id="panel-menu">
     <div id="user-info">
-        <img src="assets/img/user.png" width="200px" />
+        <img {{bind-attr src=currentUser.avatarUrl}} width="200px" />
     </div>
     <div class="accordion" id="leftMenu">
         {{#if session.isAuthenticated}}
