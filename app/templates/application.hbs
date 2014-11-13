@@ -3,7 +3,7 @@
         {{partial "sidebar"}}
 	</div>
 {{/unless}}
-<div id="container-outlet">
+<div id="container-outlet" {{bind-attr class="hideSidebar"}}>
     {{#unless hideNavbar}}
         {{partial "navbar"}}
     {{/unless}}

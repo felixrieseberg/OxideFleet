@@ -171,6 +171,14 @@ body, html, body > .ember-view {
     cursor: pointer;
 }
 
+.hide-sidebar > #navbar, .hide-sidebar > #main-content {
+    margin-left: 0px;
+}
+
+.hide-sidebar .hamburger {
+    visibility: collapse;
+}
+
 /* Body */
 /* --------------------------------------------------------- */
 
