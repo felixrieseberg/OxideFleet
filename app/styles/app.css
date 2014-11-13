@@ -50,8 +50,13 @@ body, html, body > .ember-view {
 }
 
 #panel-menu #user-info {
-    height: 200px;
     padding-top: 20px;
+    height: 250px;
+}
+
+#panel-menu #user-info img {
+    position: absolute;
+    margin-left: 24px;
 }
 
 #leftMenu .accordion-group {
