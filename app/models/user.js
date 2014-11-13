@@ -1,18 +1,24 @@
 import DS from 'ember-data';
 
 var User = DS.Model.extend({
-    email: DS.attr('string'),
-    password: DS.attr('string'),
-    name: DS.attr('string'),
-    avatar: DS.attr('string'),
-    devices: DS.hasMany('device', { async: true })
-});
+    
+    // Oxide
+    avatarUrl: DS.attr('string'),
 
-User.reopenClass({
-    FIXTURES: [
-        { id: 1, email: 'john@microsoft.com', password: 'password', name: 'John Testuser', avatar: null },
-        { id: 2, email: 'mary@microsoft.com', password: 'password', name: 'Mary Testuser', avatar: null },
-    ]
+    // Nitrogen
+    name: DS.attr('string'),
+    email: DS.attr('string'),
+    api_key: DS.attr('string'),
+    created_at: DS.attr('string'),
+    nId: DS.attr('string'),
+    last_connection: DS.attr('string'),
+    last_ip: DS.attr('string'),
+    nickname: DS.attr('string'),
+    password: DS.attr('string'),
+    updated_at: DS.attr('string'),
+
+    // Relations
+    devices: DS.hasMany('device', { async: true })
 });
 
 export default User;

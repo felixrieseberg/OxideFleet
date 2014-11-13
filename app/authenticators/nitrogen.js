@@ -23,7 +23,6 @@ export default Base.extend({
     @return {Ember.RSVP.Promise} A promise that when it resolves results in the session being authenticated
     */
     restore: function(data) {
-        var _this = this;
         return new Ember.RSVP.Promise(function(resolve, reject) {
             console.log("Nitrogen authenticator restore, with data: " + data);
             var principal = new nitrogen.User({
@@ -33,7 +32,7 @@ export default Base.extend({
                 id: data.user.id,
                 nickname: data.user.nickname
             });
-            nitrogenService.resume(principal, function (err, user, accessToken) {
+            nitrogenService.resume(principal, function (err, user) {
                 if (err) { reject(err); }
                 resolve({ user: user.principal, accessToken: user.accessToken });
             });
@@ -47,7 +46,7 @@ export default Base.extend({
     @return {Ember.RSVP.Promise} A promise that resolves when an access token is successfully acquired from the server and rejects otherwise
     */
     authenticate: function(credentials) {
-        var _this = this;
+        var self = this;
         return new Ember.RSVP.Promise(function(resolve, reject) {
             console.log("Nitrogen authenticator authenticate.");
             var user = new nitrogen.User({
@@ -56,9 +55,34 @@ export default Base.extend({
                 password: credentials.password
             });
             Ember.run(function () {
-                nitrogenService.authenticate(user, function (err, user, accessToken) {
+                nitrogenService.authenticate(user, function (err, user) {
+                    var store, storedUser;
+
                     if (err) { reject(err); }
-                    resolve({ user: user.principal, accessToken: user.accessToken });
+
+                    store = self.container.lookup('store:main');
+
+                    store.find('user', { email: user.principal.email })
+                    .then(function (foundUser) {
+                        storedUser = foundUser;
+                        resolve({ user: storedUser, accessToken: user.accessToken });
+                    }, function () {
+
+                        storedUser = store.createRecord('user', {
+                            name: user.principal.name,
+                            email: user.principal.email,
+                            api_key: user.principal.api_key,
+                            created_at: user.principal.created_at,
+                            nId: user.principal.id,
+                            last_connection: user.principal.last_connection,
+                            last_ip: user.principal.last_ip,
+                            nickname: user.principal.nickname,
+                            password: user.principal.password,
+                            updated_at: user.principal.updated_at
+                        });
+
+                        resolve({ user: storedUser, accessToken: user.accessToken });
+                    });
                 });
             });
         });
@@ -70,8 +94,8 @@ export default Base.extend({
     @param {Object} data The data of the session to be invalidated
     @return {Ember.RSVP.Promise} A resolving promise
     */
-    invalidate: function(data) {
-        return new Ember.RSVP.Promise(function(resolve, reject) {
+    invalidate: function() {
+        return new Ember.RSVP.Promise(function(resolve) {
             console.log("Nitrogen authenticator invalidate.");
             nitrogenService = null;
             resolve({ user: null, accessToken: null });
