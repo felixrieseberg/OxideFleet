@@ -5,9 +5,9 @@ module.exports = function (environment) {
         modulePrefix: 'oxide',
         environment: environment,
         baseURL: '/',
-        locationType: 'auto',
+        locationType: 'hash',
 
-        torii = {
+        torii: {
             providers: {
                 'google-oauth2': {
                     apiKey: '',
