@@ -35,6 +35,25 @@
         </div>
         <div class="accordion-group">
             <div class="accordion-heading">
+                <a class="accordion-toggle" class="collapse-devices" data-toggle="collapse-devices" data-parent="#leftMenu" href="#collapseDevices">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle dark fa-stack-2x"></i>
+                        <i class="fa fa-map-marker light fa-stack-1x fa-inverse"></i>
+                    </span> Devices
+                </a>
+            </div>
+            <div id="collapseDevices" class="accordion-body collapse-devices in">
+                <div class="accordion-inner">
+                    <ul>
+                        {{#each devices}}
+                            {{#link-to 'location' id tagName="li" class="sidebar-link"}} {{fa-icon "map-marker"}} {{name}}{{/link-to}}
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
                 {{#link-to 'settings' class="accordion-toggle sidebar-link"}}
                     <span class="fa-stack fa-lg">
                         <i class="fa fa-circle dark fa-stack-2x"></i>

@@ -1,17 +1,8 @@
 <div class="login-form">
     <div>
         <h3>Welcome to Oxide</h3>
-        <p>Please login using either Google or Facebook.</p>
+        <p>Login to manage your Nitrogen enabled devices.</p>
     </div>
-    <div>
-        <a {{ action 'authenticateWithFacebook' }} class="btn btn-hg btn-primary">
-            <i class="fa fa-facebook-square"></i> Facebook
-        </a>
-        <a {{ action 'authenticateWithGoogle' }} class="btn btn-hg btn-primary">
-            <i class="fa fa-google"></i> Google
-        </a>
-    </div>
-    <br>
     <div>
         <form {{action 'authenticate' on='submit'}} >
             <div class="form-group">
