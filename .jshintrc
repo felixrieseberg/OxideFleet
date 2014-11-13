@@ -4,7 +4,8 @@
     "window",
     "-Promise",
     "moment",
-    "nitrogen"
+    "nitrogen",
+    "md5"
   ],
   "browser" : true,
   "boss" : true,
