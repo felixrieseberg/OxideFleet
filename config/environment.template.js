@@ -7,19 +7,6 @@ module.exports = function (environment) {
         baseURL: '/',
         locationType: 'hash',
 
-        torii: {
-            providers: {
-                'google-oauth2': {
-                    apiKey: '',
-                    redirectUri: 'http://localhost:4200'
-                },
-                'facebook-oauth2': {
-                    apiKey:      '',
-                    redirectUri: 'http://localhost:4200'
-                }
-            }
-        },
-
         EmberENV: {
           FEATURES: {
             // Here you can enable experimental features on an ember canary build
