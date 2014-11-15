@@ -15,6 +15,7 @@ You will need the following things properly installed on your computer.
 * [Node.js](http://nodejs.org/) (with NPM). *v0.11.14 is heavily recommended*
 * [Bower](http://bower.io/)
 * [Cordova](http://cordova.apache.org/)
+* [Cordova Icon](https://www.npmjs.org/package/cordova-icon)
 
 ### Installation
 * `git clone <repository-url>` this repository
@@ -24,8 +25,6 @@ You will need the following things properly installed on your computer.
 
 ### Running / Development
 The included live-development server has automatically reloads on file changes can be started with the following command.
-* `ember generate cordova-init io.nitrogen`
-** When asked "[?] Overwrite <project path>/.gitignore?", answer n (no)
 * cp config/environment.template.js config/environement.js`
 * `ember serve`
 * Visit your app at http://localhost:4200.
