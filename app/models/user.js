@@ -13,7 +13,7 @@ var User = DS.Model.extend({
     email: DS.attr('string'),
     api_key: DS.attr('string'),
     created_at: DS.attr('string'),
-    nId: DS.attr('string'),
+    nitrogen_id: DS.attr('string'),
     last_connection: DS.attr('string'),
     last_ip: DS.attr('string'),
     nickname: DS.attr('string'),
