@@ -11,6 +11,97 @@ Nitrogen Authenticator.
 */
 var nitrogenService = null;
 
+function findOrCreateUser(store, session, principal, foundUser) {
+    var newUser;
+    if (foundUser == null) {
+        newUser = store.createRecord('user', {
+            id: 'me',
+            name: principal.name,
+            email: principal.email,
+            api_key: principal.api_key,
+            created_at: principal.created_at,
+            nitrogen_id: principal.id,
+            last_connection: principal.last_connection,
+            last_ip: principal.last_ip,
+            nickname: principal.nickname,
+            password: principal.password,
+            updated_at: principal.updated_at
+        });
+        newUser.save();
+        return newUser;
+    } else {
+        foundUser.set('name', principal.name);
+        foundUser.set('email', principal.email);
+        foundUser.set('api_key', principal.api_key);
+        foundUser.set('created_at', principal.created_at);
+        foundUser.set('nitrogen_id', principal.id);
+        foundUser.set('last_connection', principal.last_connection);
+        foundUser.set('last_ip', principal.last_ip);
+        foundUser.set('nickname', principal.nickname);
+        foundUser.set('password', session.principal.password);
+        foundUser.set('updated_at', principal.updated_at);
+
+        foundUser.save();
+        return foundUser;
+    }
+}
+
+function updateDevice(foundDevice, device, owner) {
+    console.log("Found: " + device);
+    foundDevice.set('nitrogen_id', device.id);
+    foundDevice.set('name', device.name);
+    foundDevice.set('lastUpdated', device.updated_at);
+    foundDevice.set('last_connection', device.last_connection);
+    foundDevice.set('last_ip', device.last_ip);
+    foundDevice.set('nickname', device.nickname);
+    foundDevice.set('updated_at', device.updated_at);
+    foundDevice.set('created_at', device.created_at);
+    foundDevice.set('owner', owner);
+    foundDevice.save();
+    return foundDevice;
+}
+
+function newDevice(store, device, owner) {
+    console.log("New Device: " + device);
+    var nDevice = store.createRecord('device', {
+        nitrogen_id: device.id,
+        name: device.name,
+        lastUpdated: device.updated_at,
+        last_connection: device.last_connection,
+        last_ip: device.last_ip,
+        nickname: device.nickname,
+        created_at: device.created_at,
+        updated_at: device.updated_at
+    });
+
+    nDevice.owner = owner;
+    nDevice.save();
+
+    // for (var i = device.tags.length - 1; i >= 0; i--) {
+    //     var newTag = store.createRecord('tag', {
+    //         value: device.tags[i]
+    //     }).save();
+    //     nDevice.push(newTag);
+    //     nDevice.save();
+    // }
+    return nDevice;
+}
+
+function updateOrCreateDevices(store, session, user) {
+    nitrogen.Principal.find(session, {
+        type: "device"
+    }, {
+        skip: 0,
+        sort: { last_connection: 1 }
+    }, function(err, principals) {
+        var idx;
+        for(idx = 0; idx < principals.length; ++idx) {
+            store.find('device', { nitrogen_id: principals[idx].id })
+            .then(function (foundDevice) { updateDevice(foundDevice, principals[idx], user); }, newDevice(store, principals[idx], user));
+        }
+    });   
+}
+
 export default Base.extend({
     init: function() {
         nitrogenService = new nitrogen.Service(Config.APP.nitrogen);
@@ -33,46 +124,21 @@ export default Base.extend({
                 id: data.user.id,
                 nickname: data.user.nickname
             });
-            nitrogenService.resume(principal, function (err, user) {
+            nitrogenService.resume(principal, function (err, session, principal) {
                 var store, storedUser;
 
                 if (err) { reject(err); }
-
                 store = self.container.lookup('store:main');
 
                 store.find('user', 'me')
                 .then(function (foundUser) {
-                    foundUser.set('name', user.principal.name);
-                    foundUser.set('email', user.principal.email);
-                    foundUser.set('api_key', user.principal.api_key);
-                    foundUser.set('created_at', user.principal.created_at);
-                    foundUser.set('nId', user.principal.id);
-                    foundUser.set('last_connection', user.principal.last_connection);
-                    foundUser.set('last_ip', user.principal.last_ip);
-                    foundUser.set('nickname', user.principal.nickname);
-                    foundUser.set('password', user.principal.password);
-                    foundUser.set('updated_at', user.principal.updated_at);
-
-                    foundUser.save();
-                    resolve({ user: user.principal.email, accessToken: user.accessToken });
+                    storedUser = findOrCreateUser(store, session, principal, foundUser);
+                    updateOrCreateDevices(store, session, storedUser);
+                    resolve({ user: principal, accessToken: session.accessToken });
                 }, function () {
-
-                    storedUser = store.createRecord('user', {
-                        id: 'me',
-                        name: user.principal.name,
-                        email: user.principal.email,
-                        api_key: user.principal.api_key,
-                        created_at: user.principal.created_at,
-                        nId: user.principal.id,
-                        last_connection: user.principal.last_connection,
-                        last_ip: user.principal.last_ip,
-                        nickname: user.principal.nickname,
-                        password: user.principal.password,
-                        updated_at: user.principal.updated_at
-                    });
-                    storedUser.save();
-
-                    resolve({ user: user.principal.email, accessToken: user.accessToken });
+                    storedUser = findOrCreateUser(store, session, principal);
+                    updateOrCreateDevices(store, session, storedUser);
+                    resolve({ user: principal, accessToken: session.accessToken });
                 });
             });
         });
@@ -94,47 +160,23 @@ export default Base.extend({
                 password: credentials.password
             });
             Ember.run(function () {
-                nitrogenService.authenticate(user, function (err, user) {
+                nitrogenService.authenticate(user, function (err, session, principal) {
                     var store, storedUser;
 
                     if (err) { reject(err); }
-
                     store = self.container.lookup('store:main');
 
                     store.find('user', { id: 'me' })
                     .then(function (foundUser) {
-                        foundUser.set('name', user.principal.name);
-                        foundUser.set('email', user.principal.email);
-                        foundUser.set('api_key', user.principal.api_key);
-                        foundUser.set('created_at', user.principal.created_at);
-                        foundUser.set('nId', user.principal.id);
-                        foundUser.set('last_connection', user.principal.last_connection);
-                        foundUser.set('last_ip', user.principal.last_ip);
-                        foundUser.set('nickname', user.principal.nickname);
-                        foundUser.set('password', user.principal.password);
-                        foundUser.set('updated_at', user.principal.updated_at);
-
-                        foundUser.save();
-                        resolve({ user: user.principal.email, accessToken: user.accessToken });
+                        storedUser = findOrCreateUser(store, session, principal, foundUser);
+                        updateOrCreateDevices(store, session, storedUser);
+                        resolve({ user: principal, accessToken: session.accessToken });
                     }, function () {
-
-                        storedUser = store.createRecord('user', {
-                            id: 'me',
-                            name: user.principal.name,
-                            email: user.principal.email,
-                            api_key: user.principal.api_key,
-                            created_at: user.principal.created_at,
-                            nId: user.principal.id,
-                            last_connection: user.principal.last_connection,
-                            last_ip: user.principal.last_ip,
-                            nickname: user.principal.nickname,
-                            password: user.principal.password,
-                            updated_at: user.principal.updated_at
-                        });
-                        storedUser.save();
-
-                        resolve({ user: user.principal.email, accessToken: user.accessToken });
+                        storedUser = findOrCreateUser(store, session, principal);
+                        updateOrCreateDevices(store, session, storedUser);
+                        resolve({ user: principal, accessToken: session.accessToken });
                     });
+
                 });
             });
         });

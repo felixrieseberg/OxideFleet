@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>FA4D0E59-6F52-44F4-968D-93579101E695</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Oxide</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>EC7A5B9E2111F89069DA6ADE3209134DE3122F22</key>
+		<string>https://github.com/irjudson/oxide.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>cordova/platforms/ios/Oxide.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>EC7A5B9E2111F89069DA6ADE3209134DE3122F22</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/irjudson/oxide.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>EC7A5B9E2111F89069DA6ADE3209134DE3122F22</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>EC7A5B9E2111F89069DA6ADE3209134DE3122F22</string>
+			<key>IDESourceControlWCCName</key>
+			<string>oxide</string>
+		</dict>
+	</array>
+</dict>
+</plist>
