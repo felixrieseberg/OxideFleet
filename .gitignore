@@ -16,7 +16,6 @@
 /libpeerconnection.log
 npm-debug.log
 testem.log
-config/environment.js
 
 # iOS
 cordova/platforms/ios/build/
