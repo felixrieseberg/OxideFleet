@@ -47,7 +47,7 @@ function findOrCreateUser(store, session, principal, foundUser) {
 }
 
 function updateDevice (foundDevice, device, owner) {
-    console.log("Found: ", device);
+    console.log("Found: ", device, " for Owner: " + owner);
     foundDevice.set('nitrogen_id', device.id);
     foundDevice.set('name', device.name);
     foundDevice.set('lastUpdated', device.updated_at);
@@ -81,8 +81,8 @@ function newDevice(store, device, owner) {
 }
 
 function lookupDevice (principal, user, store) {
-    return new Ember.RSVP.Promise(function (resolve, reject) {
-        console.log('Looking up device with nid ' + principal.id);
+    return new Ember.RSVP.Promise(function (resolve) {
+        console.log('Looking up device with nitrogen id ' + principal.id);
         store.find('device', { nitrogen_id: principal.id })
         .then(function (foundDevices) {
 
@@ -101,8 +101,7 @@ function lookupDevice (principal, user, store) {
 
             resolve();
         }, function () {
-            return newDevice(store, principal, user);
-            resolve();
+            resolve(newDevice(store, principal, user));
         });
     });
 }
