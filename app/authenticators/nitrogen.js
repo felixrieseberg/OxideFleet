@@ -56,7 +56,8 @@ function updateDevice (foundDevice, device, owner) {
     foundDevice.set('nickname', device.nickname);
     foundDevice.set('updated_at', device.updated_at);
     foundDevice.set('created_at', device.created_at);
-    foundDevice.set('owner', owner);
+    
+    //foundDevice.set('owner', owner);
     foundDevice.save();
     return foundDevice;
 }
@@ -81,7 +82,7 @@ function newDevice(store, device, owner) {
 
 function lookupDevice (principal, user, store) {
     return new Ember.RSVP.Promise(function (resolve, reject) {
-        console.log(principal.id);
+        console.log('Looking up device with nid ' + principal.id);
         store.find('device', { nitrogen_id: principal.id })
         .then(function (foundDevices) {
 
@@ -97,7 +98,12 @@ function lookupDevice (principal, user, store) {
             foundDevices.map(function (foundDevice) {
                 updateDevice(foundDevice, principal, user); 
             });
-        }).then(resolve, reject);
+
+            resolve();
+        }, function () {
+            return newDevice(store, principal, user);
+            resolve();
+        });
     });
 }
 
@@ -116,8 +122,10 @@ function updateOrCreateDevices (store, session, user) {
                 reject(error);
             }
 
+            console.log(principals);
+
             principalLookup = principals.map(function (principal) {
-                return lookupDevice(principal, user, store)
+                return lookupDevice(principal, user, store);
             });
 
             Ember.RSVP.all(principalLookup).then(function (results) {
@@ -164,11 +172,13 @@ export default Base.extend({
                 .then(function (foundUser) {
                     storedUser = findOrCreateUser(store, session, principal, foundUser);
                     updateOrCreateDevices(store, session, storedUser).then(function() {
+                        console.log('Resolving Login');
                         resolve({ user: principal, accessToken: session.accessToken });
                     });
                 }, function () {
                     storedUser = findOrCreateUser(store, session, principal);
                     updateOrCreateDevices(store, session, storedUser).then(function() {
+                        console.log('Resolving Login');
                         resolve({ user: principal, accessToken: session.accessToken });
                     });
                 });
@@ -202,11 +212,13 @@ export default Base.extend({
                     .then(function (foundUser) {
                         storedUser = findOrCreateUser(store, session, principal, foundUser);
                         updateOrCreateDevices(store, session, storedUser).then(function() {
+                            console.log('Resolving Login');
                             resolve({ user: principal, accessToken: session.accessToken });
                         });
                     }, function () {
                         storedUser = findOrCreateUser(store, session, principal);
                         updateOrCreateDevices(store, session, storedUser).then(function() {
+                            console.log('Resolving Login');
                             resolve({ user: principal, accessToken: session.accessToken });
                         });
                     });
