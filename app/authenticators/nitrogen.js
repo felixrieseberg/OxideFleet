@@ -46,8 +46,8 @@ function findOrCreateUser(store, session, principal, foundUser) {
     }
 }
 
-function updateDevice(foundDevice, device, owner) {
-    console.log("Found: " + device);
+function updateDevice (foundDevice, device, owner) {
+    console.log("Found: ", device);
     foundDevice.set('nitrogen_id', device.id);
     foundDevice.set('name', device.name);
     foundDevice.set('lastUpdated', device.updated_at);
@@ -62,7 +62,7 @@ function updateDevice(foundDevice, device, owner) {
 }
 
 function newDevice(store, device, owner) {
-    console.log("New Device: " + device);
+    console.log("New Device: ", device);
     var nDevice = store.createRecord('device', {
         nitrogen_id: device.id,
         name: device.name,
@@ -76,30 +76,58 @@ function newDevice(store, device, owner) {
 
     nDevice.owner = owner;
     nDevice.save();
-
-    // for (var i = device.tags.length - 1; i >= 0; i--) {
-    //     var newTag = store.createRecord('tag', {
-    //         value: device.tags[i]
-    //     }).save();
-    //     nDevice.push(newTag);
-    //     nDevice.save();
-    // }
     return nDevice;
 }
 
-function updateOrCreateDevices(store, session, user) {
-    nitrogen.Principal.find(session, {
-        type: "device"
-    }, {
-        skip: 0,
-        sort: { last_connection: 1 }
-    }, function(err, principals) {
-        var idx;
-        for(idx = 0; idx < principals.length; ++idx) {
-            store.find('device', { nitrogen_id: principals[idx].id })
-            .then(function (foundDevice) { updateDevice(foundDevice, principals[idx], user); }, newDevice(store, principals[idx], user));
-        }
-    });   
+function lookupDevice (principal, user, store) {
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+        console.log(principal.id);
+        store.find('device', { nitrogen_id: principal.id })
+        .then(function (foundDevices) {
+
+            if (foundDevices.get('length') === 0) {
+                return newDevice(store, principal, user);
+            }
+
+            if (foundDevices.get('length') > 1) {
+                console.log('WARNING: Multiple devices in store for one Nitrogen id!');
+                console.log('Number of devices in store for this id: ' + foundDevices.get('length'));
+            }
+
+            foundDevices.map(function (foundDevice) {
+                updateDevice(foundDevice, principal, user); 
+            });
+        }).then(resolve, reject);
+    });
+}
+
+function updateOrCreateDevices (store, session, user) {
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+        nitrogen.Principal.find(session, {
+            type: "device"
+        }, {
+            skip: 0,
+            sort: { last_connection: 1 }
+        }, function (error, principals) {
+            var principalLookup;
+
+            if (error) {
+                console.log(error);
+                reject(error);
+            }
+
+            principalLookup = principals.map(function (principal) {
+                return lookupDevice(principal, user, store)
+            });
+
+            Ember.RSVP.all(principalLookup).then(function (results) {
+                console.log('Principal Lookup Results: ', results);
+                resolve();
+            }).catch(function (error) {
+                reject (error);
+            });
+        });
+    });
 }
 
 export default Base.extend({
@@ -116,7 +144,8 @@ export default Base.extend({
     restore: function(data) {
         var self = this;
         return new Ember.RSVP.Promise(function(resolve, reject) {
-            console.log("Nitrogen authenticator restore, with data: " + data);
+            console.log("Nitrogen authenticator restore, with data: ", data);
+
             var principal = new nitrogen.User({
                 accessToken: {
                     token: data.accessToken.token
@@ -124,6 +153,7 @@ export default Base.extend({
                 id: data.user.id,
                 nickname: data.user.nickname
             });
+
             nitrogenService.resume(principal, function (err, session, principal) {
                 var store, storedUser;
 
@@ -133,12 +163,14 @@ export default Base.extend({
                 store.find('user', 'me')
                 .then(function (foundUser) {
                     storedUser = findOrCreateUser(store, session, principal, foundUser);
-                    updateOrCreateDevices(store, session, storedUser);
-                    resolve({ user: principal, accessToken: session.accessToken });
+                    updateOrCreateDevices(store, session, storedUser).then(function() {
+                        resolve({ user: principal, accessToken: session.accessToken });
+                    });
                 }, function () {
                     storedUser = findOrCreateUser(store, session, principal);
-                    updateOrCreateDevices(store, session, storedUser);
-                    resolve({ user: principal, accessToken: session.accessToken });
+                    updateOrCreateDevices(store, session, storedUser).then(function() {
+                        resolve({ user: principal, accessToken: session.accessToken });
+                    });
                 });
             });
         });
@@ -169,12 +201,14 @@ export default Base.extend({
                     store.find('user', { id: 'me' })
                     .then(function (foundUser) {
                         storedUser = findOrCreateUser(store, session, principal, foundUser);
-                        updateOrCreateDevices(store, session, storedUser);
-                        resolve({ user: principal, accessToken: session.accessToken });
+                        updateOrCreateDevices(store, session, storedUser).then(function() {
+                            resolve({ user: principal, accessToken: session.accessToken });
+                        });
                     }, function () {
                         storedUser = findOrCreateUser(store, session, principal);
-                        updateOrCreateDevices(store, session, storedUser);
-                        resolve({ user: principal, accessToken: session.accessToken });
+                        updateOrCreateDevices(store, session, storedUser).then(function() {
+                            resolve({ user: principal, accessToken: session.accessToken });
+                        });
                     });
 
                 });
