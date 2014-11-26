@@ -1,40 +1,24 @@
 import Ember from 'ember';
 
 var nitrogenEmberUtils = {
-    findOrCreateUser: function (store, session, principal, foundUser) {
-        var newUser;
-
-        if (foundUser === null) {
-            newUser = store.createRecord('user', {
-                id: 'me',
-                name: principal.name,
-                email: principal.email,
-                api_key: principal.api_key,
-                created_at: principal.created_at,
-                nitrogen_id: principal.id,
-                last_connection: principal.last_connection,
-                last_ip: principal.last_ip,
-                nickname: principal.nickname,
-                password: principal.password,
-                updated_at: principal.updated_at
-            });
-            newUser.save();
-            return newUser;
-        } else {
-            foundUser.set('name', principal.name);
-            foundUser.set('email', principal.email);
-            foundUser.set('api_key', principal.api_key);
-            foundUser.set('created_at', principal.created_at);
-            foundUser.set('nitrogen_id', principal.id);
-            foundUser.set('last_connection', principal.last_connection);
-            foundUser.set('last_ip', principal.last_ip);
-            foundUser.set('nickname', principal.nickname);
-            foundUser.set('password', session.principal.password);
-            foundUser.set('updated_at', principal.updated_at);
-
-            foundUser.save();
-            return foundUser;
-        }
+    findOrCreateUser: function (store, session, principal) {
+        return new Ember.RSVP.Promise(function (resolve) {;
+            var user = store.createRecord('user', {id: 'me'});
+            user.set('name', principal.name);
+            user.set('email', principal.email);
+            user.set('api_key', principal.api_key);
+            user.set('created_at', principal.created_at);
+            user.set('nitrogen_id', principal.id);
+            user.set('last_connection', principal.last_connection);
+            user.set('last_ip', principal.last_ip);
+            user.set('nickname', principal.nickname);
+            user.set('password', session.principal.password);
+            user.set('updated_at', principal.updated_at);
+            
+            user.save().then(function (result) {
+                resolve(result);
+            })
+        });
     },
 
     updateDevice: function (foundDevice, device, owner) {
@@ -78,8 +62,10 @@ var nitrogenEmberUtils = {
             nickname: device.nickname,
             created_at: device.created_at,
             updated_at: device.updated_at,
-            owner: this.store.find('user', 'me')
+            owner: owner
         });
+
+
 
         // Once we have a Nitrogen Tags API, we can introduce this.
         // if (device.tags.length > 0) {
@@ -97,18 +83,6 @@ var nitrogenEmberUtils = {
 
         return newDevice.save();
     },
-
-    // lookupTag: function (tag, store) {
-    //     var self = this;
-
-    //     return new Ember.RSVP.Promise(function (resolve) {
-    //         store.find('tag', {value: tag}).then(function (records) {
-    //             return records.get('firstObject');
-    //         }, function () {
-    //             return self.store.createRecord('tag', {value: tag});
-    //         });
-    //     });
-    // },
 
     lookupDevice: function (principal, user, store) {
         var self = this;

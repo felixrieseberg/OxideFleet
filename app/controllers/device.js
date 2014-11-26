@@ -26,14 +26,19 @@ export default Ember.ObjectController.extend({
     }.property(),
 
     tagString: function (key, value) {
+        var deviceTags = this.get('tags');
+
         // Setter
         if (arguments.length > 1) {
             this.set('tags', value.split(','));
         }
 
         // Getter
-        return this.get('tags').toString();
-
+        if (deviceTags) {
+            return this.get('tags').toString();
+        } else {
+            return '';
+        }
     }.property('tags'),
 
     actions: {

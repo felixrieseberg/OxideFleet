@@ -37,24 +37,19 @@ export default Base.extend({
             });
 
             nitrogenService.resume(principal, function (err, session, principal) {
-                var store, storedUser;
+                var store;
 
                 if (err) { reject(err); }
                 store = self.container.lookup('store:main');
 
-                store.find('user', 'me')
-                .then(function (foundUser) {
-                    storedUser = nitrogenEmberUtils.findOrCreateUser(store, session, principal, foundUser);
-                    nitrogenEmberUtils.updateOrCreateDevices(store, session, storedUser).then(function () {
-                        console.log('Resolving Login');
-                        resolve({ user: principal, accessToken: session.accessToken });
-                    });
-                }, function () {
-                    storedUser = nitrogenEmberUtils.findOrCreateUser(store, session, principal);
-                    nitrogenEmberUtils.updateOrCreateDevices(store, session, storedUser).then(function () {
-                        console.log('Resolving Login');
-                        resolve({ user: principal, accessToken: session.accessToken });
-                    });
+                nitrogenEmberUtils.findOrCreateUser(store, session, principal)
+                .then(function (storedUser) {
+                    return nitrogenEmberUtils.updateOrCreateDevices(store, session, storedUser)
+                }).then(function () {
+                    console.log('Resolving Login');
+                    resolve({ user: principal, accessToken: session.accessToken });
+                }).catch(function (error) {
+                    console.log(error);
                 });
             });
         });
@@ -77,26 +72,20 @@ export default Base.extend({
             });
             Ember.run(function () {
                 nitrogenService.authenticate(user, function (err, session, principal) {
-                    var store, storedUser;
+                    var store;
 
                     if (err) { reject(err); }
                     store = self.container.lookup('store:main');
 
-                    store.find('user', { id: 'me' })
-                    .then(function (foundUser) {
-                        storedUser = nitrogenEmberUtils.findOrCreateUser(store, session, principal, foundUser);
-                        nitrogenEmberUtils.updateOrCreateDevices(store, session, storedUser).then(function () {
-                            console.log('Resolving Login');
-                            resolve({ user: principal, accessToken: session.accessToken });
-                        });
-                    }, function () {
-                        storedUser = nitrogenEmberUtils.findOrCreateUser(store, session, principal);
-                        nitrogenEmberUtils.updateOrCreateDevices(store, session, storedUser).then(function () {
-                            console.log('Resolving Login');
-                            resolve({ user: principal, accessToken: session.accessToken });
-                        });
+                    nitrogenEmberUtils.findOrCreateUser(store, session, principal)
+                    .then(function (storedUser) {
+                        return nitrogenEmberUtils.updateOrCreateDevices(store, session, storedUser)
+                    }).then(function () {
+                        console.log('Resolving Login');
+                        resolve({ user: principal, accessToken: session.accessToken });
+                    }).catch(function (error) {
+                        console.log(error);
                     });
-
                 });
             });
         });
