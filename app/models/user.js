@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 
 var User = DS.Model.extend({
-    
+
     // Oxide
     avatarUrl: function () {
         console.log('http://www.gravatar.com/avatar/' + md5(this.get('email')));
@@ -21,7 +21,7 @@ var User = DS.Model.extend({
     updated_at: DS.attr('string'),
 
     // Relations
-    devices: DS.hasMany('device', { async: true })
+    devices: DS.hasMany('device', {async: true})
 });
 
 export default User;

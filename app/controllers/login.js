@@ -16,7 +16,7 @@ export default Ember.Controller.extend(LoginControllerMixin, {
             });
         },
 
-        authenticateWithFacebook: function() {
+        authenticateWithFacebook: function () {
             var self = this;
 
             this.get('session').authenticate('simple-auth-authenticator:torii', 'facebook-oauth2')
@@ -25,6 +25,6 @@ export default Ember.Controller.extend(LoginControllerMixin, {
             }, function (error) {
                 console.log(error);
             });
-        },
+        }
     }
 });

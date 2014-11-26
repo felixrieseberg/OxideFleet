@@ -6,10 +6,10 @@ export default Ember.Controller.extend({
         return this.store.find('location');
     }.property(),
 
-    devices: function() {
-    	return this.store.find('device');
+    devices: function () {
+        return this.store.find('device');
     }.property(),
-    
+
     currentUser: function () {
         return this.store.find('user', 'me');
     }.property()

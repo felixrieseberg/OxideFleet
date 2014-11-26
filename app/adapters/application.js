@@ -7,7 +7,7 @@ export default DS.LSAdapter.extend({
 });
 
 // Rest Adapter, calling http://[HOST]/api/model/id
-// ------------------------------------------------- 
+// -------------------------------------------------
 // export default DS.RESTAdapter.extend({
 //     namespace: 'api'
 // });

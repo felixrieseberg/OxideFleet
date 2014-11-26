@@ -6,7 +6,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     actions: {
         sessionInvalidationSucceeded: function () {
             // Force reload to empty all cached data
-            window.location = "http://" + document.location.host;
+            window.location = 'http://' + document.location.host;
         },
 
         toggleSidebar: function () {
@@ -31,7 +31,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 }, { duration: 200, queue: false });
                 $('#navbar').animate({
                    marginLeft: '250px'
-                }, { duration: 200, queue: false });    
+                }, { duration: 200, queue: false });
             }
         }
     }

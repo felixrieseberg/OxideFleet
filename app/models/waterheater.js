@@ -8,7 +8,7 @@ var Waterheater = Device.extend({
     powerConsumption: DS.attr('number'),
     image: DS.attr('string'),
     temperatureHistory: DS.attr('string'),
-    preset: DS.belongsTo('preset', { async: true }),
+    preset: DS.belongsTo('preset', {async: true}),
 
     sleepmode: DS.attr('boolean'),
     vacationmode: DS.attr('boolean'),

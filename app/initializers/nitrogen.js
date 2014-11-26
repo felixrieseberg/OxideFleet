@@ -1,14 +1,9 @@
-import nitrogen_auth from '../authenticators/nitrogen';
-// import Config from '../config/environment';
-
-var called = false;
+import nitrogenAuth from '../authenticators/nitrogen';
 
 export default {
-	name: "authentication",
+	name: 'authentication',
 	initialize: function (container) {
-		console.log("Loading nitrogen initializer.");
-		container.register('authenticator:nitrogen', nitrogen_auth);
-		called = true;
-		// application.nitrogenService = new nitrogen.Service(Config.APP.nitrogen);
+		console.log('Loading nitrogen initializer.');
+		container.register('authenticator:nitrogen', nitrogenAuth);
 	}
 };
