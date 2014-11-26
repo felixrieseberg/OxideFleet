@@ -20,6 +20,7 @@ body, html, body > .ember-view {
     font-family: Lato, Helvetica, Arial, sans-serif;;
     min-height: 100vh;
     position: relative;
+    overflow-x: hidden;
 }
 
 #container-outlet {
