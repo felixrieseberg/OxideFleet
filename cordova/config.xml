@@ -10,4 +10,8 @@
     <content src="index.html" />
     <access origin="*" />
     <preference name="DisallowOverscroll" value="true" />
+    <preference name="EnableViewportScale" value="true" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#d7383b" />
+    <preference name="StatusBarStyle" value="lightcontent" />
 </widget>
