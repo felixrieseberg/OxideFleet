@@ -1,0 +1,1274 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"sele",
+				"SelectizeComponent"
+			],
+			[
+				"tag",
+				"tagLookup"
+			],
+			[
+				"nitro",
+				"nitrogenEmberUtils"
+			],
+			[
+				"new",
+				"newDevice"
+			],
+			[
+				"find",
+				"findOrCreateUser"
+			],
+			[
+				"f",
+				"files"
+			],
+			[
+				"pri",
+				"principal"
+			],
+			[
+				"princ",
+				"principals"
+			],
+			[
+				"u",
+				"uploaderReference"
+			],
+			[
+				"em",
+				"emailPassword"
+			],
+			[
+				"emai",
+				"emailUser"
+			],
+			[
+				"uplo",
+				"uploaderUi"
+			],
+			[
+				"uplad",
+				"uploaderUi"
+			],
+			[
+				"upl",
+				"uploaderUi"
+			],
+			[
+				"up",
+				"uploaderUi"
+			],
+			[
+				"fu",
+				"function"
+			],
+			[
+				"mar",
+				"margin-top"
+			],
+			[
+				"margin",
+				"margin-top"
+			],
+			[
+				"xml",
+				"xmlResult"
+			],
+			[
+				"dataset",
+				"datasetName"
+			],
+			[
+				"parsing",
+				"parsingNodes"
+			],
+			[
+				"crea",
+				"createProperty"
+			],
+			[
+				"Xm",
+				"XMLSerializer"
+			],
+			[
+				"val",
+				"valueTextNode"
+			],
+			[
+				"name",
+				"nameTextNode"
+			],
+			[
+				"value",
+				"valueTextNode"
+			],
+			[
+				"Xml",
+				"xmlResult"
+			],
+			[
+				"ap",
+				"appendChild"
+			],
+			[
+				"valu",
+				"valueString"
+			],
+			[
+				"extra",
+				"extractor"
+			],
+			[
+				"get",
+				"getChildren"
+			],
+			[
+				"select",
+				"selectedJobNames"
+			],
+			[
+				"selec",
+				"selectedJobNames"
+			],
+			[
+				"jobna",
+				"jobNamesSelected"
+			],
+			[
+				"job",
+				"jobName"
+			],
+			[
+				"for",
+				"for	for (…) {…} (Improved Native For-Loop)"
+			],
+			[
+				"jobNa",
+				"jobNameOptions"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"fail",
+				"failMessage"
+			],
+			[
+				"in",
+				"input"
+			],
+			[
+				"at",
+				"attributes"
+			],
+			[
+				"req",
+				"require"
+			],
+			[
+				"rest",
+				"restoreBackup"
+			],
+			[
+				"scrop",
+				"scriptLogTitle"
+			],
+			[
+				"scriptlog",
+				"bScriptLogArea"
+			],
+			[
+				"err",
+				"error"
+			],
+			[
+				"error",
+				"errorCheck"
+			],
+			[
+				"ero",
+				"errorCheck"
+			],
+			[
+				"check",
+				"checkForError"
+			],
+			[
+				"tex",
+				"textRed"
+			],
+			[
+				"te",
+				"textKeepTrying"
+			],
+			[
+				"timer",
+				"timerRed"
+			],
+			[
+				"tim",
+				"timerRed"
+			],
+			[
+				"inlin",
+				"inline-block"
+			],
+			[
+				"co",
+				"config"
+			],
+			[
+				"cluser",
+				"clusterName"
+			],
+			[
+				"stor",
+				"storageAccountContainer"
+			],
+			[
+				"str",
+				"storageAccountName"
+			],
+			[
+				"cl",
+				"clusterUsername"
+			],
+			[
+				"clust",
+				"cluserLocation"
+			],
+			[
+				"re",
+				"reject"
+			],
+			[
+				"sot",
+				"storageAccountKey"
+			],
+			[
+				"clus",
+				"clusterLocation"
+			],
+			[
+				"clu",
+				"clusterUsername"
+			],
+			[
+				"st",
+				"storageContainer"
+			],
+			[
+				"clut",
+				"clusterLocation"
+			],
+			[
+				"config",
+				"configSetting"
+			],
+			[
+				"pad",
+				"padding-top"
+			],
+			[
+				"op",
+				"option	Tag"
+			],
+			[
+				"Update",
+				"UpdaterClient"
+			],
+			[
+				"delete",
+				"deleteScriptRunning"
+			],
+			[
+				"del",
+				"deleteScriptLog"
+			],
+			[
+				"res",
+				"restoreScriptLog"
+			],
+			[
+				"cre",
+				"createScriptLog"
+			],
+			[
+				"create",
+				"createBackup"
+			],
+			[
+				"upda",
+				"updater_client"
+			],
+			[
+				"fn",
+				"function"
+			],
+			[
+				"scr",
+				"scriptRunning"
+			],
+			[
+				"scro",
+				"scriptLog"
+			],
+			[
+				"scri",
+				"scriptLogArea"
+			],
+			[
+				"sc",
+				"scriptLogArea"
+			],
+			[
+				"script",
+				"scriptLogArea"
+			],
+			[
+				"respon",
+				"response"
+			],
+			[
+				"pro",
+				"propagate"
+			],
+			[
+				"log",
+				"logcontent"
+			],
+			[
+				"updat",
+				"updaterScriptLog"
+			],
+			[
+				"updater",
+				"updaterScriptRunning"
+			],
+			[
+				"upd",
+				"updaterScriptLog"
+			],
+			[
+				"target",
+				"targetUrl"
+			],
+			[
+				"is",
+				"isNodeWebkit"
+			],
+			[
+				"zip",
+				"zippath"
+			],
+			[
+				"ghost",
+				"ghost-zip"
+			],
+			[
+				"set",
+				"setGhostPackage"
+			],
+			[
+				"app",
+				"appendError"
+			],
+			[
+				"appen",
+				"appendLog"
+			],
+			[
+				"fon",
+				"font-weight"
+			],
+			[
+				"switch",
+				"switchPanel"
+			],
+			[
+				"sw",
+				"switchPanel"
+			],
+			[
+				"test",
+				"testPassword"
+			],
+			[
+				"tes",
+				"testUrl"
+			],
+			[
+				"blog",
+				"blog-password"
+			],
+			[
+				"bacl",
+				"background-color"
+			],
+			[
+				"trans",
+				"transparent"
+			],
+			[
+				"std",
+				"stderr"
+			],
+			[
+				"ot",
+				"output"
+			],
+			[
+				"out",
+				"output"
+			],
+			[
+				"con",
+				"configdir"
+			],
+			[
+				"vali",
+				"validateConfig"
+			],
+			[
+				"url",
+				"urlRegex"
+			],
+			[
+				"sh",
+				"switchPanel"
+			],
+			[
+				"marg",
+				"margin-right"
+			],
+			[
+				"post",
+				"postCommand"
+			],
+			[
+				"source",
+				"sourceStream"
+			],
+			[
+				"er",
+				"errorHandlers"
+			],
+			[
+				"erro",
+				"errorHandlers"
+			],
+			[
+				"e",
+				"error"
+			],
+			[
+				"slug",
+				"slugTryCount"
+			],
+			[
+				"user",
+				"userData"
+			],
+			[
+				"_",
+				"_s"
+			],
+			[
+				"has",
+				"hasChanged"
+			],
+			[
+				"base",
+				"baseName"
+			],
+			[
+				"slu",
+				"longSlug"
+			],
+			[
+				"return",
+				"returnMatch"
+			],
+			[
+				"save",
+				"savedNumbers"
+			],
+			[
+				"saved",
+				"savedNumbers"
+			],
+			[
+				"red",
+				"redisClient"
+			],
+			[
+				"wolf",
+				"wolframappid"
+			],
+			[
+				"rq",
+				"reqText"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "Packages/User/node.sublime-build",
+	"command_palette":
+	{
+		"height": 368.0,
+		"selected_items":
+		[
+			[
+				"tog",
+				"Toggle Comment"
+			],
+			[
+				"togl",
+				"Toggle Comment"
+			],
+			[
+				"spaces",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"reind",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"java",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"markd",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"sc",
+				"Set Syntax: SCSS"
+			],
+			[
+				"inde",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"js",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"to",
+				"Toggle Comment"
+			],
+			[
+				"rei",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"colo",
+				"Color Picker"
+			],
+			[
+				"color",
+				"Color Picker"
+			],
+			[
+				"css",
+				"Run CSScomb"
+			],
+			[
+				"javsa",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"javas",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"html",
+				"Set Syntax: HTML"
+			],
+			[
+				"htm",
+				"Set Syntax: HTML"
+			],
+			[
+				"pre",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"mark",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"col",
+				"Color Picker"
+			],
+			[
+				"javasc",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"comm",
+				"Toggle Comment"
+			],
+			[
+				"package",
+				"Package Control: Remove Package"
+			],
+			[
+				"change",
+				"ChangeQuotes"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"prevo",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"preview",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"markdo",
+				"Set Syntax: Markdown"
+			],
+			[
+				"t",
+				"Toggle Comment"
+			],
+			[
+				"toggl",
+				"Toggle Comment"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"tidy",
+				"Tidy CSS (Low Compression)"
+			],
+			[
+				"csst",
+				"Tidy CSS (Highest Compression)"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"comme",
+				"Toggle Comment"
+			],
+			[
+				"toglg",
+				"Toggle Comment"
+			],
+			[
+				"toggle",
+				"Toggle Comment"
+			],
+			[
+				"lower",
+				"Convert Case: Lower Case"
+			],
+			[
+				"co",
+				"Color Picker"
+			],
+			[
+				"comment",
+				"Toggle Comment"
+			],
+			[
+				"scss",
+				"Set Syntax: SCSS"
+			],
+			[
+				"markdown",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"preview ",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"markdow",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"re",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"rein",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"set scss",
+				"Set Syntax: SCSS"
+			],
+			[
+				"i",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"convert",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"conver",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"set css",
+				"Set Syntax: CSS"
+			],
+			[
+				"inten",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"wrap",
+				"Word Wrap: Toggle"
+			],
+			[
+				"refres",
+				"Project: Refresh Folders"
+			],
+			[
+				"handle",
+				"Set Syntax: Handlebars"
+			],
+			[
+				"inte",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"cole",
+				"Color Picker"
+			],
+			[
+				"package ins",
+				"Package Control: Install Package"
+			],
+			[
+				"git checkout",
+				"Git: Checkout Tag"
+			],
+			[
+				"git",
+				"Git: Status"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 435.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+	],
+	"file_history":
+	[
+		"/Users/felixrieseberg/Code/oxide/.sublime-project",
+		"/Users/felixrieseberg/Code/oxide/app/app.js",
+		"/Users/felixrieseberg/Code/oxide/package.json",
+		"/Users/felixrieseberg/Code/oxide/app/controllers/dashboard.js",
+		"/Users/felixrieseberg/Code/oxide/app/models/waterheater.js",
+		"/Users/felixrieseberg/Code/oxide/app/router.js",
+		"/Users/felixrieseberg/Code/oxide/app/routes/application.js",
+		"/Users/felixrieseberg/Code/oxide/app/templates/login.hbs",
+		"/Users/felixrieseberg/Code/oxide/app/models/device.js",
+		"/Users/felixrieseberg/Code/oxide/app/models/user.js",
+		"/Users/felixrieseberg/Code/oxide/app/utils/nitrogen-ember-utils.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/components/jg-selectize.js",
+		"/Users/felixrieseberg/Code/oxide/app/components/ox-selectize.js",
+		"/Users/felixrieseberg/Code/oxide/app/index.html",
+		"/Users/felixrieseberg/Code/oxide/README.md",
+		"/Users/felixrieseberg/Code/oxide/app/models/tag.js",
+		"/Users/felixrieseberg/Code/oxide/.travis.yml",
+		"/Users/felixrieseberg/Code/oxide/Gruntfile.js",
+		"/Users/felixrieseberg/Code/oxide/app/routes/login.js",
+		"/Users/felixrieseberg/Code/oxide/app/initializers/nitrogen.js",
+		"/Users/felixrieseberg/Code/oxide/node_modules/ember-cli/lib/cli/lookup-command.js",
+		"/Users/felixrieseberg/Code/oxide/node_modules/ember-cli/lib/cli/cli.js",
+		"/Users/felixrieseberg/Code/oxide/node_modules/ember-cli/appveyor.yml",
+		"/Users/felixrieseberg/Code/oxide/app/controllers/device.js",
+		"/Users/felixrieseberg/Code/oxide/app/controllers/login.js",
+		"/Users/felixrieseberg/Code/oxide/app/controllers/settings.js",
+		"/Users/felixrieseberg/Code/oxide/app/authenticators/nitrogen.js",
+		"/Users/felixrieseberg/Code/oxide/app/controllers/application.js",
+		"/Users/felixrieseberg/Code/oxide/Brocfile.js",
+		"/Users/felixrieseberg/Code/oxide/app/routes/settings.js",
+		"/Users/felixrieseberg/Code/oxide/app/routes/location.js",
+		"/Users/felixrieseberg/Code/oxide/app/views/device.js",
+		"/Users/felixrieseberg/Code/oxide/config/environment.js",
+		"/Users/felixrieseberg/Code/oxide/app/adapters/application.js",
+		"/Users/felixrieseberg/Code/oxide/.jscsrc",
+		"/Users/felixrieseberg/Code/Ghost/Gruntfile.js",
+		"/Users/felixrieseberg/Code/oxide/.jshintrc",
+		"/Users/felixrieseberg/Code/oxide/tests/test-helper.js",
+		"/Users/felixrieseberg/Code/oxide/app/models/preset.js",
+		"/Users/felixrieseberg/Code/oxide/.ember-cli",
+		"/Users/felixrieseberg/Code/oxide/app/views/application.js",
+		"/Users/felixrieseberg/Code/oxide/.gitignore",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-simple-auth/simple-auth.js",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-document-title/dist/document-title.amd.js",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/moment/moment.js",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-document-title/dist/document-title.min.js",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-document-title/dist/document-title.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/app.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/templates/components/gh-uploader.hbs",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/loader.js/loader.js",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/loader.js/README.md",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-document-title/bower.json",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-document-title/.bower.json",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-data/ember-data.js",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-resolver/dist/ember-resolver.js",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-document-title/README.md",
+		"/Users/felixrieseberg/Code/Ghost/core/server/middleware/index.js",
+		"/Users/felixrieseberg/Code/Ghost/core/server/middleware/middleware.js",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-document-title/dist/document-title.amd.min.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/initializers/ghost-config.js",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-simple-auth/README.md",
+		"/Users/felixrieseberg/Code/Ghost/bower.json",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-load-initializers/ember-load-initializers.js",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember-load-initializers/README.md",
+		"/Users/felixrieseberg/Code/Ghost/core/server/views/default.hbs",
+		"/Users/felixrieseberg/Code/Ghost/core/server/index.js",
+		"/Users/felixrieseberg/Code/Ghost/core/server/controllers/admin.js",
+		"/Users/felixrieseberg/Code/Ghost/core/server/routes/admin.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/loader.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/config.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/_config.yml",
+		"/Users/felixrieseberg/Code/Ghost/package.json",
+		"/Users/felixrieseberg/Code/Ghost-Azure/.gitmodules",
+		"/Users/felixrieseberg/Code/Ghost-Azure/Gruntfile.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/components/gh-uploader.js",
+		"/Users/felixrieseberg/Downloads/Ghost-Azure-0510 2/Ghost/config.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/controllers/editor/new.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/controllers/post-settings-menu.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/templates/post-settings-menu.hbs",
+		"/Users/felixrieseberg/Code/Ghost/bower_components/ember/ember.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/components/gh-upload-modal.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/views/editor/edit.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/views/editor/new.js",
+		"/Users/felixrieseberg/Code/Ghost/core/client/components/gh-file-upload.js",
+		"/Users/felixrieseberg/Downloads/Ghost-Azure-0550/Ghost/web.config",
+		"/Users/felixrieseberg/Library/Application Support/Sublime Text 3/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/felixrieseberg/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/felixrieseberg/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/server/gruntfile.js",
+		"/Users/felixrieseberg/Code/Ghost-Updater-Azure/gruntfile.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/server/index.html",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/server/clientdist/index.html",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/Gruntfile.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/.tmp/index.html",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/styles/style.scss",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/static_components/highlight/highlight.pack.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/bower.json",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/index.html",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/components/jg-highlight.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/routes/application_route.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/app.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/static_components/highlight/styles/rainbow.css",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/static_components/highlight/styles/vs.css",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/static_components/highlight/styles/default.css",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/bower_components/highlight.js/src/export.html",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/bower_components/highlight.js/README.md",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/templates/_navbar.hbs",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/bower_components/highlight.js/src/highlight.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/templates/components/jg-highlight.hbs",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/controllers/modals/execerror-modal.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/templates/components/jg-modal.hbs",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/router.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/templates/xmlextraction.hbs",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/bower_components/flat-ui/js/radiocheck.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/components/jg-styled-checkbox.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/components/jg-styled-input.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/components/jg-modal.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/routes/xmlextraction_route.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/views/jobnames-select_view.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/server/api/xmlextraction.js",
+		"/Users/felixrieseberg/Code/Flat-UI-master/docs/components.html",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/models/jobname.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/views/xmlextraction_view.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/views/index_view.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/styles/flatui.scss",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/models/config.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/scripts/store.js",
+		"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/templates/components/jg-selectize.hbs"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"/Users/felixrieseberg/Code/Ghost/core/client",
+			"/Users/felixrieseberg/Code/Ghost/bower_components",
+			"/Users/felixrieseberg/Code/Ghost/core/client",
+			"/Users/felixrieseberg/Code/Ghost/core",
+			"/Users/felixrieseberg/Code/Ghost/core/client",
+			"/Users/felixrieseberg/Code/Ghost/core/server",
+			"/Users/felixrieseberg/Code/Ghost/core/client",
+			"/Users/felixrieseberg/Code/Ghost-Updater-Azure/updater_client",
+			"/Users/felixrieseberg/Code/Ghost-Updater-Azure/updater",
+			"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client",
+			"/Users/felixrieseberg/Code/Jaglion-Workbench/core/client/styles",
+			"/Users/felixrieseberg/Code/Jaglion/core/client/scripts",
+			"/Users/felixrieseberg/Code/Jaglion/core/client",
+			"/Users/felixrieseberg/Code/SlackbotBender",
+			"/Users/felixrieseberg/Code/Ghost/core/server",
+			"/Users/felixrieseberg/Code/Ghost/core/test",
+			"/Users/felixrieseberg/Code/Ghost/core/server",
+			"/Users/felixrieseberg/Code/Ghost/core/test/integration/api",
+			"/Users/felixrieseberg/Code/Ghost/core/test",
+			"/Users/felixrieseberg/Code/Ghost/core/test/utils/fixtures",
+			"/Users/felixrieseberg/Code/Ghost/core/test/utils",
+			"/Users/felixrieseberg/Code/Ghost/core/test/functional",
+			"/Users/felixrieseberg/Code/Ghost/core/server",
+			"/Users/felixrieseberg/Code/Ghost/core/server/models",
+			"/Users/felixrieseberg/Code/Ghost/core/client",
+			"/Users/felixrieseberg/Code/Ghost/core",
+			"/Users/felixrieseberg/Code/Ghost/core/test",
+			"/Users/felixrieseberg/Code/Ghost/core",
+			"/Users/felixrieseberg/Code/Ghost/core/server",
+			"/Users/felixrieseberg/Code/Ghost/core/client/templates",
+			"/Users/felixrieseberg/Code/MadCad/app/madcadmobile/www/assets/scss",
+			"/Users/felixrieseberg/Code/MadCad/app/madcadmobile/www/js",
+			"/Users/felixrieseberg/Code/Ghost/core/client",
+			"/Users/felixrieseberg/Code/Ghost/core/test/functional",
+			"/Users/felixrieseberg/Code/Ghost/core/client",
+			"/Users/felixrieseberg/Code/Ghost/core",
+			"/Users/felixrieseberg/Code/Ghost/core/client",
+			"/Users/felixrieseberg/Code/MadCad/app/madcadmobile/www/js",
+			"/Users/felixrieseberg/Code/Ghost/core",
+			"/Users/felixrieseberg/Code/Ghost/core/client",
+			"/Users/felixrieseberg/Code/Ghost/core/client/routes",
+			"/Users/felixrieseberg/Code/Ghost/core/client",
+			"/Users/felixrieseberg/Code/MadCad/app/madcadmobile/www/js",
+			"/Users/felixrieseberg/Code/MadCad/app/madcadmobile/www",
+			"/Users/felixrieseberg/Code/MadCad/app",
+			"/Users/felixrieseberg/Code/MadCad/app/madcadmobile/www",
+			"/Users/felixrieseberg/Code/Wellington"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"all",
+			"lookupdevice",
+			"result",
+			"lookupdevice",
+			"updateOrCreateDevices",
+			"lookupDevice",
+			"newDevice",
+			"updateDevice",
+			"findOrCreateUser",
+			"//",
+			"function(",
+			"lintFiles",
+			"jscs",
+			"\"",
+			"jshint",
+			"lookup",
+			"app.import",
+			"requirejs",
+			"simple",
+			"description",
+			"Add post image",
+			"Add image",
+			"add post",
+			"add",
+			"bower",
+			"ember/resolver",
+			"ember-simple-auth",
+			"ember/simple-auth",
+			"from '",
+			"import",
+			"script_tags",
+			"script tags",
+			"remove",
+			"removeExtras",
+			"reset",
+			"$dropzone",
+			"console.log",
+			"uploader",
+			"console",
+			"js-cancel",
+			"canceled",
+			"willtransition",
+			"Ember.Component",
+			"component",
+			"target",
+			"cons",
+			"upload",
+			"init",
+			"js-cancel",
+			"removeextras",
+			"                        <div class=\"col-md-3\">\n                                <div class=\"input-group\">\n                                    Attribute {{extra.index}}\n                                </div>\n                            </div>\n                            <div class=\"col-md-3\">\n                                <div class=\"input-group\">\n                                    <span class=\"input-group-addon\">XPath</span>\n                                    {{input value=extra.xpath class=\"form-control\"}}\n                                </div>\n                            </div>\n                            <div class=\"col-md-3\">\n                                <div class=\"input-group\">\n                                    <span class=\"input-group-addon\">Column</span>\n                                    {{input value=extra.column class=\"form-control\"}}\n                                </div>\n                            </div>\n                            <div class=\"col-md-3\">\n                                <div class=\"input-group\">\n                                    <span class=\"input-group-addon\">Extractor</span>\n                                    {{input value=extra.extractor class=\"form-control\"}}\n                                </div>\n                            </div>",
+			"offset",
+			"selectedJobNames",
+			"istaVorgangID",
+			"istaVorgangAbschnitt",
+			"showJobNames",
+			"checkbox",
+			"radio",
+			"_FLM_LESEN_BOSCH",
+			"flmLesenBosch",
+			"IS_LESEN_DETAIL",
+			"STATUS_BZEDIAG",
+			"IS_LESEN_DETAIL",
+			"datensatz",
+			"istaVorgangAbschnitt",
+			"isLesenDetail",
+			"flmLesenBosch",
+			"jobname",
+			"nodemon",
+			"data",
+			"concurrent",
+			"concurrent:dev",
+			"concurrent",
+			"liveapi",
+			"concurrent",
+			"watch",
+			"padding-top",
+			"compass",
+			"cssmin",
+			"bower",
+			"concurrent",
+			"serve:",
+			"serve",
+			"jobname",
+			"logger",
+			"delete",
+			"restore",
+			"500",
+			"show",
+			"ENOTFOUND",
+			"NOTFOUND",
+			"errorcheck",
+			"getWebjobLog",
+			"webjob log",
+			"500",
+			"self",
+			"html",
+			"reject",
+			"cancel",
+			"setGhos",
+			"J\\\\@g\\\\!0n2014",
+			"jaglion",
+			"cluser",
+			"display",
+			"modal",
+			"restadapter",
+			"rest",
+			"components",
+			"Ember",
+			"ember",
+			"main",
+			"built",
+			"ember",
+			"step",
+			"start",
+			"switchPanel",
+			"backup",
+			"shorts",
+			"generateslug",
+			"edit",
+			"generateslug",
+			"ghostbo",
+			"bookshelf",
+			"slug",
+			"accept",
+			"send",
+			"signup",
+			"console"
+		],
+		"highlight": false,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"nitrogenEmberUtils.updateOrCreateDevices",
+			"nitrogenEmberUtils.lookupDevice",
+			"nitrogenEmberUtils.newDevice",
+			"nitrogenEmberUtils.updateDevice",
+			"nitrogenEmberUtils.findOrCreateUser",
+			"function (",
+			"'",
+			"%storagepassword%",
+			"%storageusername%",
+			"server/clientdist",
+			"ghost",
+			"twilio",
+			"'",
+			"device",
+			":after",
+			"#A9A9A9",
+			"f13600",
+			"../images/",
+			"../fonts/",
+			"assureStorage",
+			"states.comment",
+			"states.tag_string_single",
+			"states.tag_string",
+			"states.tag_commenced",
+			"states.unitialized",
+			"'",
+			"\"",
+			"\\\"",
+			"\"",
+			"\\\"",
+			"\"",
+			"ddd",
+			"Open Sans Condensed"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 51.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 264.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 162.0
+	},
+	"project": "oxide.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 291.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
