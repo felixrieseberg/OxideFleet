@@ -12,6 +12,6 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="EnableViewportScale" value="true" />
     <preference name="StatusBarOverlaysWebView" value="false" />
-    <preference name="StatusBarBackgroundColor" value="#d7383b" />
+    <preference name="StatusBarBackgroundColor" value="#E74C3C" />
     <preference name="StatusBarStyle" value="lightcontent" />
 </widget>

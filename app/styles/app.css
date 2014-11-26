@@ -5,6 +5,8 @@
  - Main Content Body
  - NavBar
  - Device Cards
+ - Helpers
+ - Mobile
 */
 
 /* General Style */
@@ -21,7 +23,7 @@ body, html, body > .ember-view {
 }
 
 #container-outlet {
-    min-width: 400px;
+    min-width: 300px;
 }
 
 /* Menu Panel */
@@ -539,4 +541,17 @@ li > .bootstrap-switch-square {
 
 .right {
     float: right;
+}
+
+/* Mobile */
+/* --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+    #main-content {
+        height: 100%;
+        padding-top: 80px;
+        padding-left: 0px;
+        margin-left: 250px;
+        padding-right: 0px;
+    }
 }
