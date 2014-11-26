@@ -58,11 +58,11 @@ var nitrogenEmberUtils = {
         //     Ember.RSVP.all(tagLookup).then(function (tags) {
         //         foundDevice.set('tags', tags);
         //         return foundDevice.save();
-        //     })            
+        //     })
         // } else {
         //     return foundDevice.save();
         // }
-        
+
         return foundDevice.save();
     },
 
@@ -90,11 +90,11 @@ var nitrogenEmberUtils = {
         //     Ember.RSVP.all(tagLookup).then(function (tags) {
         //         newDevice.set('tags', tags);
         //         return newDevice.save();
-        //     })            
+        //     })
         // } else {
         //     return newDevice.save();
         // }
-        
+
         return newDevice.save();
     },
 
