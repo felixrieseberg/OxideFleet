@@ -25,6 +25,17 @@ export default Ember.ObjectController.extend({
         return this.store.find('preset');
     }.property(),
 
+    tagString: function (key, value) {
+        // Setter
+        if (arguments.length > 1) {
+            this.set('tags', value.split(','));
+        }
+
+        // Getter
+        return this.get('tags').toString();
+
+    }.property('tags'),
+
     actions: {
         selectNewPreset: function (preset) {
             if (!preset) {
