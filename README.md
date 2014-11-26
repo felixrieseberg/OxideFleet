@@ -1,4 +1,4 @@
-# Oxide
+# Oxide [![Build Status](https://travis-ci.org/nitrogenjs/oxide.svg)](https://travis-ci.org/nitrogenjs/oxide)
 This is a bootstrapped app for device-managemet 'Internet of Things' apps using Nitrogen. It's based on Cordova and Ember-Cli and should be considered  a 'starting point' rather than a production-ready application. The following key elements are included:
 
 - Full client MVC architecture with Models, Views and Controllers for IoT Devices with properties, with automatic binding to a REST API.

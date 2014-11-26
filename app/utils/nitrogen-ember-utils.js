@@ -38,8 +38,6 @@ var nitrogenEmberUtils = {
     },
 
     updateDevice: function (foundDevice, device, owner) {
-        var tagLookup;
-
         console.log('Found: ', device, ' for Owner: ', owner);
         foundDevice.set('nitrogen_id', device.id);
         foundDevice.set('name', device.name);
@@ -69,7 +67,7 @@ var nitrogenEmberUtils = {
     },
 
     newDevice: function (store, device, owner) {
-        console.log('New Device: ', device);
+        console.log('New Device: ', device, ' for Owner: ', owner);
 
         var newDevice = store.createRecord('device', {
             nitrogen_id: device.id,
@@ -100,17 +98,17 @@ var nitrogenEmberUtils = {
         return newDevice.save();
     },
 
-    lookupTag: function (tag) {
-        var self = this;
+    // lookupTag: function (tag, store) {
+    //     var self = this;
 
-        return new Ember.RSVP.Promise(function (resolve) {
-            store.find('tag', {value: tag}).then(function (records) {
-                return records.get('firstObject');
-            }, function () {
-                return self.store.createRecord('tag', {value: tag});
-            });
-        }
-    },
+    //     return new Ember.RSVP.Promise(function (resolve) {
+    //         store.find('tag', {value: tag}).then(function (records) {
+    //             return records.get('firstObject');
+    //         }, function () {
+    //             return self.store.createRecord('tag', {value: tag});
+    //         });
+    //     });
+    // },
 
     lookupDevice: function (principal, user, store) {
         var self = this;
