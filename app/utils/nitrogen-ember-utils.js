@@ -38,8 +38,9 @@ var nitrogenEmberUtils = {
     },
 
     updateDevice: function (foundDevice, device, owner) {
-        console.log('Found: ', device, ' for Owner: ' + owner);
+        var tagLookup;
 
+        console.log('Found: ', device, ' for Owner: ', owner);
         foundDevice.set('nitrogen_id', device.id);
         foundDevice.set('name', device.name);
         foundDevice.set('lastUpdated', device.updated_at);
@@ -48,14 +49,29 @@ var nitrogenEmberUtils = {
         foundDevice.set('nickname', device.nickname);
         foundDevice.set('updated_at', device.updated_at);
         foundDevice.set('created_at', device.created_at);
-        foundDevice.save();
-        return foundDevice;
+        foundDevice.set('owner', owner);
+
+        // Once we have a Nitrogen Tags API, we can introduce this.
+        // if (device.tags.length > 0) {
+        //     tagLookup = device.tags.map(function (tag) {
+        //         return self.lookupTag(tag);
+        //     });
+
+        //     Ember.RSVP.all(tagLookup).then(function (tags) {
+        //         foundDevice.set('tags', tags);
+        //         return foundDevice.save();
+        //     })            
+        // } else {
+        //     return foundDevice.save();
+        // }
+        
+        return foundDevice.save();
     },
 
     newDevice: function (store, device, owner) {
         console.log('New Device: ', device);
 
-        var nDevice = store.createRecord('device', {
+        var newDevice = store.createRecord('device', {
             nitrogen_id: device.id,
             name: device.name,
             lastUpdated: device.updated_at,
@@ -63,12 +79,37 @@ var nitrogenEmberUtils = {
             last_ip: device.last_ip,
             nickname: device.nickname,
             created_at: device.created_at,
-            updated_at: device.updated_at
+            updated_at: device.updated_at,
+            owner: this.store.find('user', 'me')
         });
 
-        nDevice.owner = owner;
-        nDevice.save();
-        return nDevice;
+        // Once we have a Nitrogen Tags API, we can introduce this.
+        // if (device.tags.length > 0) {
+        //     tagLookup = device.tags.map(function (tag) {
+        //         return self.lookupTag(tag);
+        //     });
+
+        //     Ember.RSVP.all(tagLookup).then(function (tags) {
+        //         newDevice.set('tags', tags);
+        //         return newDevice.save();
+        //     })            
+        // } else {
+        //     return newDevice.save();
+        // }
+        
+        return newDevice.save();
+    },
+
+    lookupTag: function (tag) {
+        var self = this;
+
+        return new Ember.RSVP.Promise(function (resolve) {
+            store.find('tag', {value: tag}).then(function (records) {
+                return records.get('firstObject');
+            }, function () {
+                return self.store.createRecord('tag', {value: tag});
+            });
+        }
     },
 
     lookupDevice: function (principal, user, store) {
