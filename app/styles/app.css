@@ -263,6 +263,10 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid {
 /* Device Cards */
 /* --------------------------------------------------------- */
 
+.device {
+    word-break: break-all;
+}
+
 .device.col-md-3 {
     width: 400px;
     margin-bottom: 20px;

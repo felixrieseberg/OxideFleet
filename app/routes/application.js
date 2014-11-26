@@ -21,7 +21,8 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                    marginRight: '0px',
                 }, { duration: 200, queue: false });
                 $('#navbar').animate({
-                   marginLeft: '0px'
+                   marginLeft: '0px',
+                   marginRight: '0px',
                 }, { duration: 200, queue: false });
             } else {
                 $('#sidebar-container').animate({
@@ -32,7 +33,8 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                    marginRight: '-250px',
                 }, { duration: 200, queue: false });
                 $('#navbar').animate({
-                   marginLeft: '250px'
+                   marginLeft: '250px',
+                   marginRight: '-250px',
                 }, { duration: 200, queue: false });
             }
         }
