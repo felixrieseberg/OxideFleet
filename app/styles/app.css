@@ -354,22 +354,6 @@ img.device-instrument {
     background-size: 16px 16px;
 }
 
-.device-power-icon:before {
-    font-family: 'Flat-UI-Pro-Icons';
-    font-size: 16px;
-    line-height: 17px;
-
-    position: absolute;
-    top: 50%;
-    left: 92%;
-
-    display: inline-block;
-
-    margin: -.5em 0 0 -1em;
-
-    content: '\e634';
-}
-
 .device small {
     display: block;
     text-transform: uppercase;
@@ -381,14 +365,6 @@ img.device-instrument {
 
     margin: 0;
     padding: 0;
-}
-
-.device-icon {
-    font-size: 24px;
-
-    float: left;
-
-    padding: 11px 22px 0 0;
 }
 
 .device-image {
