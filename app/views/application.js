@@ -17,9 +17,9 @@ export default Ember.View.extend({
             });
         }
 
-        $('#sidebar-container').swipe( {
+        $('#sidebar-container').swipe({
             swipeLeft: function () {
-                self.get('controller').send('toggleSidebar');  
+                self.get('controller').send('toggleSidebar');
             },
             threshold: 20
         });

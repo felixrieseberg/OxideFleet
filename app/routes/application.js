@@ -18,11 +18,11 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 }, { duration: 200, queue: false });
                 $('#main-content').animate({
                    marginLeft: '0px',
-                   marginRight: '0px',
+                   marginRight: '0px'
                 }, { duration: 200, queue: false });
                 $('#navbar').animate({
                    marginLeft: '0px',
-                   marginRight: '0px',
+                   marginRight: '0px'
                 }, { duration: 200, queue: false });
             } else {
                 $('#sidebar-container').animate({
@@ -30,11 +30,11 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
                 }, { duration: 200, queue: false });
                 $('#main-content').animate({
                    marginLeft: '250px',
-                   marginRight: '-250px',
+                   marginRight: '-250px'
                 }, { duration: 200, queue: false });
                 $('#navbar').animate({
                    marginLeft: '250px',
-                   marginRight: '-250px',
+                   marginRight: '-250px'
                 }, { duration: 200, queue: false });
             }
         }
