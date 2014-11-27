@@ -32,6 +32,8 @@ app.import('bower_components/flat-ui/dist/fonts/glyphicons/flat-ui-icons-regular
 
 app.import('bower_components/flat-ui/dist/fonts/lato/lato-regular.woff', { destDir: 'fonts/lato' });
 app.import('bower_components/flat-ui/dist/fonts/lato/lato-regular.ttf', { destDir: 'fonts/lato' });
+app.import('bower_components/flat-ui/dist/fonts/lato/lato-bold.woff', { destDir: 'fonts/lato' });
+app.import('bower_components/flat-ui/dist/fonts/lato/lato-bold.ttf', { destDir: 'fonts/lato' });
 
 app.import('bower_components/moment/min/moment-with-locales.js');
 app.import('bower_components/rangeslider.js/dist/rangeslider.min.js');
