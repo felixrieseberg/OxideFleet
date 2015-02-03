@@ -3,20 +3,28 @@ import Ember from 'ember';
 var nitrogenEmberUtils = {
     findOrCreateUser: function (store, session, principal) {
         return new Ember.RSVP.Promise(function (resolve) {
-            var user = store.createRecord('user', {id: 'me'});
-            user.set('name', principal.name);
-            user.set('email', principal.email);
-            user.set('api_key', principal.api_key);
-            user.set('created_at', principal.created_at);
-            user.set('nitrogen_id', principal.id);
-            user.set('last_connection', principal.last_connection);
-            user.set('last_ip', principal.last_ip);
-            user.set('nickname', principal.nickname);
-            user.set('password', session.principal.password);
-            user.set('updated_at', principal.updated_at);
+            store.find('user', {id: 'me'}).then(function (foundUser) {
+                if (foundUser.content.length > 0) {
+                    return resolve(foundUser.content[0]);
+                }
+            }, function (reason) {
+                console.log(reason);
 
-            user.save().then(function (result) {
-                resolve(result);
+                var user = store.createRecord('user', {id: 'me'});
+                user.set('name', principal.name);
+                user.set('email', principal.email);
+                user.set('api_key', principal.api_key);
+                user.set('created_at', principal.created_at);
+                user.set('nitrogen_id', principal.id);
+                user.set('last_connection', principal.last_connection);
+                user.set('last_ip', principal.last_ip);
+                user.set('nickname', principal.nickname);
+                user.set('password', session.principal.password);
+                user.set('updated_at', principal.updated_at);
+
+                user.save().then(function (result) {
+                    resolve(result);
+                });
             });
         });
     },
