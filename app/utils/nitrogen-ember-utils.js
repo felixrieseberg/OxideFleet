@@ -3,9 +3,21 @@ import Ember from 'ember';
 var nitrogenEmberUtils = {
     findOrCreateUser: function (store, session, principal) {
         return new Ember.RSVP.Promise(function (resolve) {
-            store.find('user', {id: 'me'}).then(function (foundUser) {
-                if (foundUser.content.length > 0) {
-                    return resolve(foundUser.content[0]);
+            store.find('user', {id: 'me'}).then(function (foundUsers) {
+                if (foundUsers.content.length > 0) {
+                    var foundUser = foundUsers.content[0];
+                    foundUser.set('name', principal.name);
+                    foundUser.set('email', principal.email);
+                    foundUser.set('api_key', principal.api_key);
+                    foundUser.set('created_at', principal.created_at);
+                    foundUser.set('nitrogen_id', principal.id);
+                    foundUser.set('last_connection', principal.last_connection);
+                    foundUser.set('last_ip', principal.last_ip);
+                    foundUser.set('nickname', principal.nickname);
+                    foundUser.set('password', session.principal.password);
+                    foundUser.set('updated_at', principal.updated_at);
+
+                    return resolve(foundUser);
                 }
             }, function (reason) {
                 console.log(reason);
