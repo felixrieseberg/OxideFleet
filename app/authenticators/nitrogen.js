@@ -46,7 +46,10 @@ export default Base.extend({
                 .then(function (storedUser) {
                     return nitrogenEmberUtils.updateOrCreateDevices(store, session, storedUser);
                 }).then(function () {
-                    console.log('Resolving Login');
+                    var appController = self.container.lookup('controller:application');
+
+                    console.log('Resolving Login', session);
+                    appController.set('nitrogenSession', session);
                     resolve({ user: principal, accessToken: session.accessToken });
                 });
             });
@@ -79,7 +82,10 @@ export default Base.extend({
                     .then(function (storedUser) {
                         return nitrogenEmberUtils.updateOrCreateDevices(store, session, storedUser);
                     }).then(function () {
-                        console.log('Resolving Login');
+                        var appController = self.container.lookup('controller:application');
+
+                        console.log('Resolving Login', session);
+                        appController.set('nitrogenSession', session);
                         resolve({ user: principal, accessToken: session.accessToken });
                     });
                 });

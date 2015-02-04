@@ -11,6 +11,8 @@ var Device = DS.Model.extend({
     created_at: DS.attr('string'),
     updated_at: DS.attr('string'),
     tags: DS.attr(),
+    type: DS.attr(),
+    location: DS.attr(),
 
     // Relations
     owner: DS.belongsTo('user', {async: true})
