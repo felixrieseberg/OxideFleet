@@ -16,21 +16,23 @@ export default Ember.Controller.extend({
             }
 
             nitrogenSession.onMessage({
-                $or: [
-                    { type: 'location' }
-                ]
-            }, function(message) {
+                $or: [{
+                    type: 'location'
+                }]
+            }, function (message) {
                 console.log('Message Received. New Location:', message.body);
 
-                self.store.find('device', {nitrogen_id: message.from})
-                .then(function (foundDevices) {
-                    var foundDevice;
+                self.store.find('device', {
+                        nitrogen_id: message.from
+                    })
+                    .then(function (foundDevices) {
+                        var foundDevice;
 
-                    if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
-                        foundDevice = foundDevices.content[0];
-                        // TODO: Process incoming messages
-                    }
-                });
+                        if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
+                            foundDevice = foundDevices.content[0];
+                            // TODO: Process incoming messages
+                        }
+                    });
             });
 
             this.set('subscribedToNitrogen', true);
@@ -43,20 +45,29 @@ export default Ember.Controller.extend({
                 self = this;
 
             if (nitrogenSession && principalId) {
-                nitrogen.Message.find(nitrogenSession, { type: 'location', from: principalId }, { sort: { ts: -1 }, limit: limit }, 
-                    function(err, locations) {
+                nitrogen.Message.find(nitrogenSession, {
+                        type: 'location',
+                        from: principalId
+                    }, {
+                        sort: {
+                            ts: -1
+                        },
+                        limit: limit
+                    },
+                    function (err, locations) {
                         if (err) {
                             return;
                         }
 
                         if (locations.length > 0) {
-                            self.store.find('device', { nitrogen_id: principalId }).then(function (foundDevices) {
-                                var foundDevice, i,
-                                    gps;
+                            self.store.find('device', {
+                                nitrogen_id: principalId
+                            }).then(function (foundDevices) {
+                                var foundDevice;
 
                                 if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
                                     foundDevice = foundDevices.content[0];
-                                    
+
                                     // TODO: Process Messages
                                 }
                             });

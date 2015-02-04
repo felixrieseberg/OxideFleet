@@ -1,15 +1,15 @@
 import Ember from 'ember';
 
 var nitrogenEmberUtils = {
-    findOrCreateUser: function(store, session, principal) {
-        return new Ember.RSVP.Promise(function(resolve) {
+    findOrCreateUser: function (store, session, principal) {
+        return new Ember.RSVP.Promise(function (resolve) {
             store.find('user', {
                 id: 'me'
-            }).then(function(foundUser) {
+            }).then(function (foundUser) {
                 if (foundUser.content.length > 0) {
                     return resolve(foundUser.content[0]);
                 }
-            }, function(reason) {
+            }, function (reason) {
                 console.log(reason);
 
                 var user = store.createRecord('user', {
@@ -26,14 +26,14 @@ var nitrogenEmberUtils = {
                 user.set('password', session.principal.password);
                 user.set('updated_at', principal.updated_at);
 
-                user.save().then(function(result) {
+                user.save().then(function (result) {
                     resolve(result);
                 });
             });
         });
     },
 
-    updateDevice: function(foundDevice, device, owner) {
+    updateDevice: function (foundDevice, device, owner) {
         console.log('Found: ', device, ' for Owner: ', owner);
         foundDevice.set('nitrogen_id', device.id);
         foundDevice.set('name', device.name);
@@ -51,7 +51,7 @@ var nitrogenEmberUtils = {
         return foundDevice.save();
     },
 
-    newDevice: function(store, device, owner) {
+    newDevice: function (store, device, owner) {
         console.log('New Device: ', device, ' for Owner: ', owner);
 
         var newDevice = store.createRecord('device', {
@@ -72,15 +72,15 @@ var nitrogenEmberUtils = {
         return newDevice.save();
     },
 
-    lookupDevice: function(principal, user, store) {
+    lookupDevice: function (principal, user, store) {
         var self = this;
 
-        return new Ember.RSVP.Promise(function(resolve) {
+        return new Ember.RSVP.Promise(function (resolve) {
             console.log('Looking up device with nitrogen id ' + principal.id);
             store.find('device', {
                     nitrogen_id: principal.id
                 })
-                .then(function(foundDevices) {
+                .then(function (foundDevices) {
                     if (foundDevices.get('length') === 0) {
                         return self.newDevice(store, principal, user);
                     }
@@ -90,21 +90,21 @@ var nitrogenEmberUtils = {
                         console.log('Number of devices in store for this id: ' + foundDevices.get('length'));
                     }
 
-                    foundDevices.map(function(foundDevice) {
+                    foundDevices.map(function (foundDevice) {
                         self.updateDevice(foundDevice, principal, user);
                     });
 
                     resolve();
-                }, function() {
+                }, function () {
                     resolve(self.newDevice(store, principal, user));
                 });
         });
     },
 
-    updateOrCreateDevices: function(store, session, user) {
+    updateOrCreateDevices: function (store, session, user) {
         var self = this;
 
-        return new Ember.RSVP.Promise(function(resolve, reject) {
+        return new Ember.RSVP.Promise(function (resolve, reject) {
             nitrogen.Principal.find(session, {
                 type: 'device'
             }, {
@@ -112,7 +112,7 @@ var nitrogenEmberUtils = {
                 sort: {
                     last_connection: 1
                 }
-            }, function(error, principals) {
+            }, function (error, principals) {
                 var principalLookup;
 
                 if (error) {
@@ -120,13 +120,13 @@ var nitrogenEmberUtils = {
                     reject(error);
                 }
 
-                principalLookup = principals.map(function(principal) {
+                principalLookup = principals.map(function (principal) {
                     return self.lookupDevice(principal, user, store);
                 });
 
-                Ember.RSVP.all(principalLookup).then(function() {
+                Ember.RSVP.all(principalLookup).then(function () {
                     resolve();
-                }).catch(function(error) {
+                }).catch(function (error) {
                     reject(error);
                 });
             });

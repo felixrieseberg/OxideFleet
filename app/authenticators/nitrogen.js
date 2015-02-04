@@ -2,7 +2,6 @@ import Ember from 'ember';
 import Base from 'simple-auth/authenticators/base';
 import Config from '../config/environment';
 import nitrogenEmberUtils from '../utils/nitrogen-ember-utils';
-import App from '../app';
 
 /**
 Nitrogen Authenticator.
