@@ -2,6 +2,7 @@ import Ember from 'ember';
 import Base from 'simple-auth/authenticators/base';
 import Config from '../config/environment';
 import nitrogenEmberUtils from '../utils/nitrogen-ember-utils';
+import App from '../app';
 
 /**
 Nitrogen Authenticator.
@@ -46,7 +47,10 @@ export default Base.extend({
                 .then(function (storedUser) {
                     return nitrogenEmberUtils.updateOrCreateDevices(store, session, storedUser);
                 }).then(function () {
-                    console.log('Resolving Login');
+                    var appController = self.container.lookup('controller:application');
+
+                    console.log('Resolving Login', session);
+                    appController.set('nitrogenSession', session);
                     resolve({ user: principal, accessToken: session.accessToken });
                 });
             });
@@ -79,7 +83,10 @@ export default Base.extend({
                     .then(function (storedUser) {
                         return nitrogenEmberUtils.updateOrCreateDevices(store, session, storedUser);
                     }).then(function () {
-                        console.log('Resolving Login');
+                        var appController = self.container.lookup('controller:application');
+
+                        console.log('Resolving Login', session);
+                        appController.set('nitrogenSession', session);
                         resolve({ user: principal, accessToken: session.accessToken });
                     });
                 });
