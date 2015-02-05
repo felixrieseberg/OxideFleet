@@ -14,7 +14,10 @@ var nitrogenService = null;
 
 export default Base.extend({
     init: function () {
+        var appController = self.container.lookup('controller:application'); 
+
         nitrogenService = new nitrogen.Service(Config.APP.nitrogen);
+        appController.set('nitrogenService', nitrogenService);
     },
 
     /**

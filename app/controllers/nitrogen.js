@@ -3,12 +3,13 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
     needs: 'application',
     appController: Ember.computed.alias('controllers.application'),
+    nitrogenSession: Ember.computed.alias('controllers.application.nitrogenSession'),
+    nitrogenService: Ember.computed.alias('controllers.application.nitrogenService'),
     subscribeToNitrogen: false,
 
     actions: {
         subscribeToNitrogen: function () {
-            var appController = this.get('appController'),
-                nitrogenSession = appController.get('nitrogenSession'),
+            var nitrogenSession = this.get('nitrogenSession'),
                 self = this;
 
             if (this.get('subscribedToNitrogen')) {
@@ -39,8 +40,7 @@ export default Ember.Controller.extend({
         },
 
         getMessage: function (principalId, messageLimit) {
-            var appController = this.get('appController'),
-                nitrogenSession = appController.get('nitrogenSession'),
+            var nitrogenSession = this.get('nitrogenSession'),
                 limit = (messageLimit) ? messageLimit : 0,
                 self = this;
 
