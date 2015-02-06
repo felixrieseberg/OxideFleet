@@ -50,6 +50,7 @@ export default Base.extend({
 
                     console.log('Resolving Login', session);
                     appController.set('nitrogenSession', session);
+                    appController.set('nitrogenService', nitrogenService);
                     resolve({ user: principal, accessToken: session.accessToken });
                 });
             });
@@ -86,6 +87,7 @@ export default Base.extend({
 
                         console.log('Resolving Login', session);
                         appController.set('nitrogenSession', session);
+                        appController.set('nitrogenService', nitrogenService);
                         resolve({ user: principal, accessToken: session.accessToken });
                     });
                 });

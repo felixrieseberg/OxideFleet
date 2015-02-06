@@ -43,4 +43,10 @@ app.import('bower_components/bootstrap-select/dist/js/bootstrap-select.js');
 app.import('bower_components/JavaScript-MD5/js/md5.js');
 app.import('bower_components/jquery-touchswipe/jquery.touchSwipe.min.js');
 
+app.import('bower_components/underscore/underscore-min.js', {
+  'underscore': [
+    'default'
+  ]
+});
+
 module.exports = app.toTree();
