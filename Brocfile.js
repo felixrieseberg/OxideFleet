@@ -1,8 +1,13 @@
 /* global require, module */
 
-var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
+    HtmlbarsCompiler = require('ember-cli-htmlbars'),
+    app = new EmberApp();
 
-var app = new EmberApp();
+var templateTree = new HtmlbarsCompiler('app/templates', {
+    isHTMLBars: true,
+    templateCompiler: require('./bower_components/ember/ember-template-compiler')
+});
 
 // Use `app.import` to add additional libraries to the generated
 // output files.
@@ -48,5 +53,7 @@ app.import('bower_components/underscore/underscore-min.js', {
     'default'
   ]
 });
+
+
 
 module.exports = app.toTree();
