@@ -38,7 +38,5 @@ export default Ember.Controller.extend(LoginControllerMixin, {
                 self.notify.warning({message: 'Incorrect email or password.', closeAfter: 7000});
             });
         }
-
-
     }
 });

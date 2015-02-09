@@ -69,7 +69,7 @@ export default Base.extend({
                 email: credentials.identification,
                 password: credentials.password
             });
-            
+
             Ember.run(function () {
                 nitrogenService.authenticate(user, function (err, session, principal) {
                     var store;
