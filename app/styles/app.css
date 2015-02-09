@@ -7,6 +7,7 @@
  - Device Cards
  - Helpers
  - Mobile
+ - Notifications
 */
 
 /* General Style */
@@ -658,3 +659,11 @@ li > .bootstrap-switch-square
         padding-left: 0;
     }
 }
+
+/* Notifications */
+/* --------------------------------------------------------- */
+
+.ember-notify.alert.alert-warning {
+    background-color: rgb(228, 73, 76);
+    color: #fff;
+} 
