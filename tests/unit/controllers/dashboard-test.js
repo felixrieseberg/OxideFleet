@@ -9,7 +9,14 @@ moduleFor('controller:dashboard', 'DashboardController', {
 });
 
 // Replace this with your real tests.
-test('it exists', function() {
+test('it exists', function () {
   var controller = this.subject();
   ok(controller);
+});
+
+test('has correct title', function () {
+    var controller = this.subject(),
+        title = controller.get('title');
+        
+    ok(title === 'Dashboard');
 });

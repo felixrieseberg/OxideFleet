@@ -1,9 +1,12 @@
 import App from '../app';
 import DS from 'ember-data';
+import Config from '../config/environment';
+
+var namespace = (Config.environment === 'test') ? 'oxide_test' : 'oxide';
 
 App.ApplicationSerializer = DS.LSSerializer.extend();
 export default DS.LSAdapter.extend({
-    namespace: 'oxide'
+    namespace: namespace
 });
 
 // Rest Adapter, calling http://[HOST]/api/model/id
