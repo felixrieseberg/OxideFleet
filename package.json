@@ -1,57 +1,51 @@
 {
-  "name": "oxide",
-  "version": "0.1.0",
-  "private": true,
-  "directories": {
-    "test": "tests"
-  },
-  "scripts": {
-    "start": "ember server",
-    "build": "ember build",
-    "test": "grunt test"
-  },
-  "repository": "https://github.com/nitrogenjs/oxide",
-  "engines": {
-    "node": ">= 0.10.0"
-  },
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "body-parser": "^1.2.0",
-    "broccoli-asset-rev": "^2.0.0",
-    "broccoli-ember-hbs-template-compiler": "^1.6.1",
-    "connect-restreamer": "^1.0.1",
-    "cordova": "^4.1.2",
-    "ember-cli": "^0.1.12",
-    "ember-cli-6to5": "^3.0.0",
-    "ember-cli-app-version": "0.3.1",
-    "ember-cli-content-security-policy": "0.3.0",
-    "ember-cli-cordova": "0.0.11",
-    "ember-cli-dependency-checker": "0.0.7",
-    "ember-cli-font-awesome": "0.0.4",
-    "ember-cli-htmlbars": "^0.6.0",
-    "ember-cli-ic-ajax": "0.1.1",
-    "ember-cli-inject-live-reload": "^1.3.0",
-    "ember-cli-pretender": "0.3.1",
-    "ember-cli-qunit": "0.3.1",
-    "ember-cli-simple-auth": "^0.6.7",
-    "ember-cli-simple-auth-testing": "^0.7.3",
-    "ember-cli-uglify": "1.0.1",
-    "ember-data": "1.0.0-beta.14.1",
-    "ember-export-application-global": "^1.0.0",
-    "ember-localstorage-adapter": "^0.5.0",
-    "ember-notify": "^3.0.15",
-    "express": "^4.8.5",
-    "glob": "^4.0.5",
-    "grunt": "^0.4.5",
-    "grunt-contrib-jscs": "^0.1.8",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-cordovacli": "^0.5.1",
-    "grunt-jscs": "^0.8.1",
-    "load-grunt-tasks": "^1.0.0",
-    "nitrogen": "0.2.19"
-  },
-  "dependencies": {
-    "ember-data": "^1.0.0-beta.14.1"
-  }
+    "name": "oxide",
+    "version": "0.2.0",
+    "private": true,
+    "directories": {
+        "test": "tests"
+    },
+    "scripts": {
+        "start": "ember server",
+        "build": "ember build",
+        "test": "grunt test"
+    },
+    "repository": "https://github.com/felixrieseberg/OxideFleet",
+    "engines": {
+        "node": ">= 0.10.0"
+    },
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "body-parser": "^1.2.0",
+        "broccoli-asset-rev": "^2.0.0",
+        "broccoli-ember-hbs-template-compiler": "^1.6.1",
+        "connect-restreamer": "^1.0.1",
+        "ember-cli": "^0.1.12",
+        "ember-cli-6to5": "^3.0.0",
+        "ember-cli-app-version": "0.3.1",
+        "ember-cli-content-security-policy": "0.3.0",
+        "ember-cli-dependency-checker": "0.0.7",
+        "ember-cli-font-awesome": "0.0.4",
+        "ember-cli-htmlbars": "^0.6.0",
+        "ember-cli-ic-ajax": "0.1.1",
+        "ember-cli-inject-live-reload": "^1.3.0",
+        "ember-cli-pretender": "0.3.1",
+        "ember-cli-qunit": "0.3.1",
+        "ember-cli-simple-auth": "^0.6.7",
+        "ember-cli-simple-auth-testing": "^0.7.3",
+        "ember-cli-uglify": "1.0.1",
+        "ember-data": "1.0.0-beta.14.1",
+        "ember-export-application-global": "^1.0.0",
+        "ember-localstorage-adapter": "^0.5.0",
+        "ember-notify": "^3.0.15",
+        "express": "^4.8.5",
+        "glob": "^4.0.5",
+        "grunt": "^0.4.5",
+        "grunt-contrib-jscs": "^0.1.8",
+        "grunt-contrib-jshint": "^0.10.0",
+        "grunt-jscs": "^0.8.1",
+        "load-grunt-tasks": "^1.0.0",
+        "nitrogen": "0.2.19"
+    }
 }
