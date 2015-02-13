@@ -6,7 +6,7 @@ import startApp from '../helpers/start-app';
 
 var App;
 
-module('Integration: Authentication', {
+module('Integration: Login Flow', {
     setup: function () {
         App = startApp();
     },
@@ -21,8 +21,6 @@ module('Integration: Authentication', {
 });
 
 test('users can log in', function () {
-    var self = this;
-
     expect(2);
     visit('/');
 
@@ -36,29 +34,3 @@ test('users can log in', function () {
         equal(find('a:contains("Sign Out")').length, 1, 'The page shows a logout link when the session is authenticated');
     });
 });
-
-/*test('a protected route is accessible when the session is authenticated', function () {
-    var self = this;
-
-    expect(1);
-
-    Ember.Run(function () {
-        login();
-    });
-
-    visit('/dashboard');
-
-    andThen(function () {
-        equal(currentRouteName(), 'dashboard');
-    });
-});
-
-test('a protected route is not accessible when the session is not authenticated', function () {
-    expect(1);
-
-    visit('/dashboard');
-
-    andThen(function () {
-        notEqual(currentRouteName(), 'dashboard');
-    });
-});*/
