@@ -1,19 +1,30 @@
-<div class="login-form col-xs-6 col-xs-offset-3 col-lg-4 col-lg-offset-4">
-    <div>
-        <h3>Welcome to Oxide</h3>
-        <p>Login to manage your Nitrogen enabled devices.</p>
-    </div>
-    <div>
-        <form {{action 'authenticate' on='submit'}} >
-            <div class="form-group">
-                {{input class='form-control login-field' id='identification' placeholder='Enter Login' value=identification}}
-                <label class="login-field-icon fui-user" for="identification"></label>
+<div class="darkbackground">
+    <div class="container">
+        <div class="row login_box">
+            <div class="col-md-12 col-xs-12" align="center">
+                <div class="line"><h5 class="white">Connected Car</h5></div>
+                <div class="outter"><img src="assets/img/tile2.png" class="image-circle"/></div>   
+                <h3 class="white">Welcome</h3>
+                <p class="white">Please Sign In</p>
             </div>
-            <div class="form-group">
-                {{input class='form-control login-field' id='password' placeholder='Enter Password' type='password' value=password}}
-                <label class="login-field-icon fui-lock" for="password"></label>
+            
+            <div class="col-md-12 col-xs-12 login_control">
+                <form {{action 'authenticate' on='submit'}} >
+                    <div class="control">
+                        {{input class='form-control floating-label login-field' id='identification' placeholder='Enter Login' value=identification}}
+                    </div>
+                    
+                    <div class="control">
+                        {{input class='form-control floating-label login-field' id='password' placeholder='Enter Password' type='password' value=password}}
+                    </div>
+                    <div align="center">
+                         <button {{bind-attr disabled=loading }} class="btn btn-primary btn-lg">Login</button>
+                    </div>
+                </form>
+                <div {{bind-attr class="loading:show:hidden :login-loading"}}>
+                    {{loading-spin color='red' size=50}}
+                </div>
             </div>
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
-        </form>
+        </div>
     </div>
 </div>

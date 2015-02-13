@@ -23,7 +23,6 @@
     "JavaScript-MD5": "~1.1.0",
     "selectize": "~0.11.2",
     "jquery-touchswipe": "~1.6.6",
-    "underscore": "~1.7.0",
     "pretender": "0.1.0"
   }
 }

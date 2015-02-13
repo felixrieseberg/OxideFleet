@@ -14,6 +14,10 @@ var Device = DS.Model.extend({
     type: DS.attr(),
     location: DS.attr(),
 
+    // Connected Car
+    gps: DS.attr('array'),
+    trackOnMap: DS.attr('boolean'),
+
     // Relations
     owner: DS.belongsTo('user', {async: true})
 });

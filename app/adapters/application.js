@@ -2,7 +2,7 @@ import App from '../app';
 import DS from 'ember-data';
 import Config from '../config/environment';
 
-var namespace = (Config.environment === 'test') ? 'oxide_test' : 'oxide';
+var namespace = (Config.environment === 'test') ? 'cc_test' : 'ccar';
 
 App.ApplicationSerializer = DS.LSSerializer.extend();
 export default DS.LSAdapter.extend({

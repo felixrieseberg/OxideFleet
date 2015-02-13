@@ -1,16 +1,3 @@
-{{#unless hideSidebar}}
-	<div id="sidebar-container">
-        {{partial "sidebar"}}
-	</div>
-{{/unless}}
-<div id="container-outlet" {{bind-attr class="hideSidebar"}}>
-    {{#unless hideNavbar}}
-        {{partial "navbar"}}
-    {{/unless}}
-
-    <div id="main-content" class="container-fluid">
-        {{outlet}}
-    </div>
-</div>
+{{outlet}}
 
 {{ember-notify messageStyle='bootstrap'}}
