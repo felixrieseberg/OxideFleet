@@ -15,7 +15,7 @@
     "qunit": "~1.17.1",
     "flat-ui": "latest",
     "bootstrap": "latest",
-    "ember-simple-auth": "0.6.7",
+    "ember-simple-auth": "0.7.3",
     "moment": "~2.8.3",
     "rangeslider.js": "~0.3.6",
     "bootstrap-switch": "~3.1.0",
@@ -23,6 +23,7 @@
     "JavaScript-MD5": "~1.1.0",
     "selectize": "~0.11.2",
     "jquery-touchswipe": "~1.6.6",
-    "underscore": "~1.7.0"
+    "underscore": "~1.7.0",
+    "pretender": "0.1.0"
   }
 }
