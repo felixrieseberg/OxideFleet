@@ -1,12 +1,6 @@
-# Oxide [![Build Status](https://travis-ci.org/nitrogenjs/oxide.svg)](https://travis-ci.org/nitrogenjs/oxide)
-This is a bootstrapped app for device-managemet 'Internet of Things' apps using Nitrogen. It's based on Cordova and Ember-Cli and should be considered  a 'starting point' rather than a production-ready application. The following key elements are included:
+# Oxide Fleed: Management for the Connected Car
 
-- Full client MVC architecture with Models, Views and Controllers for IoT Devices with properties, with automatic binding to a REST API.
-- A mock-http server for said API is included to illustrate how the data flow works.
-- Authorization flow (based on ember-simple-auth), allowing for both OAuth2 as well as custom authorization against a custom or major provider. Facebook and Google as authentication providers are included.
-- UI/UX based on Bootstrap and FlatUI. It look's pretty good, but will likely need some work around the rough edges.
-
-![Screenshot](https://raw.githubusercontent.com/irjudson/oxide/master/.screenshot.png)
+This folder contains the source for the client application displaying information about the 'Connected Car'. It's built with Ember Cli and contains a clean build pipeline, asset management, and unit/functional testing. It's pretty heavily WIP - you probably don't need anything in here if you just stumbled in here.
 
 ## Development
 You will need the following things properly installed on your computer.
