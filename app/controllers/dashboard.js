@@ -8,7 +8,18 @@ export default Ember.ArrayController.extend({
     subscribeToNitrogen: false,
     mapEntityTracker: [],
     trackedCars: [],
-    information: false,
+    
+    information: function () {
+        var speed = this.get('speed'),
+            lat = this.get('lat'),
+            lon = this.get('lon');
+
+        if (speed || (lat && lon)) {
+            return true;
+        } else {
+            return false;
+        }
+    }.property('speed', 'lat', 'lon'),
 
     carsConnected: Ember.computed('model', function () {
         var model = this.get('model');
@@ -148,7 +159,6 @@ export default Ember.ArrayController.extend({
             map.entities.push(pin);
             map.entities.push(path);
 
-            this.set('information', true);
             this.set('speed', Math.round(lastLocation.speed));
             this.set('lat', lastLocation.latitude.toFixed(4));
             this.set('lon', lastLocation.longitude.toFixed(4));
