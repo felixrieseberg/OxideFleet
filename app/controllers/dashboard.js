@@ -51,7 +51,7 @@ export default Ember.ArrayController.extend({
                 this.store.find('device', { nitrogen_id: trackedCars[i] }).then(handleFoundDevices);
             }
         }
-    }.observes('trackedCars.[]'),
+    }.observes('trackedCars.[]').on('init'),
 
     init: function () {
         var nitrogenController = this.get('nitrogenController');
@@ -86,10 +86,12 @@ export default Ember.ArrayController.extend({
                         gps = foundDevice.get('gps');
 
                         for (i = 0; i < locations.length; i += 1) {
-                            if (locations[i].body.timestamp) {
+                            if (!locations[i].body.timestamp) {
                                 locations[i].body.timestamp = Date.now();
                             }
+
                             gps.pushObject(locations[i].body);
+                            foundDevice.save();
                         }
 
                         if (foundDevice.get('trackOnMap')) {

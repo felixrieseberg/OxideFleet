@@ -1,92 +1,40 @@
 <div id="panel-menu">
-    <div id="user-info">
-        <img {{bind-attr src=currentUser.avatarUrl}} width="200px" />
-        <img src="/assets/img/userOverlay.png" width="200px" />
-    </div>
-    <div class="accordion" id="leftMenu">
-        {{#if session.isAuthenticated}}
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                {{#link-to 'dashboard' class="accordion-toggle sidebar-link"}}
-                    <span class="fa-stack fa-lg">
-                        <i class="fa fa-circle dark fa-stack-2x"></i>
-                        <i class="fa fa-home light fa-stack-1x fa-inverse"></i>
-                    </span> Dashboard
-                {{/link-to}}
-            </div>
+    <div class="flatpanel">
+        <div class="flatpanel-title">
+            <span>Track Cars</span>
         </div>
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" class="" data-toggle="collapse" data-parent="#leftMenu" href="#collapseTwo">
-                    <span class="fa-stack fa-lg">
-                        <i class="fa fa-circle dark fa-stack-2x"></i>
-                        <i class="fa fa-map-marker light fa-stack-1x fa-inverse"></i>
-                    </span> Locations
-                </a>
-            </div>
-            <div id="collapseTwo" class="accordion-body collapse in">
-                <div class="accordion-inner">
-                    <ul>
-                        {{#each locations}}
-                            {{#link-to 'location' id tagName="li" class="sidebar-link"}} {{fa-icon "map-marker"}} {{name}}{{/link-to}}
-                        {{/each}}
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" class="" data-toggle="collapse" data-parent="#leftMenu" href="#collapseDevices">
-                    <span class="fa-stack fa-lg">
-                        <i class="fa fa-circle dark fa-stack-2x"></i>
-                        <i class="fa fa-cloud light fa-stack-1x fa-inverse"></i>
-                    </span> Devices
-                </a>
-            </div>
-            <div id="collapseDevices" class="accordion-body collapse-devices in">
-                <div class="accordion-inner">
-                    <ul>
-                        {{#each devices}}
-                            {{#link-to 'device' id tagName="li" class="sidebar-link"}} {{fa-icon "cloud"}} {{name}}{{/link-to}}
-                        {{/each}}
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                {{#link-to 'settings' class="accordion-toggle sidebar-link"}}
-                    <span class="fa-stack fa-lg">
-                        <i class="fa fa-circle dark fa-stack-2x"></i>
-                        <i class="fa fa-gear light fa-stack-1x fa-inverse"></i>
-                    </span> Settings
-                {{/link-to}}
-            </div>
-        </div>
-        <div class="accordion-group">
-            <div class="accordion-heading last">
-                <a class="accordion-toggle" {{ action 'invalidateSession' }}>
-                    <span class="fa-stack fa-lg">
-                        <i class="fa fa-circle dark fa-stack-2x"></i>
-                        <i class="fa fa-sign-out light fa-stack-1x fa-inverse"></i>
-                    </span> Sign Out
-                </a>
-            </div>
-        </div>
-        {{else}}
-        <div class="accordion-group">
-            <div class="accordion-heading last">
-                {{#link-to 'login' class="accordion-toggle sidebar-link"}}
-                    <span class="fa-stack fa-lg">
-                        <i class="fa fa-circle dark fa-stack-2x"></i>
-                        <i class="fa fa-sign-in light fa-stack-1x fa-inverse"></i>
-                    </span> Sign in
-                {{/link-to}}
-            </div>
-        </div>
+        {{#if carsConnected}}
+        <ul>
+            {{#each car in model}}
+                <li {{action 'toggleCar' car}} {{bind-attr class="car.trackOnMap:flatpanel-selected:flatpanel-notselected"}}>
+                    <div class="flatpanel-icon fa fa-car"></div>
+                    <div class="flatpanel-content">
+                        <h4 class="flatpanel-name">
+                            {{car.name}}
+                        </h4>
+                        {{#if car.gps.firstObject.timestamp}}
+                            Seen: {{pretty-Date car.gps.firstObject.timestamp}}
+                        {{else}}
+                            Never seen
+                        {{/if}}
+                    </div>
+                </li>
+                {{#if car.trackOnMap}}{{#if car.gps.firstObject}}
+                    <li>
+                        <div class="car-metadata">
+                            {{#if car.gps.firstObject.latitude}}
+                            <a type="button" {{action "centerMap" car.gps.firstObject}} class="btn btn-embossed btn-primary btn-xs"><i class="fa fa-location"></i> Go to</a>
+                            {{/if}}
+                            {{#if car.gps.firstObject.speed}}
+                                <span> <i class="fa fa-tachometer"></i> {{round-number car.gps.firstObject.speed 0}} mph </span>
+                                {{/if}}{{#if car.gps.firstObject.latitude}}
+                                <span><i class="fa fa-compass"></i> {{round-number car.gps.firstObject.latitude 3}} {{round-number car.gps.firstObject.longitude 3}}</span>
+                            {{/if}}
+                        </div>
+                    </li>
+                {{/if}}{{/if}}
+            {{/each}}
+        </ul>
         {{/if}}
-    </div>
-    <div class="fineprint">
-        Support · Privacy Policy
     </div>
 </div>

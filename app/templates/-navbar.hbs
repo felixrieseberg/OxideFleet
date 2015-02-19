@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse navbar-static-top navbar-embossed" role="navigation">
+<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
             <span class="sr-only">Toggle navigation</span>
@@ -13,18 +13,6 @@
             {{#link-to "settings" tagName="li" href=false}}
             <a {{bind-attr href="view.href"}}>Settings</a>
             {{/link-to}}
-            {{#if carsConnected}}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                        Track Connected Cars<span class="navbar-new">{{model.length}}</span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        {{#each car in model}}
-                        <li><a {{action 'toggleCar' car}} href="#">{{car.name}}</a></li>
-                        {{/each}}
-                    </ul>
-                </li>
-            {{/if}}
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li style="padding-right: 10px">
