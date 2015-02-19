@@ -32,7 +32,7 @@ export default Ember.Controller.extend({
             var appController = this.get('appController'),
                 nitrogenSession = appController.get('nitrogenSession');
 
-            if (this.get('subscribedToNitrogen')) {
+            if (this.get('subscribedToNitrogen') || !nitrogenSession) {
                 return;
             }
 
@@ -53,7 +53,7 @@ export default Ember.Controller.extend({
                 limit = (messageLimit) ? messageLimit : 0;
 
             if (nitrogenSession && principalId) {
-                nitrogen.Message.find(nitrogenSession, { type: 'location', from: principalId }, { sort: { ts: -1 }, limit: limit }, 
+                nitrogen.Message.find(nitrogenSession, { type: 'location', from: principalId }, { sort: { ts: -1 }, limit: limit },
                     function (err, locations) {
                         if (err) {
                             return;

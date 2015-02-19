@@ -5,7 +5,7 @@ import {
 
 moduleFor('controller:application', 'ApplicationController', {
   // Specify the other units that are required for this test.
-  // needs: ['controller:foo']
+  needs: ['controller:nitrogen']
 });
 
 // Replace this with your real tests.

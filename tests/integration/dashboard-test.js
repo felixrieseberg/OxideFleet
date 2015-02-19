@@ -26,6 +26,6 @@ test('Dashboard shows device card', function () {
     login();
     
     andThen(function () {
-        equal(find('div.device').length, 2, 'A device card is displayed');
+        equal(find('h4.flatpanel-name').length, 1, 'A device is displayed');
     });
 });

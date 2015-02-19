@@ -4,6 +4,7 @@ import Ember from 'ember';
 export default Ember.ArrayController.extend({
     title: 'Dashboard',
     needs: ['application', 'nitrogen'],
+    version: Ember.computed.alias('controllers.application.version'),
     appController: Ember.computed.alias('controllers.application'),
     nitrogenController: Ember.computed.alias('controllers.nitrogen'),
     mapEntityTracker: [],
@@ -57,6 +58,7 @@ export default Ember.ArrayController.extend({
         var nitrogenController = this.get('nitrogenController');
 
         this._super();
+        console.log(this);
         nitrogenController.send('subscribeToNitrogen', this, 'handleSocketMessage');
     },
 

@@ -27,6 +27,8 @@ module.exports = function (environment) {
       };
 
 
+    ENV.version = require('../package.json').version
+
     ENV['simple-auth'] = {
         routeAfterAuthentication: 'dashboard',
         routeIfAlreadyAuthenticated: 'dashboard'
