@@ -27,30 +27,30 @@ export default Ember.ArrayController.extend({
             map = this.get('mapReference'),
             self = this;
 
-        console.log(map.entities, map.entities.getLength());
-        for (let i = 0; i < mapEntityTracker.length; i++) {
+        function handleFoundDevices (foundDevices) {
+            let foundDevice;
+
+            if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
+                foundDevice = foundDevices.content[0];
+                nitrogenController.send('getLastMessage', foundDevice.get('nitrogen_id'), 1, self, 'handleLastLocation');
+            }
+        }
+
+        for (let i = 0; i < mapEntityTracker.length; i += 1) {
             if (trackedCars.indexOf(mapEntityTracker[i].name) === -1) {
                 // Car is on map, but not in trackedCars - remove from map
                 map.entities.removeAt(mapEntityTracker[i].path);
                 map.entities.removeAt(mapEntityTracker[i].pin);
                 mapEntityTracker.splice(i, 1);
-            };
-        };
+            }
+        }
 
-        for (let i = 0; i < trackedCars.length; i++) {
+        for (let i = 0; i < trackedCars.length; i += 1) {
             if (!mapEntityTracker.findBy('name', trackedCars[i])) {
                 // Car is not on map, but in trackedCars - add to map
-                this.store.find('device', { nitrogen_id: trackedCars[i] }).then(function (foundDevices) {
-                    let foundDevice;
-
-                    if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
-                        foundDevice = foundDevices.content[0];
-                        nitrogenController.send('getLastMessage', foundDevice.get('nitrogen_id'), 1, self, 'handleLastLocation');
-                    }
-                });
+                this.store.find('device', { nitrogen_id: trackedCars[i] }).then(handleFoundDevices);
             }
-        };
-
+        }
     }.observes('trackedCars.[]'),
 
     init: function () {
@@ -62,9 +62,7 @@ export default Ember.ArrayController.extend({
 
     actions: {
         toggleCar: function (device) {
-            var nitrogenController = this.get('nitrogenController'),
-                trackedCars = this.get('trackedCars'),
-                principalId = device.get('principalId');
+            var trackedCars = this.get('trackedCars');
 
             device.toggleProperty('trackOnMap');
 
