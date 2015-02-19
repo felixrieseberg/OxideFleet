@@ -73,27 +73,7 @@ export default Ember.ArrayController.extend({
             }
         },
 
-        handleSocketMessage: function (message) {
-            var self = this;
-
-            if (message) {
-                this.store.find('device', {nitrogen_id: message.from})
-                    .then(function (foundDevices) {
-                        var foundDevice;
-
-                        if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
-                            foundDevice = foundDevices.content[0];
-                            foundDevice.get('gps').pushObject(message.body);
-
-                            if (foundDevice.get('trackOnMap')) {
-                                self.send('updateCar', foundDevice);
-                            }
-                        }
-                    });
-            }
-        },
-
-        handleLastLocation: function (locations, principalId) {
+        handleLocations: function (locations, principalId, callback) {
             var self = this;
 
             if (locations.length > 0) {
@@ -106,11 +86,32 @@ export default Ember.ArrayController.extend({
                         gps = foundDevice.get('gps');
 
                         for (i = 0; i < locations.length; i += 1) {
+                            if (locations[i].body.timestamp) {
+                                locations[i].body.timestamp = Date.now();
+                            }
                             gps.pushObject(locations[i].body);
                         }
-                        self.send('addCarToMap', foundDevice);
+
+                        if (foundDevice.get('trackOnMap')) {
+                            self.send(callback, foundDevice);
+                        }
                     }
                 });
+            }
+        },
+
+        handleSocketMessage: function (message) {
+            var locations = [];
+
+            if (message && message.from) {
+                locations.push(message);
+                this.send('handleLocations', locations, message.from, 'updateCar');
+            }
+        },
+
+        handleLastLocation: function (locations, principalId) {
+            if (locations && principalId) {
+                this.send('handleLocations', locations, principalId, 'addCarToMap');
             }
         },
 
