@@ -3,23 +3,11 @@ import Ember from 'ember';
 
 export default Ember.ArrayController.extend({
     title: 'Dashboard',
-    needs: 'application',
+    needs: ['application', 'nitrogen'],
     appController: Ember.computed.alias('controllers.application'),
-    subscribeToNitrogen: false,
+    nitrogenController: Ember.computed.alias('controllers.nitrogen'),
     mapEntityTracker: [],
     trackedCars: [],
-    
-    information: function () {
-        var speed = this.get('speed'),
-            lat = this.get('lat'),
-            lon = this.get('lon');
-
-        if (speed || (lat && lon)) {
-            return true;
-        } else {
-            return false;
-        }
-    }.property('speed', 'lat', 'lon'),
 
     carsConnected: Ember.computed('model', function () {
         var model = this.get('model');
@@ -31,63 +19,101 @@ export default Ember.ArrayController.extend({
         }
     }),
 
-    actions: {
-        trackCar: function (principalId) {
-            this.send('getMessage', principalId, 1);
-            this.send('subscribeToNitrogen');
-        },
+    // Observes `trackedCars` to sync map pushpins and tracked cars
+    trackedCarsObserver: function () {
+        var mapEntityTracker = this.get('mapEntityTracker'),
+            trackedCars = this.get('trackedCars'),
+            nitrogenController = this.get('nitrogenController'),
+            map = this.get('mapReference'),
+            self = this;
 
-        carTrackerChange: function () {
-            var devices = this.get('model').content,
-                trackedCars = this.get('trackedCars'),
-                i;
+        console.log(map.entities, map.entities.getLength());
+        for (let i = 0; i < mapEntityTracker.length; i++) {
+            if (trackedCars.indexOf(mapEntityTracker[i].name) === -1) {
+                // Car is on map, but not in trackedCars - remove from map
+                map.entities.removeAt(mapEntityTracker[i].path);
+                map.entities.removeAt(mapEntityTracker[i].pin);
+                mapEntityTracker.splice(i, 1);
+            };
+        };
 
-            for (i = 0; i < devices.length; i += 1) {
-                var name = devices[i].get('nitrogen_id'),
-                    track = devices[i].get('trackOnMap');
-
-                console.log('Track', name, track);
-
-                if (track && trackedCars.indexOf(name) === -1) {
-                    // Car currently not tracked, but should be
-                    this.send('trackCar', devices[i].get('nitrogen_id'));
-                } else if (!track && trackedCars.indexOf(name) > -1) {
-                    // Car currently tracked, but should not be
-                    // TODO
-                    console.log('Untracking not implemented');
-                }
-            }
-        },
-
-        subscribeToNitrogen: function () {
-            var appController = this.get('appController'),
-                nitrogenSession = appController.get('nitrogenSession'),
-                self = this;
-
-            if (this.get('subscribedToNitrogen')) {
-                return;
-            }
-
-            nitrogenSession.onMessage({
-                $or: [
-                    { type: 'location' }
-                ]
-            }, function(message) {
-                console.log('Message Received. New Location:', message.body);
-
-                self.store.find('device', {nitrogen_id: message.from})
-                .then(function (foundDevices) {
-                    var foundDevice;
+        for (let i = 0; i < trackedCars.length; i++) {
+            if (!mapEntityTracker.findBy('name', trackedCars[i])) {
+                // Car is not on map, but in trackedCars - add to map
+                this.store.find('device', { nitrogen_id: trackedCars[i] }).then(function (foundDevices) {
+                    let foundDevice;
 
                     if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
                         foundDevice = foundDevices.content[0];
-                        foundDevice.get('gps').pushObject(message.body);
-                        self.send('updateCar', foundDevice);
+                        nitrogenController.send('getLastMessage', foundDevice.get('nitrogen_id'), 1, self, 'handleLastLocation');
                     }
                 });
-            });
+            }
+        };
 
-            this.set('subscribedToNitrogen', true);
+    }.observes('trackedCars.[]'),
+
+    init: function () {
+        var nitrogenController = this.get('nitrogenController');
+
+        this._super();
+        nitrogenController.send('subscribeToNitrogen', this, 'handleSocketMessage');
+    },
+
+    actions: {
+        toggleCar: function (device) {
+            var nitrogenController = this.get('nitrogenController'),
+                trackedCars = this.get('trackedCars'),
+                principalId = device.get('principalId');
+
+            device.toggleProperty('trackOnMap');
+
+            if (device.get('trackOnMap') === true) {
+                trackedCars.pushObject(device.get('nitrogen_id'));
+            } else {
+                trackedCars.removeObject(device.get('nitrogen_id'));
+            }
+        },
+
+        handleSocketMessage: function (message) {
+            var self = this;
+
+            if (message) {
+                this.store.find('device', {nitrogen_id: message.from})
+                    .then(function (foundDevices) {
+                        var foundDevice;
+
+                        if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
+                            foundDevice = foundDevices.content[0];
+                            foundDevice.get('gps').pushObject(message.body);
+
+                            if (foundDevice.get('trackOnMap')) {
+                                self.send('updateCar', foundDevice);
+                            }
+                        }
+                    });
+            }
+        },
+
+        handleLastLocation: function (locations, principalId) {
+            var self = this;
+
+            if (locations.length > 0) {
+                this.store.find('device', { nitrogen_id: principalId }).then(function (foundDevices) {
+                    var foundDevice, i,
+                        gps;
+
+                    if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
+                        foundDevice = foundDevices.content[0];
+                        gps = foundDevice.get('gps');
+
+                        for (i = 0; i < locations.length; i += 1) {
+                            gps.pushObject(locations[i].body);
+                        }
+                        self.send('addCarToMap', foundDevice);
+                    }
+                });
+            }
         },
 
         updateCar: function (device) {
@@ -115,6 +141,7 @@ export default Ember.ArrayController.extend({
 
                     pathLocations = path.getLocations();
                     pathLocations.push(lastLocation);
+                    path.setLocations(pathLocations);
                     map.entities.insert(path, mapEntityTracker[i].path);
                 }
             }
@@ -159,47 +186,7 @@ export default Ember.ArrayController.extend({
             map.entities.push(pin);
             map.entities.push(path);
 
-            this.set('speed', Math.round(lastLocation.speed));
-            this.set('lat', lastLocation.latitude.toFixed(4));
-            this.set('lon', lastLocation.longitude.toFixed(4));
-            this.set('lastLocation', lastLocation);
-            this.set('currentCar', device);
-
             this.send('centerMap', {'latitude': lastLocation.latitude, 'longitude': lastLocation.longitude});
-        },
-
-        getMessage: function (principalId, messageLimit) {
-            var appController = this.get('appController'),
-                nitrogenSession = appController.get('nitrogenSession'),
-                limit = (messageLimit) ? messageLimit : 0,
-                self = this;
-
-            if (nitrogenSession && principalId) {
-                nitrogen.Message.find(nitrogenSession, { type: 'location', from: principalId }, { sort: { ts: -1 }, limit: limit }, 
-                    function(err, locations) {
-                        if (err) {
-                            return;
-                        }
-
-                        if (locations.length > 0) {
-                            self.store.find('device', { nitrogen_id: principalId }).then(function (foundDevices) {
-                                var foundDevice, i,
-                                    gps;
-
-                                if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
-                                    foundDevice = foundDevices.content[0];
-                                    gps = foundDevice.get('gps');
-
-                                    for (i = 0; i < locations.length; i += 1) {
-                                        gps.pushObject(locations[i].body);
-                                    }
-                                    self.send('addCarToMap', foundDevice);
-                                }
-                            });
-                        }
-                    }
-                );
-            }
         }
     }
 });

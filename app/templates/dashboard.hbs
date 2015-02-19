@@ -4,8 +4,12 @@
 
 {{#if information}}
 <div id="floatingInfo">
-    <a type="button" {{action "centerMap" lastLocation}} class="btn btn-embossed btn-primary"><i class="fa fa-car"></i> {{currentCar.name}}</a>
-    {{#if speed}}<span><i class="fa fa-tachometer"></i> {{speed}} mph</span>{{/if}}
-    {{#if lat}}<span><i class="fa fa-compass"></i> {{lat}} {{lon}}</span>{{/if}}
+    {{#each car in model}}
+        {{#if car.trackOnMap}}
+            <a type="button" {{action "centerMap" lastLocation}} class="btn btn-embossed btn-primary"><i class="fa fa-car"></i> {{currentCar.name}}</a>
+            {{#if speed}}<span><i class="fa fa-tachometer"></i> {{car.gps.last.speed}} mph</span>{{/if}}
+            {{#if lat}}<span><i class="fa fa-compass"></i> {{car.gps.last.latitude}} {{car.gps.last.longitude}}</span>{{/if}}
+        {{/if}}
+    {{/each}}
 </div>
 {{/if}}

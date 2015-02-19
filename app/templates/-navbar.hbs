@@ -20,7 +20,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         {{#each car in model}}
-                        <li><a {{action 'trackCar' car.nitrogen_id}} href="#">{{car.name}}</a></li>
+                        <li><a {{action 'toggleCar' car}} href="#">{{car.name}}</a></li>
                         {{/each}}
                     </ul>
                 </li>

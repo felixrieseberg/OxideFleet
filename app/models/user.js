@@ -4,7 +4,6 @@ var User = DS.Model.extend({
 
     // Oxide
     avatarUrl: function () {
-        console.log('http://www.gravatar.com/avatar/' + md5(this.get('email')));
         return 'http://www.gravatar.com/avatar/' + md5(this.get('email')) + '?s=200&r=pg';
     }.property('email'),
 
