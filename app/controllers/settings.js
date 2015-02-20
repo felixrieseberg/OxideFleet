@@ -12,8 +12,10 @@ export default Ember.Controller.extend({
     localStorageSize: function () {
         var result = 0;
 
-        for (var i = localStorage.length - 1; i >= 0; i =- 1) {
-            result = result + ((localStorage[i].length * 2) / 1024 / 1024);
+        for (let i in localStorage) {
+            if (localStorage.hasOwnProperty(localStorage[i])) {
+                result = result + ((localStorage[i].length * 2) / 1024 / 1024);
+            }
         }
 
         return result.toFixed(2);
