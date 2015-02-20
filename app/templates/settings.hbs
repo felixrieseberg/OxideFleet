@@ -1,0 +1,60 @@
+{{partial "navbar"}}
+<div class="container">
+    <div class="row">
+        <h2><i class="fa fa-cogs"></i> Settings</h2>
+    </div>
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <h5>Local Storage</h5>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <p>We save information using Local Storage, a feature of your browser that allows apps to save data on the local harddrive. Since the app is still in development, things can still go wrong - and it sometimes makes sense to just delete everything and start fresh.</p>
+                        </div>
+                        <div class="col-md-3 text-right right">
+                            <button {{action "clearLocalStorage"}} class="btn btn-danger">
+                            Clear Storage <span class="badge">{{localStorageSize}} MB</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr />
+                    <h5>Nitrogen.io</h5>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>This app uses the open-source 'Internet of Things' Gateway Nitrogen.io to keep track of your devices.</p>
+                        </div>
+                        <div class="col-md-2"><strong>Secure:</strong> 
+                            {{#if connectionSecure}}
+                                <i class="fa fa-check-circle"></i>
+                            {{else}}
+                                <i class="fa fa-times-circle"></i>
+                            {{/if}}
+                        </div>
+                        <div class="col-md-2"><strong>Host:</strong> {{config.nitrogen.host}}</div>
+                        <div class="col-md-2"><strong>Protocol:</strong> {{config.nitrogen.protocol}}</div>
+                        <div class="col-md-2"><strong>Port:</strong> {{config.nitrogen.http_port}}</div>
+                        <div class="col-md-4"><strong>Base:</strong> {{config.nitrogen.base_url}}</div>
+                    </div>
+                    <hr />
+                    <h5>Environment Configuration</h5>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <p>This is the full configuration. Unless you're trying to fix something, you probably don't want to see this.</p>
+                        </div>
+                        <div class="col-md-3 text-right right">
+                            <button {{action "toggleShowConfig" target=view}} class="btn btn-default">
+                            Show ENV Config
+                            </button>
+                        </div>
+                        {{#if view.showConfigString}}
+                            <div class="col-md-12">
+                                <pre>{{configString}}</pre>
+                            </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

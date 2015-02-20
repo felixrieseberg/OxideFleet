@@ -49,7 +49,6 @@ var nitrogenEmberUtils = {
     },
 
     updateDevice: function (foundDevice, device, owner) {
-        console.log('Found: ', device, ' for Owner: ', owner);
         foundDevice.set('nitrogen_id', device.id);
         foundDevice.set('name', device.name);
         foundDevice.set('lastUpdated', device.updated_at);
@@ -67,8 +66,6 @@ var nitrogenEmberUtils = {
     },
 
     newDevice: function (store, device, owner) {
-        console.log('New Device: ', device, ' for Owner: ', owner);
-
         var newDevice = store.createRecord('device', {
             nitrogen_id: device.id,
             name: device.name,
@@ -115,8 +112,6 @@ var nitrogenEmberUtils = {
         var self = this;
 
         return new Ember.RSVP.Promise(function (resolve) {
-            console.log('Looking up device with nitrogen id ' + principal.id);
-
             store.find('device', {
                     nitrogen_id: principal.id
                 })

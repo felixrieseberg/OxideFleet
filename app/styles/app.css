@@ -31,7 +31,9 @@ body > .ember-view
 
     overflow-x: hidden;
 
-    min-height: 100vh;;
+    min-height: 100vh;
+
+    background-color: #ecf0f1;
 }
 
 #container-outlet
@@ -42,6 +44,10 @@ body > .ember-view
 .content-container
 {
     height: calc(100% - 53px);
+}
+
+.code {
+    font-family: Consolas, monospace;
 }
 
 /* Menu Panel */
@@ -247,6 +253,11 @@ body > .ember-view
 #main-container
 {
     margin-left: 323px;
+}
+
+.main-container {
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
 /* Navbar */

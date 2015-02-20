@@ -5,6 +5,8 @@ export default Ember.Controller.extend({
 
     version: Config.APP.version,
 
+    fullConfig: Config.APP,
+
     devices: function () {
         return this.store.find('device');
     }.property(),
