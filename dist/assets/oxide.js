@@ -355,11 +355,13 @@ define('oxide/components/ox-tagger', ['exports'], function (exports) {
     exports['default'] = TaggingComponent;
 
 });
-define('oxide/controllers/application', ['exports', 'ember'], function (exports, Ember) {
+define('oxide/controllers/application', ['exports', 'ember', 'oxide/config/environment'], function (exports, Ember, Config) {
 
     'use strict';
 
     exports['default'] = Ember['default'].Controller.extend({
+
+        version: Config['default'].APP.version,
 
         devices: (function () {
             return this.store.find("device");
@@ -379,12 +381,12 @@ define('oxide/controllers/dashboard', ['exports', 'ember'], function (exports, E
     /* global Microsoft */
     exports['default'] = Ember['default'].ArrayController.extend({
         title: "Dashboard",
-        needs: "application",
+        needs: ["application", "nitrogen"],
+        version: Ember['default'].computed.alias("controllers.application.version"),
         appController: Ember['default'].computed.alias("controllers.application"),
-        subscribeToNitrogen: false,
+        nitrogenController: Ember['default'].computed.alias("controllers.nitrogen"),
         mapEntityTracker: [],
         trackedCars: [],
-        information: false,
 
         carsConnected: Ember['default'].computed("model", function () {
             var model = this.get("model");
@@ -396,60 +398,102 @@ define('oxide/controllers/dashboard', ['exports', 'ember'], function (exports, E
             }
         }),
 
+        // Observes `trackedCars` to sync map pushpins and tracked cars
+        trackedCarsObserver: (function () {
+            var mapEntityTracker = this.get("mapEntityTracker"),
+                trackedCars = this.get("trackedCars"),
+                nitrogenController = this.get("nitrogenController"),
+                map = this.get("mapReference"),
+                self = this;
+
+            function handleFoundDevices(foundDevices) {
+                var foundDevice = undefined;
+
+                if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
+                    foundDevice = foundDevices.content[0];
+                    nitrogenController.send("getLastMessage", foundDevice.get("nitrogen_id"), 1, self, "handleLastLocation");
+                }
+            }
+
+            for (var i = 0; i < mapEntityTracker.length; i += 1) {
+                if (trackedCars.indexOf(mapEntityTracker[i].name) === -1) {
+                    // Car is on map, but not in trackedCars - remove from map
+                    map.entities.removeAt(mapEntityTracker[i].path);
+                    map.entities.removeAt(mapEntityTracker[i].pin);
+                    mapEntityTracker.splice(i, 1);
+                }
+            }
+
+            for (var i = 0; i < trackedCars.length; i += 1) {
+                if (!mapEntityTracker.findBy("name", trackedCars[i])) {
+                    // Car is not on map, but in trackedCars - add to map
+                    this.store.find("device", { nitrogen_id: trackedCars[i] }).then(handleFoundDevices);
+                }
+            }
+        }).observes("trackedCars.[]").on("init"),
+
+        init: function () {
+            var nitrogenController = this.get("nitrogenController");
+
+            this._super();
+            console.log(this);
+            nitrogenController.send("subscribeToNitrogen", this, "handleSocketMessage");
+        },
+
         actions: {
-            trackCar: function (principalId) {
-                this.send("getMessage", principalId, 1);
-                this.send("subscribeToNitrogen");
-            },
+            toggleCar: function (device) {
+                var trackedCars = this.get("trackedCars");
 
-            carTrackerChange: function () {
-                var devices = this.get("model").content,
-                    trackedCars = this.get("trackedCars"),
-                    i;
+                device.toggleProperty("trackOnMap");
 
-                for (i = 0; i < devices.length; i += 1) {
-                    var name = devices[i].get("nitrogen_id"),
-                        track = devices[i].get("trackOnMap");
-
-                    console.log("Track", name, track);
-
-                    if (track && trackedCars.indexOf(name) === -1) {
-                        // Car currently not tracked, but should be
-                        this.send("trackCar", devices[i].get("nitrogen_id"));
-                    } else if (!track && trackedCars.indexOf(name) > -1) {
-                        // Car currently tracked, but should not be
-                        // TODO
-                        console.log("Untracking not implemented");
-                    }
+                if (device.get("trackOnMap") === true) {
+                    trackedCars.pushObject(device.get("nitrogen_id"));
+                } else {
+                    trackedCars.removeObject(device.get("nitrogen_id"));
                 }
             },
 
-            subscribeToNitrogen: function () {
-                var appController = this.get("appController"),
-                    nitrogenSession = appController.get("nitrogenSession"),
-                    self = this;
+            handleLocations: function (locations, principalId, callback) {
+                var self = this;
 
-                if (this.get("subscribedToNitrogen")) {
-                    return;
-                }
-
-                nitrogenSession.onMessage({
-                    $or: [{ type: "location" }]
-                }, function (message) {
-                    console.log("Message Received. New Location:", message.body);
-
-                    self.store.find("device", { nitrogen_id: message.from }).then(function (foundDevices) {
-                        var foundDevice;
+                if (locations.length > 0) {
+                    this.store.find("device", { nitrogen_id: principalId }).then(function (foundDevices) {
+                        var foundDevice, i, gps;
 
                         if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
                             foundDevice = foundDevices.content[0];
-                            foundDevice.get("gps").pushObject(message.body);
-                            self.send("updateCar", foundDevice);
+                            gps = foundDevice.get("gps");
+
+                            for (i = 0; i < locations.length; i += 1) {
+                                if (!locations[i].body.timestamp) {
+                                    locations[i].body.timestamp = Date.now();
+                                }
+
+                                gps.pushObject(locations[i].body);
+                                foundDevice.save();
+                            }
+
+                            if (foundDevice.get("trackOnMap")) {
+                                self.send(callback, foundDevice);
+                            }
                         }
                     });
-                });
+                }
+            },
 
-                this.set("subscribedToNitrogen", true);
+            handleSocketMessage: function (message) {
+                var locations = [];
+
+                if (message && message.from) {
+                    locations.push(message);
+                    this.send("handleLocations", locations, message.from, "updateCar");
+                }
+            },
+
+            handleLastLocation: function (locations, principalId) {
+                if (locations && principalId) {
+                    this.send("handleLocations", locations, principalId, "addCarToMap");
+                }
             },
 
             updateCar: function (device) {
@@ -480,6 +524,7 @@ define('oxide/controllers/dashboard', ['exports', 'ember'], function (exports, E
 
                         pathLocations = path.getLocations();
                         pathLocations.push(lastLocation);
+                        path.setLocations(pathLocations);
                         map.entities.insert(path, mapEntityTracker[i].path);
                     }
                 }
@@ -526,45 +571,7 @@ define('oxide/controllers/dashboard', ['exports', 'ember'], function (exports, E
                 map.entities.push(pin);
                 map.entities.push(path);
 
-                this.set("information", true);
-                this.set("speed", Math.round(lastLocation.speed));
-                this.set("lat", lastLocation.latitude.toFixed(4));
-                this.set("lon", lastLocation.longitude.toFixed(4));
-                this.set("lastLocation", lastLocation);
-                this.set("currentCar", device);
-
                 this.send("centerMap", { latitude: lastLocation.latitude, longitude: lastLocation.longitude });
-            },
-
-            getMessage: function (principalId, messageLimit) {
-                var appController = this.get("appController"),
-                    nitrogenSession = appController.get("nitrogenSession"),
-                    limit = messageLimit ? messageLimit : 0,
-                    self = this;
-
-                if (nitrogenSession && principalId) {
-                    nitrogen.Message.find(nitrogenSession, { type: "location", from: principalId }, { sort: { ts: -1 }, limit: limit }, function (err, locations) {
-                        if (err) {
-                            return;
-                        }
-
-                        if (locations.length > 0) {
-                            self.store.find("device", { nitrogen_id: principalId }).then(function (foundDevices) {
-                                var foundDevice, i, gps;
-
-                                if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
-                                    foundDevice = foundDevices.content[0];
-                                    gps = foundDevice.get("gps");
-
-                                    for (i = 0; i < locations.length; i += 1) {
-                                        gps.pushObject(locations[i].body);
-                                    }
-                                    self.send("addCarToMap", foundDevice);
-                                }
-                            });
-                        }
-                    });
-                }
             }
         }
     });
@@ -717,70 +724,34 @@ define('oxide/controllers/nitrogen', ['exports', 'ember'], function (exports, Em
                 }
             },
 
-            subscribeToNitrogen: function () {
+            subscribeToNitrogen: function (originalController, callback) {
                 var appController = this.get("appController"),
-                    nitrogenSession = appController.get("nitrogenSession"),
-                    self = this;
+                    nitrogenSession = appController.get("nitrogenSession");
 
-                if (this.get("subscribedToNitrogen")) {
+                if (this.get("subscribedToNitrogen") || !nitrogenSession) {
                     return;
                 }
 
                 nitrogenSession.onMessage({
-                    $or: [{
-                        type: "location"
-                    }]
+                    $or: [{ type: "location" }]
                 }, function (message) {
-                    console.log("Message Received. New Location:", message.body);
-
-                    self.store.find("device", {
-                        nitrogen_id: message.from
-                    }).then(function (foundDevices) {
-                        var foundDevice;
-
-                        if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
-                            foundDevice = foundDevices.content[0];
-                            // TODO: Process incoming messages
-                        }
-                    });
+                    originalController.send(callback, message);
                 });
 
                 this.set("subscribedToNitrogen", true);
             },
 
-            getMessage: function (principalId, messageLimit) {
+            getLastMessage: function (principalId, messageLimit, originalController, callback) {
                 var appController = this.get("appController"),
                     nitrogenSession = appController.get("nitrogenSession"),
-                    limit = messageLimit ? messageLimit : 0,
-                    self = this;
+                    limit = messageLimit ? messageLimit : 0;
 
                 if (nitrogenSession && principalId) {
-                    nitrogen.Message.find(nitrogenSession, {
-                        type: "location",
-                        from: principalId
-                    }, {
-                        sort: {
-                            ts: -1
-                        },
-                        limit: limit
-                    }, function (err, locations) {
+                    nitrogen.Message.find(nitrogenSession, { type: "location", from: principalId }, { sort: { ts: -1 }, limit: limit }, function (err, locations) {
                         if (err) {
                             return;
                         }
-
-                        if (locations.length > 0) {
-                            self.store.find("device", {
-                                nitrogen_id: principalId
-                            }).then(function (foundDevices) {
-                                var foundDevice;
-
-                                if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
-                                    foundDevice = foundDevices.content[0];
-
-                                    // TODO: Process Messages
-                                }
-                            });
-                        }
+                        originalController.send(callback, locations, principalId);
                     });
                 }
             }
@@ -887,6 +858,31 @@ define('oxide/helpers/fa-icon', ['exports', 'ember'], function (exports, Ember) 
   exports['default'] = Ember['default'].Handlebars.makeBoundHelper(faIcon);
 
   exports.faIcon = faIcon;
+
+});
+define('oxide/helpers/pretty-date', ['exports', 'ember'], function (exports, Ember) {
+
+    'use strict';
+
+    exports.prettyDate = prettyDate;
+
+    function prettyDate(timestamp) {
+        return moment(timestamp).calendar();
+    }exports['default'] = Ember['default'].Handlebars.makeBoundHelper(prettyDate);
+
+});
+define('oxide/helpers/round-number', ['exports', 'ember'], function (exports, Ember) {
+
+    'use strict';
+
+    exports.round = round;
+
+    function round(input, points) {
+        if (points === undefined) {
+            points = 2;
+        }
+        return parseFloat(input).toFixed(points);
+    }exports['default'] = Ember['default'].Handlebars.makeBoundHelper(round);
 
 });
 define('oxide/initializers/app-version', ['exports', 'oxide/config/environment', 'ember'], function (exports, config, Ember) {
@@ -1010,7 +1006,6 @@ define('oxide/models/user', ['exports', 'ember-data'], function (exports, DS) {
 
         // Oxide
         avatarUrl: (function () {
-            console.log("http://www.gravatar.com/avatar/" + md5(this.get("email")));
             return "http://www.gravatar.com/avatar/" + md5(this.get("email")) + "?s=200&r=pg";
         }).property("email"),
 
@@ -1515,8 +1510,8 @@ define('oxide/templates/-navbar', ['exports'], function (exports) {
           } else {
             fragment = this.build(dom);
           }
-          var element3 = dom.childAt(fragment, [1]);
-          element(env, element3, context, "bind-attr", [], {"href": "view.href"});
+          var element1 = dom.childAt(fragment, [1]);
+          element(env, element1, context, "bind-attr", [], {"href": "view.href"});
           return fragment;
         }
       };
@@ -1559,129 +1554,8 @@ define('oxide/templates/-navbar', ['exports'], function (exports) {
           } else {
             fragment = this.build(dom);
           }
-          var element2 = dom.childAt(fragment, [1]);
-          element(env, element2, context, "bind-attr", [], {"href": "view.href"});
-          return fragment;
-        }
-      };
-    }());
-    var child2 = (function() {
-      var child0 = (function() {
-        return {
-          isHTMLBars: true,
-          blockParams: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          build: function build(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("                        ");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createElement("li");
-            var el2 = dom.createElement("a");
-            dom.setAttribute(el2,"href","#");
-            dom.appendChild(el1, el2);
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("\n");
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          render: function render(context, env, contextualElement) {
-            var dom = env.dom;
-            var hooks = env.hooks, get = hooks.get, element = hooks.element, content = hooks.content;
-            dom.detectNamespace(contextualElement);
-            var fragment;
-            if (env.useFragmentCache && dom.canClone) {
-              if (this.cachedFragment === null) {
-                fragment = this.build(dom);
-                if (this.hasRendered) {
-                  this.cachedFragment = fragment;
-                } else {
-                  this.hasRendered = true;
-                }
-              }
-              if (this.cachedFragment) {
-                fragment = dom.cloneNode(this.cachedFragment, true);
-              }
-            } else {
-              fragment = this.build(dom);
-            }
-            var element0 = dom.childAt(fragment, [1, 0]);
-            var morph0 = dom.createMorphAt(element0,-1,-1);
-            element(env, element0, context, "action", ["trackCar", get(env, context, "car.nitrogen_id")], {});
-            content(env, morph0, context, "car.name");
-            return fragment;
-          }
-        };
-      }());
-      return {
-        isHTMLBars: true,
-        blockParams: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        build: function build(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("                ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("li");
-          dom.setAttribute(el1,"class","dropdown");
-          var el2 = dom.createTextNode("\n                    ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("a");
-          dom.setAttribute(el2,"href","#");
-          dom.setAttribute(el2,"class","dropdown-toggle");
-          dom.setAttribute(el2,"data-toggle","dropdown");
-          dom.setAttribute(el2,"role","button");
-          dom.setAttribute(el2,"aria-expanded","false");
-          var el3 = dom.createTextNode("\n                        Track Connected Cars");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createElement("span");
-          dom.setAttribute(el3,"class","navbar-new");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n                    ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n                    ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("ul");
-          dom.setAttribute(el2,"class","dropdown-menu");
-          dom.setAttribute(el2,"role","menu");
-          var el3 = dom.createTextNode("\n");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("                    ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n                ");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        render: function render(context, env, contextualElement) {
-          var dom = env.dom;
-          var hooks = env.hooks, content = hooks.content, get = hooks.get, block = hooks.block;
-          dom.detectNamespace(contextualElement);
-          var fragment;
-          if (env.useFragmentCache && dom.canClone) {
-            if (this.cachedFragment === null) {
-              fragment = this.build(dom);
-              if (this.hasRendered) {
-                this.cachedFragment = fragment;
-              } else {
-                this.hasRendered = true;
-              }
-            }
-            if (this.cachedFragment) {
-              fragment = dom.cloneNode(this.cachedFragment, true);
-            }
-          } else {
-            fragment = this.build(dom);
-          }
-          var element1 = dom.childAt(fragment, [1]);
-          var morph0 = dom.createMorphAt(dom.childAt(element1, [1, 1]),-1,-1);
-          var morph1 = dom.createMorphAt(dom.childAt(element1, [3]),0,1);
-          content(env, morph0, context, "model.length");
-          block(env, morph1, context, "each", [get(env, context, "model")], {"keyword": "car"}, child0, null);
+          var element0 = dom.childAt(fragment, [1]);
+          element(env, element0, context, "bind-attr", [], {"href": "view.href"});
           return fragment;
         }
       };
@@ -1693,7 +1567,7 @@ define('oxide/templates/-navbar', ['exports'], function (exports) {
       hasRendered: false,
       build: function build(dom) {
         var el0 = dom.createElement("nav");
-        dom.setAttribute(el0,"class","navbar navbar-inverse navbar-static-top navbar-embossed");
+        dom.setAttribute(el0,"class","navbar navbar-inverse navbar-static-top");
         dom.setAttribute(el0,"role","navigation");
         var el1 = dom.createTextNode("\n    ");
         dom.appendChild(el0, el1);
@@ -1734,8 +1608,6 @@ define('oxide/templates/-navbar', ['exports'], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("");
         dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("");
-        dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("        ");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
@@ -1768,7 +1640,7 @@ define('oxide/templates/-navbar', ['exports'], function (exports) {
       },
       render: function render(context, env, contextualElement) {
         var dom = env.dom;
-        var hooks = env.hooks, inline = hooks.inline, block = hooks.block, get = hooks.get, element = hooks.element;
+        var hooks = env.hooks, inline = hooks.inline, block = hooks.block, element = hooks.element;
         dom.detectNamespace(contextualElement);
         var fragment;
         if (env.useFragmentCache && dom.canClone) {
@@ -1786,19 +1658,17 @@ define('oxide/templates/-navbar', ['exports'], function (exports) {
         } else {
           fragment = this.build(dom);
         }
-        var element4 = dom.childAt(fragment, [3]);
-        var element5 = dom.childAt(element4, [1]);
-        if (this.cachedFragment) { dom.repairClonedNode(element5,[1,2]); }
-        var element6 = dom.childAt(element4, [3, 1, 1]);
+        var element2 = dom.childAt(fragment, [3]);
+        var element3 = dom.childAt(element2, [1]);
+        if (this.cachedFragment) { dom.repairClonedNode(element3,[1]); }
+        var element4 = dom.childAt(element2, [3, 1, 1]);
         var morph0 = dom.createMorphAt(dom.childAt(fragment, [1]),2,3);
-        var morph1 = dom.createMorphAt(element5,0,1);
-        var morph2 = dom.createMorphAt(element5,1,2);
-        var morph3 = dom.createMorphAt(element5,2,3);
+        var morph1 = dom.createMorphAt(element3,0,1);
+        var morph2 = dom.createMorphAt(element3,1,2);
         inline(env, morph0, context, "link-to", ["Connected Car", "dashboard"], {"class": "navbar-brand"});
         block(env, morph1, context, "link-to", ["dashboard"], {"tagName": "li", "href": false}, child0, null);
         block(env, morph2, context, "link-to", ["settings"], {"tagName": "li", "href": false}, child1, null);
-        block(env, morph3, context, "if", [get(env, context, "carsConnected")], {}, child2, null);
-        element(env, element6, context, "action", ["invalidateSession"], {});
+        element(env, element4, context, "action", ["invalidateSession"], {});
         return fragment;
       }
     };
@@ -1812,58 +1682,6 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
   exports['default'] = Ember.HTMLBars.template((function() {
     var child0 = (function() {
       var child0 = (function() {
-        return {
-          isHTMLBars: true,
-          blockParams: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          build: function build(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("                    ");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createElement("span");
-            dom.setAttribute(el1,"class","fa-stack fa-lg");
-            var el2 = dom.createTextNode("\n                        ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("i");
-            dom.setAttribute(el2,"class","fa fa-circle dark fa-stack-2x");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n                        ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("i");
-            dom.setAttribute(el2,"class","fa fa-home light fa-stack-1x fa-inverse");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n                    ");
-            dom.appendChild(el1, el2);
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode(" Dashboard\n");
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          render: function render(context, env, contextualElement) {
-            var dom = env.dom;
-            dom.detectNamespace(contextualElement);
-            var fragment;
-            if (env.useFragmentCache && dom.canClone) {
-              if (this.cachedFragment === null) {
-                fragment = this.build(dom);
-                if (this.hasRendered) {
-                  this.cachedFragment = fragment;
-                } else {
-                  this.hasRendered = true;
-                }
-              }
-              if (this.cachedFragment) {
-                fragment = dom.cloneNode(this.cachedFragment, true);
-              }
-            } else {
-              fragment = this.build(dom);
-            }
-            return fragment;
-          }
-        };
-      }());
-      var child1 = (function() {
         var child0 = (function() {
           return {
             isHTMLBars: true,
@@ -1872,17 +1690,15 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
             hasRendered: false,
             build: function build(dom) {
               var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode(" ");
+              var el1 = dom.createTextNode("                            Seen: ");
               dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode(" ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("");
+              var el1 = dom.createTextNode("\n");
               dom.appendChild(el0, el1);
               return el0;
             },
             render: function render(context, env, contextualElement) {
               var dom = env.dom;
-              var hooks = env.hooks, inline = hooks.inline, content = hooks.content;
+              var hooks = env.hooks, get = hooks.get, inline = hooks.inline;
               dom.detectNamespace(contextualElement);
               var fragment;
               if (env.useFragmentCache && dom.canClone) {
@@ -1900,74 +1716,24 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
               } else {
                 fragment = this.build(dom);
               }
-              if (this.cachedFragment) { dom.repairClonedNode(fragment,[2]); }
               var morph0 = dom.createMorphAt(fragment,0,1,contextualElement);
-              var morph1 = dom.createMorphAt(fragment,1,2,contextualElement);
-              inline(env, morph0, context, "fa-icon", ["map-marker"], {});
-              content(env, morph1, context, "name");
+              inline(env, morph0, context, "pretty-Date", [get(env, context, "car.gps.firstObject.timestamp")], {});
               return fragment;
             }
           };
         }());
-        return {
-          isHTMLBars: true,
-          blockParams: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          build: function build(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("                            ");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("\n");
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          render: function render(context, env, contextualElement) {
-            var dom = env.dom;
-            var hooks = env.hooks, get = hooks.get, block = hooks.block;
-            dom.detectNamespace(contextualElement);
-            var fragment;
-            if (env.useFragmentCache && dom.canClone) {
-              if (this.cachedFragment === null) {
-                fragment = this.build(dom);
-                if (this.hasRendered) {
-                  this.cachedFragment = fragment;
-                } else {
-                  this.hasRendered = true;
-                }
-              }
-              if (this.cachedFragment) {
-                fragment = dom.cloneNode(this.cachedFragment, true);
-              }
-            } else {
-              fragment = this.build(dom);
-            }
-            var morph0 = dom.createMorphAt(fragment,0,1,contextualElement);
-            block(env, morph0, context, "link-to", ["location", get(env, context, "id")], {"tagName": "li", "class": "sidebar-link"}, child0, null);
-            return fragment;
-          }
-        };
-      }());
-      var child2 = (function() {
-        var child0 = (function() {
+        var child1 = (function() {
           return {
             isHTMLBars: true,
             blockParams: 0,
             cachedFragment: null,
             hasRendered: false,
             build: function build(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode(" ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode(" ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("");
-              dom.appendChild(el0, el1);
+              var el0 = dom.createTextNode("                            Never seen\n");
               return el0;
             },
             render: function render(context, env, contextualElement) {
               var dom = env.dom;
-              var hooks = env.hooks, inline = hooks.inline, content = hooks.content;
               dom.detectNamespace(contextualElement);
               var fragment;
               if (env.useFragmentCache && dom.canClone) {
@@ -1985,11 +1751,262 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
               } else {
                 fragment = this.build(dom);
               }
-              if (this.cachedFragment) { dom.repairClonedNode(fragment,[2]); }
+              return fragment;
+            }
+          };
+        }());
+        var child2 = (function() {
+          var child0 = (function() {
+            var child0 = (function() {
+              return {
+                isHTMLBars: true,
+                blockParams: 0,
+                cachedFragment: null,
+                hasRendered: false,
+                build: function build(dom) {
+                  var el0 = dom.createDocumentFragment();
+                  var el1 = dom.createTextNode("                            ");
+                  dom.appendChild(el0, el1);
+                  var el1 = dom.createElement("a");
+                  dom.setAttribute(el1,"type","button");
+                  dom.setAttribute(el1,"class","btn btn-embossed btn-primary btn-xs");
+                  var el2 = dom.createElement("i");
+                  dom.setAttribute(el2,"class","fa fa-location");
+                  dom.appendChild(el1, el2);
+                  var el2 = dom.createTextNode(" Go to");
+                  dom.appendChild(el1, el2);
+                  dom.appendChild(el0, el1);
+                  var el1 = dom.createTextNode("\n");
+                  dom.appendChild(el0, el1);
+                  return el0;
+                },
+                render: function render(context, env, contextualElement) {
+                  var dom = env.dom;
+                  var hooks = env.hooks, get = hooks.get, element = hooks.element;
+                  dom.detectNamespace(contextualElement);
+                  var fragment;
+                  if (env.useFragmentCache && dom.canClone) {
+                    if (this.cachedFragment === null) {
+                      fragment = this.build(dom);
+                      if (this.hasRendered) {
+                        this.cachedFragment = fragment;
+                      } else {
+                        this.hasRendered = true;
+                      }
+                    }
+                    if (this.cachedFragment) {
+                      fragment = dom.cloneNode(this.cachedFragment, true);
+                    }
+                  } else {
+                    fragment = this.build(dom);
+                  }
+                  var element1 = dom.childAt(fragment, [1]);
+                  element(env, element1, context, "action", ["centerMap", get(env, context, "car.gps.firstObject")], {});
+                  return fragment;
+                }
+              };
+            }());
+            var child1 = (function() {
+              return {
+                isHTMLBars: true,
+                blockParams: 0,
+                cachedFragment: null,
+                hasRendered: false,
+                build: function build(dom) {
+                  var el0 = dom.createDocumentFragment();
+                  var el1 = dom.createTextNode("                                ");
+                  dom.appendChild(el0, el1);
+                  var el1 = dom.createElement("span");
+                  var el2 = dom.createTextNode(" ");
+                  dom.appendChild(el1, el2);
+                  var el2 = dom.createElement("i");
+                  dom.setAttribute(el2,"class","fa fa-tachometer");
+                  dom.appendChild(el1, el2);
+                  var el2 = dom.createTextNode(" ");
+                  dom.appendChild(el1, el2);
+                  var el2 = dom.createTextNode(" mph ");
+                  dom.appendChild(el1, el2);
+                  dom.appendChild(el0, el1);
+                  var el1 = dom.createTextNode("\n                                ");
+                  dom.appendChild(el0, el1);
+                  return el0;
+                },
+                render: function render(context, env, contextualElement) {
+                  var dom = env.dom;
+                  var hooks = env.hooks, get = hooks.get, inline = hooks.inline;
+                  dom.detectNamespace(contextualElement);
+                  var fragment;
+                  if (env.useFragmentCache && dom.canClone) {
+                    if (this.cachedFragment === null) {
+                      fragment = this.build(dom);
+                      if (this.hasRendered) {
+                        this.cachedFragment = fragment;
+                      } else {
+                        this.hasRendered = true;
+                      }
+                    }
+                    if (this.cachedFragment) {
+                      fragment = dom.cloneNode(this.cachedFragment, true);
+                    }
+                  } else {
+                    fragment = this.build(dom);
+                  }
+                  var morph0 = dom.createMorphAt(dom.childAt(fragment, [1]),2,3);
+                  inline(env, morph0, context, "round-number", [get(env, context, "car.gps.firstObject.speed"), 0], {});
+                  return fragment;
+                }
+              };
+            }());
+            var child2 = (function() {
+              return {
+                isHTMLBars: true,
+                blockParams: 0,
+                cachedFragment: null,
+                hasRendered: false,
+                build: function build(dom) {
+                  var el0 = dom.createDocumentFragment();
+                  var el1 = dom.createTextNode("\n                                ");
+                  dom.appendChild(el0, el1);
+                  var el1 = dom.createElement("span");
+                  var el2 = dom.createElement("i");
+                  dom.setAttribute(el2,"class","fa fa-compass");
+                  dom.appendChild(el1, el2);
+                  var el2 = dom.createTextNode(" ");
+                  dom.appendChild(el1, el2);
+                  var el2 = dom.createTextNode(" ");
+                  dom.appendChild(el1, el2);
+                  dom.appendChild(el0, el1);
+                  var el1 = dom.createTextNode("\n");
+                  dom.appendChild(el0, el1);
+                  return el0;
+                },
+                render: function render(context, env, contextualElement) {
+                  var dom = env.dom;
+                  var hooks = env.hooks, get = hooks.get, inline = hooks.inline;
+                  dom.detectNamespace(contextualElement);
+                  var fragment;
+                  if (env.useFragmentCache && dom.canClone) {
+                    if (this.cachedFragment === null) {
+                      fragment = this.build(dom);
+                      if (this.hasRendered) {
+                        this.cachedFragment = fragment;
+                      } else {
+                        this.hasRendered = true;
+                      }
+                    }
+                    if (this.cachedFragment) {
+                      fragment = dom.cloneNode(this.cachedFragment, true);
+                    }
+                  } else {
+                    fragment = this.build(dom);
+                  }
+                  var element0 = dom.childAt(fragment, [1]);
+                  var morph0 = dom.createMorphAt(element0,1,2);
+                  var morph1 = dom.createMorphAt(element0,2,-1);
+                  inline(env, morph0, context, "round-number", [get(env, context, "car.gps.firstObject.latitude"), 3], {});
+                  inline(env, morph1, context, "round-number", [get(env, context, "car.gps.firstObject.longitude"), 3], {});
+                  return fragment;
+                }
+              };
+            }());
+            return {
+              isHTMLBars: true,
+              blockParams: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              build: function build(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("\n                    ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("li");
+                var el2 = dom.createTextNode("\n                        ");
+                dom.appendChild(el1, el2);
+                var el2 = dom.createElement("div");
+                dom.setAttribute(el2,"class","car-metadata");
+                var el3 = dom.createTextNode("\n");
+                dom.appendChild(el2, el3);
+                var el3 = dom.createTextNode("");
+                dom.appendChild(el2, el3);
+                var el3 = dom.createTextNode("");
+                dom.appendChild(el2, el3);
+                var el3 = dom.createTextNode("                        ");
+                dom.appendChild(el2, el3);
+                dom.appendChild(el1, el2);
+                var el2 = dom.createTextNode("\n                    ");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n                ");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              render: function render(context, env, contextualElement) {
+                var dom = env.dom;
+                var hooks = env.hooks, get = hooks.get, block = hooks.block;
+                dom.detectNamespace(contextualElement);
+                var fragment;
+                if (env.useFragmentCache && dom.canClone) {
+                  if (this.cachedFragment === null) {
+                    fragment = this.build(dom);
+                    if (this.hasRendered) {
+                      this.cachedFragment = fragment;
+                    } else {
+                      this.hasRendered = true;
+                    }
+                  }
+                  if (this.cachedFragment) {
+                    fragment = dom.cloneNode(this.cachedFragment, true);
+                  }
+                } else {
+                  fragment = this.build(dom);
+                }
+                var element2 = dom.childAt(fragment, [1, 1]);
+                if (this.cachedFragment) { dom.repairClonedNode(element2,[1,2]); }
+                var morph0 = dom.createMorphAt(element2,0,1);
+                var morph1 = dom.createMorphAt(element2,1,2);
+                var morph2 = dom.createMorphAt(element2,2,3);
+                block(env, morph0, context, "if", [get(env, context, "car.gps.firstObject.latitude")], {}, child0, null);
+                block(env, morph1, context, "if", [get(env, context, "car.gps.firstObject.speed")], {}, child1, null);
+                block(env, morph2, context, "if", [get(env, context, "car.gps.firstObject.latitude")], {}, child2, null);
+                return fragment;
+              }
+            };
+          }());
+          return {
+            isHTMLBars: true,
+            blockParams: 0,
+            cachedFragment: null,
+            hasRendered: false,
+            build: function build(dom) {
+              var el0 = dom.createDocumentFragment();
+              var el1 = dom.createTextNode("");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("");
+              dom.appendChild(el0, el1);
+              return el0;
+            },
+            render: function render(context, env, contextualElement) {
+              var dom = env.dom;
+              var hooks = env.hooks, get = hooks.get, block = hooks.block;
+              dom.detectNamespace(contextualElement);
+              var fragment;
+              if (env.useFragmentCache && dom.canClone) {
+                if (this.cachedFragment === null) {
+                  fragment = this.build(dom);
+                  if (this.hasRendered) {
+                    this.cachedFragment = fragment;
+                  } else {
+                    this.hasRendered = true;
+                  }
+                }
+                if (this.cachedFragment) {
+                  fragment = dom.cloneNode(this.cachedFragment, true);
+                }
+              } else {
+                fragment = this.build(dom);
+              }
+              if (this.cachedFragment) { dom.repairClonedNode(fragment,[0,1]); }
               var morph0 = dom.createMorphAt(fragment,0,1,contextualElement);
-              var morph1 = dom.createMorphAt(fragment,1,2,contextualElement);
-              inline(env, morph0, context, "fa-icon", ["cloud"], {});
-              content(env, morph1, context, "name");
+              block(env, morph0, context, "if", [get(env, context, "car.gps.firstObject")], {}, child0, null);
               return fragment;
             }
           };
@@ -2001,7 +2018,36 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
           hasRendered: false,
           build: function build(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("                            ");
+            var el1 = dom.createTextNode("                ");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createElement("li");
+            var el2 = dom.createTextNode("\n                    ");
+            dom.appendChild(el1, el2);
+            var el2 = dom.createElement("div");
+            dom.setAttribute(el2,"class","flatpanel-icon fa fa-car");
+            dom.appendChild(el1, el2);
+            var el2 = dom.createTextNode("\n                    ");
+            dom.appendChild(el1, el2);
+            var el2 = dom.createElement("div");
+            dom.setAttribute(el2,"class","flatpanel-content");
+            var el3 = dom.createTextNode("\n                        ");
+            dom.appendChild(el2, el3);
+            var el3 = dom.createElement("h4");
+            dom.setAttribute(el3,"class","flatpanel-name");
+            var el4 = dom.createTextNode("\n                            ");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createTextNode("\n                        ");
+            dom.appendChild(el3, el4);
+            dom.appendChild(el2, el3);
+            var el3 = dom.createTextNode("\n");
+            dom.appendChild(el2, el3);
+            var el3 = dom.createTextNode("                    ");
+            dom.appendChild(el2, el3);
+            dom.appendChild(el1, el2);
+            var el2 = dom.createTextNode("\n                ");
+            dom.appendChild(el1, el2);
+            dom.appendChild(el0, el1);
+            var el1 = dom.createTextNode("\n                ");
             dom.appendChild(el0, el1);
             var el1 = dom.createTextNode("\n");
             dom.appendChild(el0, el1);
@@ -2009,7 +2055,7 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
           },
           render: function render(context, env, contextualElement) {
             var dom = env.dom;
-            var hooks = env.hooks, get = hooks.get, block = hooks.block;
+            var hooks = env.hooks, get = hooks.get, element = hooks.element, content = hooks.content, block = hooks.block;
             dom.detectNamespace(contextualElement);
             var fragment;
             if (env.useFragmentCache && dom.canClone) {
@@ -2027,60 +2073,16 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
             } else {
               fragment = this.build(dom);
             }
-            var morph0 = dom.createMorphAt(fragment,0,1,contextualElement);
-            block(env, morph0, context, "link-to", ["device", get(env, context, "id")], {"tagName": "li", "class": "sidebar-link"}, child0, null);
-            return fragment;
-          }
-        };
-      }());
-      var child3 = (function() {
-        return {
-          isHTMLBars: true,
-          blockParams: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          build: function build(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("                    ");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createElement("span");
-            dom.setAttribute(el1,"class","fa-stack fa-lg");
-            var el2 = dom.createTextNode("\n                        ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("i");
-            dom.setAttribute(el2,"class","fa fa-circle dark fa-stack-2x");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n                        ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("i");
-            dom.setAttribute(el2,"class","fa fa-gear light fa-stack-1x fa-inverse");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n                    ");
-            dom.appendChild(el1, el2);
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode(" Settings\n");
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          render: function render(context, env, contextualElement) {
-            var dom = env.dom;
-            dom.detectNamespace(contextualElement);
-            var fragment;
-            if (env.useFragmentCache && dom.canClone) {
-              if (this.cachedFragment === null) {
-                fragment = this.build(dom);
-                if (this.hasRendered) {
-                  this.cachedFragment = fragment;
-                } else {
-                  this.hasRendered = true;
-                }
-              }
-              if (this.cachedFragment) {
-                fragment = dom.cloneNode(this.cachedFragment, true);
-              }
-            } else {
-              fragment = this.build(dom);
-            }
+            var element3 = dom.childAt(fragment, [1]);
+            var element4 = dom.childAt(element3, [3]);
+            var morph0 = dom.createMorphAt(dom.childAt(element4, [1]),0,1);
+            var morph1 = dom.createMorphAt(element4,2,3);
+            var morph2 = dom.createMorphAt(fragment,2,3,contextualElement);
+            element(env, element3, context, "action", ["toggleCar", get(env, context, "car")], {});
+            element(env, element3, context, "bind-attr", [], {"class": "car.trackOnMap:flatpanel-selected:flatpanel-notselected"});
+            content(env, morph0, context, "car.name");
+            block(env, morph1, context, "if", [get(env, context, "car.gps.firstObject.timestamp")], {}, child0, child1);
+            block(env, morph2, context, "if", [get(env, context, "car.trackOnMap")], {}, child2, null);
             return fragment;
           }
         };
@@ -2094,202 +2096,10 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
           var el0 = dom.createDocumentFragment();
           var el1 = dom.createTextNode("        ");
           dom.appendChild(el0, el1);
-          var el1 = dom.createElement("div");
-          dom.setAttribute(el1,"class","accordion-group");
-          var el2 = dom.createTextNode("\n            ");
+          var el1 = dom.createElement("ul");
+          var el2 = dom.createTextNode("\n");
           dom.appendChild(el1, el2);
-          var el2 = dom.createElement("div");
-          dom.setAttribute(el2,"class","accordion-heading");
-          var el3 = dom.createTextNode("\n");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("            ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n        ");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n        ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("div");
-          dom.setAttribute(el1,"class","accordion-group");
-          var el2 = dom.createTextNode("\n            ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("div");
-          dom.setAttribute(el2,"class","accordion-heading");
-          var el3 = dom.createTextNode("\n                ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createElement("a");
-          dom.setAttribute(el3,"class","accordion-toggle");
-          dom.setAttribute(el3,"class","");
-          dom.setAttribute(el3,"data-toggle","collapse");
-          dom.setAttribute(el3,"data-parent","#leftMenu");
-          dom.setAttribute(el3,"href","#collapseTwo");
-          var el4 = dom.createTextNode("\n                    ");
-          dom.appendChild(el3, el4);
-          var el4 = dom.createElement("span");
-          dom.setAttribute(el4,"class","fa-stack fa-lg");
-          var el5 = dom.createTextNode("\n                        ");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createElement("i");
-          dom.setAttribute(el5,"class","fa fa-circle dark fa-stack-2x");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createTextNode("\n                        ");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createElement("i");
-          dom.setAttribute(el5,"class","fa fa-map-marker light fa-stack-1x fa-inverse");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createTextNode("\n                    ");
-          dom.appendChild(el4, el5);
-          dom.appendChild(el3, el4);
-          var el4 = dom.createTextNode(" Locations\n                ");
-          dom.appendChild(el3, el4);
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n            ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n            ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("div");
-          dom.setAttribute(el2,"id","collapseTwo");
-          dom.setAttribute(el2,"class","accordion-body collapse in");
-          var el3 = dom.createTextNode("\n                ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createElement("div");
-          dom.setAttribute(el3,"class","accordion-inner");
-          var el4 = dom.createTextNode("\n                    ");
-          dom.appendChild(el3, el4);
-          var el4 = dom.createElement("ul");
-          var el5 = dom.createTextNode("\n");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createTextNode("                    ");
-          dom.appendChild(el4, el5);
-          dom.appendChild(el3, el4);
-          var el4 = dom.createTextNode("\n                ");
-          dom.appendChild(el3, el4);
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n            ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n        ");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n        ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("div");
-          dom.setAttribute(el1,"class","accordion-group");
-          var el2 = dom.createTextNode("\n            ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("div");
-          dom.setAttribute(el2,"class","accordion-heading");
-          var el3 = dom.createTextNode("\n                ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createElement("a");
-          dom.setAttribute(el3,"class","accordion-toggle");
-          dom.setAttribute(el3,"class","");
-          dom.setAttribute(el3,"data-toggle","collapse");
-          dom.setAttribute(el3,"data-parent","#leftMenu");
-          dom.setAttribute(el3,"href","#collapseDevices");
-          var el4 = dom.createTextNode("\n                    ");
-          dom.appendChild(el3, el4);
-          var el4 = dom.createElement("span");
-          dom.setAttribute(el4,"class","fa-stack fa-lg");
-          var el5 = dom.createTextNode("\n                        ");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createElement("i");
-          dom.setAttribute(el5,"class","fa fa-circle dark fa-stack-2x");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createTextNode("\n                        ");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createElement("i");
-          dom.setAttribute(el5,"class","fa fa-cloud light fa-stack-1x fa-inverse");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createTextNode("\n                    ");
-          dom.appendChild(el4, el5);
-          dom.appendChild(el3, el4);
-          var el4 = dom.createTextNode(" Devices\n                ");
-          dom.appendChild(el3, el4);
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n            ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n            ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("div");
-          dom.setAttribute(el2,"id","collapseDevices");
-          dom.setAttribute(el2,"class","accordion-body collapse-devices in");
-          var el3 = dom.createTextNode("\n                ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createElement("div");
-          dom.setAttribute(el3,"class","accordion-inner");
-          var el4 = dom.createTextNode("\n                    ");
-          dom.appendChild(el3, el4);
-          var el4 = dom.createElement("ul");
-          var el5 = dom.createTextNode("\n");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createTextNode("                    ");
-          dom.appendChild(el4, el5);
-          dom.appendChild(el3, el4);
-          var el4 = dom.createTextNode("\n                ");
-          dom.appendChild(el3, el4);
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n            ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n        ");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n        ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("div");
-          dom.setAttribute(el1,"class","accordion-group");
-          var el2 = dom.createTextNode("\n            ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("div");
-          dom.setAttribute(el2,"class","accordion-heading");
-          var el3 = dom.createTextNode("\n");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("            ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n        ");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n        ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("div");
-          dom.setAttribute(el1,"class","accordion-group");
-          var el2 = dom.createTextNode("\n            ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("div");
-          dom.setAttribute(el2,"class","accordion-heading last");
-          var el3 = dom.createTextNode("\n                ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createElement("a");
-          dom.setAttribute(el3,"class","accordion-toggle");
-          var el4 = dom.createTextNode("\n                    ");
-          dom.appendChild(el3, el4);
-          var el4 = dom.createElement("span");
-          dom.setAttribute(el4,"class","fa-stack fa-lg");
-          var el5 = dom.createTextNode("\n                        ");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createElement("i");
-          dom.setAttribute(el5,"class","fa fa-circle dark fa-stack-2x");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createTextNode("\n                        ");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createElement("i");
-          dom.setAttribute(el5,"class","fa fa-sign-out light fa-stack-1x fa-inverse");
-          dom.appendChild(el4, el5);
-          var el5 = dom.createTextNode("\n                    ");
-          dom.appendChild(el4, el5);
-          dom.appendChild(el3, el4);
-          var el4 = dom.createTextNode(" Sign Out\n                ");
-          dom.appendChild(el3, el4);
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("\n            ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n        ");
+          var el2 = dom.createTextNode("        ");
           dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
@@ -2298,7 +2108,7 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
         },
         render: function render(context, env, contextualElement) {
           var dom = env.dom;
-          var hooks = env.hooks, block = hooks.block, get = hooks.get, element = hooks.element;
+          var hooks = env.hooks, get = hooks.get, block = hooks.block;
           dom.detectNamespace(contextualElement);
           var fragment;
           if (env.useFragmentCache && dom.canClone) {
@@ -2316,122 +2126,8 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
           } else {
             fragment = this.build(dom);
           }
-          var element0 = dom.childAt(fragment, [9, 1, 1]);
-          var morph0 = dom.createMorphAt(dom.childAt(fragment, [1, 1]),0,1);
-          var morph1 = dom.createMorphAt(dom.childAt(fragment, [3, 3, 1, 1]),0,1);
-          var morph2 = dom.createMorphAt(dom.childAt(fragment, [5, 3, 1, 1]),0,1);
-          var morph3 = dom.createMorphAt(dom.childAt(fragment, [7, 1]),0,1);
-          block(env, morph0, context, "link-to", ["dashboard"], {"class": "accordion-toggle sidebar-link"}, child0, null);
-          block(env, morph1, context, "each", [get(env, context, "locations")], {}, child1, null);
-          block(env, morph2, context, "each", [get(env, context, "devices")], {}, child2, null);
-          block(env, morph3, context, "link-to", ["settings"], {"class": "accordion-toggle sidebar-link"}, child3, null);
-          element(env, element0, context, "action", ["invalidateSession"], {});
-          return fragment;
-        }
-      };
-    }());
-    var child1 = (function() {
-      var child0 = (function() {
-        return {
-          isHTMLBars: true,
-          blockParams: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          build: function build(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("                    ");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createElement("span");
-            dom.setAttribute(el1,"class","fa-stack fa-lg");
-            var el2 = dom.createTextNode("\n                        ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("i");
-            dom.setAttribute(el2,"class","fa fa-circle dark fa-stack-2x");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n                        ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("i");
-            dom.setAttribute(el2,"class","fa fa-sign-in light fa-stack-1x fa-inverse");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n                    ");
-            dom.appendChild(el1, el2);
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode(" Sign in\n");
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          render: function render(context, env, contextualElement) {
-            var dom = env.dom;
-            dom.detectNamespace(contextualElement);
-            var fragment;
-            if (env.useFragmentCache && dom.canClone) {
-              if (this.cachedFragment === null) {
-                fragment = this.build(dom);
-                if (this.hasRendered) {
-                  this.cachedFragment = fragment;
-                } else {
-                  this.hasRendered = true;
-                }
-              }
-              if (this.cachedFragment) {
-                fragment = dom.cloneNode(this.cachedFragment, true);
-              }
-            } else {
-              fragment = this.build(dom);
-            }
-            return fragment;
-          }
-        };
-      }());
-      return {
-        isHTMLBars: true,
-        blockParams: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        build: function build(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("        ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("div");
-          dom.setAttribute(el1,"class","accordion-group");
-          var el2 = dom.createTextNode("\n            ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("div");
-          dom.setAttribute(el2,"class","accordion-heading last");
-          var el3 = dom.createTextNode("\n");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode("            ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n        ");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        render: function render(context, env, contextualElement) {
-          var dom = env.dom;
-          var hooks = env.hooks, block = hooks.block;
-          dom.detectNamespace(contextualElement);
-          var fragment;
-          if (env.useFragmentCache && dom.canClone) {
-            if (this.cachedFragment === null) {
-              fragment = this.build(dom);
-              if (this.hasRendered) {
-                this.cachedFragment = fragment;
-              } else {
-                this.hasRendered = true;
-              }
-            }
-            if (this.cachedFragment) {
-              fragment = dom.cloneNode(this.cachedFragment, true);
-            }
-          } else {
-            fragment = this.build(dom);
-          }
-          var morph0 = dom.createMorphAt(dom.childAt(fragment, [1, 1]),0,1);
-          block(env, morph0, context, "link-to", ["login"], {"class": "accordion-toggle sidebar-link"}, child0, null);
+          var morph0 = dom.createMorphAt(dom.childAt(fragment, [1]),0,1);
+          block(env, morph0, context, "each", [get(env, context, "model")], {"keyword": "car"}, child0, null);
           return fragment;
         }
       };
@@ -2442,45 +2138,34 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
       cachedFragment: null,
       hasRendered: false,
       build: function build(dom) {
-        var el0 = dom.createDocumentFragment();
+        var el0 = dom.createElement("div");
+        dom.setAttribute(el0,"id","panel-menu");
+        var el1 = dom.createTextNode("\n    ");
+        dom.appendChild(el0, el1);
         var el1 = dom.createElement("div");
-        dom.setAttribute(el1,"id","panel-menu");
-        var el2 = dom.createTextNode("\n    ");
+        dom.setAttribute(el1,"class","flatpanel");
+        var el2 = dom.createTextNode("\n        ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("div");
-        dom.setAttribute(el2,"id","user-info");
+        dom.setAttribute(el2,"class","flatpanel-title");
+        var el3 = dom.createTextNode("\n            ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("span");
+        var el4 = dom.createTextNode("Track Cars");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n        ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("img");
-        dom.setAttribute(el3,"width","200px");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n        ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("img");
-        dom.setAttribute(el3,"src","/assets/img/userOverlay.png");
-        dom.setAttribute(el3,"width","200px");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n    ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2,"class","accordion");
-        dom.setAttribute(el2,"id","leftMenu");
-        var el3 = dom.createTextNode("\n");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("    ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n    ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2,"class","fineprint");
-        var el3 = dom.createTextNode("\n        Support · Privacy Policy\n    ");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("    ");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n    ");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("span");
+        var el2 = dom.createTextNode("Internal Preview ");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
@@ -2489,7 +2174,7 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
       },
       render: function render(context, env, contextualElement) {
         var dom = env.dom;
-        var hooks = env.hooks, get = hooks.get, element = hooks.element, block = hooks.block;
+        var hooks = env.hooks, get = hooks.get, block = hooks.block, content = hooks.content;
         dom.detectNamespace(contextualElement);
         var fragment;
         if (env.useFragmentCache && dom.canClone) {
@@ -2507,11 +2192,10 @@ define('oxide/templates/-sidebar', ['exports'], function (exports) {
         } else {
           fragment = this.build(dom);
         }
-        var element1 = dom.childAt(fragment, [0]);
-        var element2 = dom.childAt(element1, [1, 1]);
-        var morph0 = dom.createMorphAt(dom.childAt(element1, [3]),0,1);
-        element(env, element2, context, "bind-attr", [], {"src": get(env, context, "currentUser.avatarUrl")});
-        block(env, morph0, context, "if", [get(env, context, "session.isAuthenticated")], {}, child0, child1);
+        var morph0 = dom.createMorphAt(dom.childAt(fragment, [1]),2,3);
+        var morph1 = dom.createMorphAt(dom.childAt(fragment, [3]),0,-1);
+        block(env, morph0, context, "if", [get(env, context, "carsConnected")], {}, child0, null);
+        content(env, morph1, context, "version");
         return fragment;
       }
     };
@@ -3980,92 +3664,6 @@ define('oxide/templates/dashboard', ['exports'], function (exports) {
   'use strict';
 
   exports['default'] = Ember.HTMLBars.template((function() {
-    var child0 = (function() {
-      return {
-        isHTMLBars: true,
-        blockParams: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        build: function build(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createElement("div");
-          dom.setAttribute(el1,"id","floatingInfo");
-          var el2 = dom.createTextNode("\n    ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("a");
-          dom.setAttribute(el2,"type","button");
-          dom.setAttribute(el2,"class","btn btn-embossed btn-primary");
-          var el3 = dom.createElement("i");
-          dom.setAttribute(el3,"class","fa fa-car");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode(" ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n    ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("span");
-          var el3 = dom.createElement("i");
-          dom.setAttribute(el3,"class","fa fa-tachometer");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode(" ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode(" mph");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n    ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createElement("span");
-          var el3 = dom.createElement("i");
-          dom.setAttribute(el3,"class","fa fa-compass");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode(" ");
-          dom.appendChild(el2, el3);
-          var el3 = dom.createTextNode(" ");
-          dom.appendChild(el2, el3);
-          dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        render: function render(context, env, contextualElement) {
-          var dom = env.dom;
-          var hooks = env.hooks, get = hooks.get, element = hooks.element, content = hooks.content;
-          dom.detectNamespace(contextualElement);
-          var fragment;
-          if (env.useFragmentCache && dom.canClone) {
-            if (this.cachedFragment === null) {
-              fragment = this.build(dom);
-              if (this.hasRendered) {
-                this.cachedFragment = fragment;
-              } else {
-                this.hasRendered = true;
-              }
-            }
-            if (this.cachedFragment) {
-              fragment = dom.cloneNode(this.cachedFragment, true);
-            }
-          } else {
-            fragment = this.build(dom);
-          }
-          var element0 = dom.childAt(fragment, [0]);
-          var element1 = dom.childAt(element0, [1]);
-          var element2 = dom.childAt(element0, [5]);
-          var morph0 = dom.createMorphAt(element1,1,-1);
-          var morph1 = dom.createMorphAt(dom.childAt(element0, [3]),1,2);
-          var morph2 = dom.createMorphAt(element2,1,2);
-          var morph3 = dom.createMorphAt(element2,2,-1);
-          element(env, element1, context, "action", ["centerMap", get(env, context, "lastLocation")], {});
-          content(env, morph0, context, "currentCar.name");
-          content(env, morph1, context, "speed");
-          content(env, morph2, context, "lat");
-          content(env, morph3, context, "lon");
-          return fragment;
-        }
-      };
-    }());
     return {
       isHTMLBars: true,
       blockParams: 0,
@@ -4077,15 +3675,27 @@ define('oxide/templates/dashboard', ['exports'], function (exports) {
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n\n");
         dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"id","sidebar-container");
+        var el2 = dom.createTextNode("\n    ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n\n");
         dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("");
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"id","main-container");
+        var el2 = dom.createTextNode("\n    ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         return el0;
       },
       render: function render(context, env, contextualElement) {
         var dom = env.dom;
-        var hooks = env.hooks, inline = hooks.inline, get = hooks.get, block = hooks.block;
+        var hooks = env.hooks, inline = hooks.inline, get = hooks.get;
         dom.detectNamespace(contextualElement);
         var fragment;
         if (env.useFragmentCache && dom.canClone) {
@@ -4103,13 +3713,13 @@ define('oxide/templates/dashboard', ['exports'], function (exports) {
         } else {
           fragment = this.build(dom);
         }
-        if (this.cachedFragment) { dom.repairClonedNode(fragment,[0,3]); }
+        if (this.cachedFragment) { dom.repairClonedNode(fragment,[0]); }
         var morph0 = dom.createMorphAt(fragment,0,1,contextualElement);
-        var morph1 = dom.createMorphAt(fragment,1,2,contextualElement);
-        var morph2 = dom.createMorphAt(fragment,2,3,contextualElement);
+        var morph1 = dom.createMorphAt(dom.childAt(fragment, [2]),0,1);
+        var morph2 = dom.createMorphAt(dom.childAt(fragment, [4]),0,1);
         inline(env, morph0, context, "partial", ["navbar"], {});
-        inline(env, morph1, context, "ox-map", [], {"mapReference": get(env, context, "mapReference")});
-        block(env, morph2, context, "if", [get(env, context, "information")], {}, child0, null);
+        inline(env, morph1, context, "partial", ["sidebar"], {});
+        inline(env, morph2, context, "ox-map", [], {"mapReference": get(env, context, "mapReference")});
         return fragment;
       }
     };
@@ -4626,6 +4236,16 @@ define('oxide/tests/helpers/login.jshint', function () {
   });
 
 });
+define('oxide/tests/helpers/pretty-date.jshint', function () {
+
+  'use strict';
+
+  module('JSHint - helpers');
+  test('helpers/pretty-date.js should pass jshint', function() { 
+    ok(true, 'helpers/pretty-date.js should pass jshint.'); 
+  });
+
+});
 define('oxide/tests/helpers/resolver', ['exports', 'ember/resolver', 'oxide/config/environment'], function (exports, Resolver, config) {
 
   'use strict';
@@ -4647,6 +4267,16 @@ define('oxide/tests/helpers/resolver.jshint', function () {
   module('JSHint - helpers');
   test('helpers/resolver.js should pass jshint', function() { 
     ok(true, 'helpers/resolver.js should pass jshint.'); 
+  });
+
+});
+define('oxide/tests/helpers/round-number.jshint', function () {
+
+  'use strict';
+
+  module('JSHint - helpers');
+  test('helpers/round-number.js should pass jshint', function() { 
+    ok(true, 'helpers/round-number.js should pass jshint.'); 
   });
 
 });
@@ -4795,7 +4425,7 @@ define('oxide/tests/integration/dashboard-test', ['ember', 'ember-qunit', 'oxide
         login();
 
         andThen(function () {
-            equal(find("div.device").length, 2, "A device card is displayed");
+            equal(find("h4.flatpanel-name").length, 1, "A device is displayed");
         });
     });
 
@@ -5003,15 +4633,16 @@ define('oxide/tests/unit/controllers/application-test', ['ember-qunit'], functio
 
   'use strict';
 
-  ember_qunit.moduleFor("controller:application", "ApplicationController", {});
+  ember_qunit.moduleFor("controller:application", "ApplicationController", {
+    // Specify the other units that are required for this test.
+    needs: ["controller:nitrogen"]
+  });
 
   // Replace this with your real tests.
   ember_qunit.test("it exists", function () {
     var controller = this.subject();
     ok(controller);
   });
-  // Specify the other units that are required for this test.
-  // needs: ['controller:foo']
 
 });
 define('oxide/tests/unit/controllers/application-test.jshint', function () {
@@ -5028,22 +4659,16 @@ define('oxide/tests/unit/controllers/dashboard-test', ['ember-qunit'], function 
 
   'use strict';
 
-  ember_qunit.moduleFor("controller:dashboard", "DashboardController", {});
+  ember_qunit.moduleFor("controller:dashboard", "DashboardController", {
+    // Specify the other units that are required for this test.
+    needs: ["controller:application", "controller:nitrogen"]
+  });
 
   // Replace this with your real tests.
   ember_qunit.test("it exists", function () {
     var controller = this.subject();
     ok(controller);
   });
-
-  ember_qunit.test("has correct title", function () {
-    var controller = this.subject(),
-        title = controller.get("title");
-
-    ok(title === "Dashboard");
-  });
-  // Specify the other units that are required for this test.
-  // needs: ['controller:foo']
 
 });
 define('oxide/tests/unit/controllers/dashboard-test.jshint', function () {
@@ -5091,13 +4716,6 @@ define('oxide/tests/unit/controllers/login-test', ['ember-qunit'], function (emb
   ember_qunit.test("it exists", function () {
     var controller = this.subject();
     ok(controller);
-  });
-
-  ember_qunit.test("has correct title", function () {
-    var controller = this.subject(),
-        title = controller.get("title");
-
-    ok(title === "Sign In");
   });
   // Specify the other units that are required for this test.
   // needs: ['controller:foo']
@@ -5161,6 +4779,52 @@ define('oxide/tests/unit/controllers/settings-test.jshint', function () {
   module('JSHint - unit/controllers');
   test('unit/controllers/settings-test.js should pass jshint', function() { 
     ok(true, 'unit/controllers/settings-test.js should pass jshint.'); 
+  });
+
+});
+define('oxide/tests/unit/helpers/pretty-date-test', ['oxide/helpers/pretty-date', 'qunit'], function (pretty_date, qunit) {
+
+  'use strict';
+
+  qunit.module("PrettyDateHelper");
+
+  // Replace this with your real tests.
+  qunit.test("it works", function (assert) {
+    var result = pretty_date.prettyDate(42);
+    assert.ok(result);
+  });
+
+});
+define('oxide/tests/unit/helpers/pretty-date-test.jshint', function () {
+
+  'use strict';
+
+  module('JSHint - unit/helpers');
+  test('unit/helpers/pretty-date-test.js should pass jshint', function() { 
+    ok(true, 'unit/helpers/pretty-date-test.js should pass jshint.'); 
+  });
+
+});
+define('oxide/tests/unit/helpers/round-number-test', ['oxide/helpers/two-decimal', 'qunit'], function (two_decimal, qunit) {
+
+  'use strict';
+
+  qunit.module("TwoDecimalHelper");
+
+  // Replace this with your real tests.
+  qunit.test("it works", function (assert) {
+    var result = two_decimal.twoDecimal(42);
+    assert.ok(result);
+  });
+
+});
+define('oxide/tests/unit/helpers/round-number-test.jshint', function () {
+
+  'use strict';
+
+  module('JSHint - unit/helpers');
+  test('unit/helpers/round-number-test.js should pass jshint', function() { 
+    ok(true, 'unit/helpers/round-number-test.js should pass jshint.'); 
   });
 
 });
@@ -5798,7 +5462,7 @@ catch(err) {
 if (runningTests) {
   require("oxide/tests/test-helper");
 } else {
-  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"oxide","version":"0.2.0.2cb40424"});
+  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"oxide","version":"0.3.0.4c92aba9"});
 }
 
 /* jshint ignore:end */
