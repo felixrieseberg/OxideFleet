@@ -28,6 +28,7 @@ module.exports = function (grunt) {
               stdin: false
             }
           }
+      }
     });
 
     grunt.registerTask('build', ['shell:build']);
