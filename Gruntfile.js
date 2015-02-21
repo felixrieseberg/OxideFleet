@@ -19,10 +19,19 @@ module.exports = function (grunt) {
                 config: '.jscsrc',
                 esnext: true
             }
-        }
+        },
+        shell: {
+          build: {
+            command: 'ember build -prod',
+            options: {
+              stdout: true,
+              stdin: false
+            }
+          }
     });
 
+    grunt.registerTask('build', ['shell:build']);
     grunt.registerTask('codestyle', ['jshint', 'jscs']);
     grunt.registerTask('test', ['codestyle']);
-    grunt.registerTask('default', []);
+    grunt.registerTask('default', ['shell:build']);
 };

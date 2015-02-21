@@ -23,13 +23,43 @@ exitWithMessageOnError () {
 hash node 2>/dev/null
 exitWithMessageOnError "Missing node.js executable, please install node.js, if already installed make sure it can be reached from current environment."
 
+# Verify that we have access to tar
+hash tar 2> /dev/null
+exitWithMessageOnError "Missing tar. I figured as much."
+
 # Setup
 # -----
+echo Copy assets to $DEPLOYMENT_TEMP for build
+tar cf - --exclude=node_modules --exclude=bower_components --exclude=dist --exclude=tmp --exclude=.git . | (cd $DEPLOYMENT_TEMP && tar xvf - )
+exitWithMessageOnError "Failed to create and extract tarball"
+
+echo Switch to the temp directory
+cd $DEPLOYMENT_TEMP
+
+if [[ -d node_modules ]]; then
+  echo Removing node_modules folder
+  rm -Rf node_modules
+  exitWithMessageOnError "node_modules removal failed"
+fi
 
 SCRIPT_DIR="${BASH_SOURCE[0]%\\*}"
 SCRIPT_DIR="${SCRIPT_DIR%/*}"
 ARTIFACTS=$SCRIPT_DIR/../artifacts
 KUDU_SYNC_CMD=${KUDU_SYNC_CMD//\"}
+NODE_EXE="$PROGRAMFILES\\nodejs\\0.10.32\\node.exe"
+NPM_CMD="\"$NODE_EXE\" \"$PROGRAMFILES\\npm\\1.4.28\\node_modules\\npm\\bin\\npm-cli.js\""
+NODE_MODULES_DIR="$APPDATA\\npm\\node_modules"
+
+EMBER_PATH="$NODE_MODULES_DIR\\ember-cli\\bin\\ember"
+BOWER_PATH="$NODE_MODULES_DIR\\bower\\bin\\bower"
+GRUNT_PATH="$NODE_MODULES_DIR\\grunt-cli\\bin\\grunt"
+PHANTOMJS_PATH="$NODE_MODULES_DIR\\phantomjs\\bin\\phantomjs"
+
+export PATH=$PATH:"/d/local/AppData/npm/node_modules/phantomjs/lib/phantom"
+
+EMBER_CMD="\"$NODE_EXE\" \"$EMBER_PATH\""
+BOWER_CMD="\"$NODE_EXE\" \"$BOWER_PATH\""
+GRUNT_CMD="\"$NODE_EXE\" \"$GRUNT_PATH\""
 
 if [[ ! -n "$DEPLOYMENT_SOURCE" ]]; then
   DEPLOYMENT_SOURCE=$SCRIPT_DIR
@@ -42,6 +72,12 @@ if [[ ! -n "$NEXT_MANIFEST_PATH" ]]; then
     PREVIOUS_MANIFEST_PATH=$NEXT_MANIFEST_PATH
   fi
 fi
+
+# if [[ -d node_modules ]]; then
+#   echo Removing old node_modules folder
+#   rm -Rf node_modules
+#   exitWithMessageOnError "node_modules removal failed"
+# fi
 
 if [[ ! -n "$DEPLOYMENT_TARGET" ]]; then
   DEPLOYMENT_TARGET=$ARTIFACTS/wwwroot
@@ -64,81 +100,82 @@ if [[ ! -n "$KUDU_SYNC_CMD" ]]; then
   fi
 fi
 
-# # Node Helpers
-# # ------------
- 
-# selectNodeVersion () {
-#   if [[ -n "$KUDU_SELECT_NODE_VERSION_CMD" ]]; then
-#     SELECT_NODE_VERSION="$KUDU_SELECT_NODE_VERSION_CMD \"$DEPLOYMENT_SOURCE\" \"$DEPLOYMENT_TARGET\" \"$DEPLOYMENT_TEMP\""
-#     eval $SELECT_NODE_VERSION
-#     exitWithMessageOnError "select node version failed"
- 
-#     if [[ -e "$DEPLOYMENT_TEMP/__nodeVersion.tmp" ]]; then
-#       NODE_EXE=`cat "$DEPLOYMENT_TEMP/__nodeVersion.tmp"`
-#       exitWithMessageOnError "getting node version failed"
-#     fi
-    
-#     if [[ -e "$DEPLOYMENT_TEMP/.tmp" ]]; then
-#       NPM_JS_PATH=`cat "$DEPLOYMENT_TEMP/__npmVersion.tmp"`
-#       exitWithMessageOnError "getting npm version failed"
-#     fi
- 
-#     if [[ ! -n "$NODE_EXE" ]]; then
-#       NODE_EXE=node
-#     fi
- 
-#     NPM_CMD="\"$NODE_EXE\" \"$NPM_JS_PATH\""
-#   else
-#     NPM_CMD=npm
-#     NODE_EXE=node
-#   fi
-# }
+if [[ ! -e "$EMBER_PATH" ]]; then
+  echo Installing ember-cli
+  eval $NPM_CMD install -g ember-cli
+  exitWithMessageOnError "ember-cli failed"
+else
+  echo ember-cli already installed, nothing to do
+fi
 
-# ##################################################################################################################################
-# # Building Ember-Cli App
-# # ----------
+if [[ ! -e "$PHANTOMJS_PATH" ]]; then
+  echo Installing phantom-js
+  eval $NPM_CMD install -g phantomjs
+  exitWithMessageOnError "phantomjs failed"
+else
+  echo phantomjs already installed, nothing to do
+fi
 
-# # 1. Select node version
-# selectNodeVersion
- 
-# # 2. Install npm packages
-# if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
-#   eval $NPM_CMD config set registry="http://registry.npmjs.org/"
-#   eval $NPM_CMD install --dev
-#   exitWithMessageOnError "npm failed"
-# fi
- 
-# # 3. Install bower packages
-# if [ -e "$DEPLOYMENT_SOURCE/bower.json" ]; then
-#   eval $NPM_CMD install bower
-#   exitWithMessageOnError "installing bower failed"
-#   ./node_modules/.bin/bower install
-#   exitWithMessageOnError "bower failed"
-# fi
- 
-# # 4. Install and build ember-cli
-# if [ -e "$DEPLOYMENT_SOURCE/Gruntfile.js" ]; then
-#   eval $NPM_CMD install ember-cli
-#   exitWithMessageOnError "installing ember-cli failed"
-#   ./node_modules/.bin/ember build
-#   exitWithMessageOnError "Ember build failed"
-# fi
+if [[ ! -e "$BOWER_PATH" ]]; then
+  echo Installing bower
+  eval $NPM_CMD install -g bower
+  exitWithMessageOnError "bower failed"
+else
+  echo bower already installed, nothing to do
+fi
+
+if [[ ! -e "$GRUNT_PATH" ]]; then
+  echo Installing grunt-cli
+  eval $NPM_CMD install -g grunt-cli
+  exitWithMessageOnError "grunt-cli failed"
+else
+  echo grunt-cli already installed, nothing to do
+fi
+
+##################################################################################################################################
+# Build
+# -----
+
+echo Installing npm modules
+eval $NPM_CMD install
+exitWithMessageOnError "npm install failed"
+
+echo Installing bower dependencies
+eval $BOWER_CMD install
+exitWithMessageOnError "bower install failed"
+
+echo Build the dist folder
+eval $GRUNT_CMD --no-color --verbose
+exitWithMessageOnError "grunt build failed"
+
+echo Copy web.config to the dist folder
+cp web.config dist\
+
+##################################################################################################################################
+# Test
+# ----
+
+# echo Install phantomjs locally as testem does not find global install
+# eval $NPM_CMD install phantomjs@1.9.13
+# exitWithMessageOnError "local phantomjs install failed"
+
+# echo Executing Tests
+# eval $GRUNT_CMD shell:test --no-color --verbose
+# exitWithMessageOnError "unit tests failed"
 
 ##################################################################################################################################
 # Deployment
 # ----------
 
-echo Handling Basic Web Site deployment.
-
-# 1. KuduSync
 if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
-  "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE/dist" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
+  "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_TEMP/dist" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
   exitWithMessageOnError "Kudu Sync failed"
 fi
 
 ##################################################################################################################################
-
 # Post deployment stub
+# --------------------
+
 if [[ -n "$POST_DEPLOYMENT_ACTION" ]]; then
   POST_DEPLOYMENT_ACTION=${POST_DEPLOYMENT_ACTION//\"}
   cd "${POST_DEPLOYMENT_ACTION_DIR%\\*}"
