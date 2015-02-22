@@ -134,7 +134,7 @@ eval $BOWER_CMD install
 exitWithMessageOnError "bower install failed"
 
 echo Build the dist folder
-eval $AZUREDEPLOY_CMD build
+eval $AZUREDEPLOY_CMD build --no-color
 exitWithMessageOnError "ember-cli-azure-deploy build failed"
 
 echo Copy web.config to the dist folder
