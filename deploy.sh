@@ -52,14 +52,13 @@ NODE_MODULES_DIR="$APPDATA\\npm\\node_modules"
 
 EMBER_PATH="$NODE_MODULES_DIR\\ember-cli\\bin\\ember"
 BOWER_PATH="$NODE_MODULES_DIR\\bower\\bin\\bower"
-GRUNT_PATH="$NODE_MODULES_DIR\\grunt-cli\\bin\\grunt"
-PHANTOMJS_PATH="$NODE_MODULES_DIR\\phantomjs\\bin\\phantomjs"
+AZUREDEPLOY_PATH="$NODE_MODULES_DIR\\ember-cli-deploy-azure\\bin\\azure-deploy"
 
 export PATH=$PATH:"/d/local/AppData/npm/node_modules/phantomjs/lib/phantom"
 
 EMBER_CMD="\"$NODE_EXE\" \"$EMBER_PATH\""
 BOWER_CMD="\"$NODE_EXE\" \"$BOWER_PATH\""
-GRUNT_CMD="\"$NODE_EXE\" \"$GRUNT_PATH\""
+AZUREDEPLOY_CMD="\"$NODE_EXE\" \"$AZUREDEPLOY_PATH\""
 
 if [[ ! -n "$DEPLOYMENT_SOURCE" ]]; then
   DEPLOYMENT_SOURCE=$SCRIPT_DIR
@@ -108,14 +107,6 @@ else
   echo ember-cli already installed, nothing to do
 fi
 
-if [[ ! -e "$PHANTOMJS_PATH" ]]; then
-  echo Installing phantom-js
-  eval $NPM_CMD install -g phantomjs
-  exitWithMessageOnError "phantomjs failed"
-else
-  echo phantomjs already installed, nothing to do
-fi
-
 if [[ ! -e "$BOWER_PATH" ]]; then
   echo Installing bower
   eval $NPM_CMD install -g bower
@@ -125,11 +116,11 @@ else
 fi
 
 if [[ ! -e "$GRUNT_PATH" ]]; then
-  echo Installing grunt-cli
-  eval $NPM_CMD install -g grunt-cli
-  exitWithMessageOnError "grunt-cli failed"
+  echo Installing ember-cli-azure-deploy
+  eval $NPM_CMD install -g ember-cli-azure-deploy
+  exitWithMessageOnError "ember-cli-azure-deploy failed"
 else
-  echo grunt-cli already installed, nothing to do
+  echo ember-cli-azure-deploy already installed, nothing to do
 fi
 
 ##################################################################################################################################
@@ -145,23 +136,11 @@ eval $BOWER_CMD install
 exitWithMessageOnError "bower install failed"
 
 echo Build the dist folder
-eval $GRUNT_CMD --no-color --verbose
-exitWithMessageOnError "grunt build failed"
+eval $AZUREDEPLOY_CMD build
+exitWithMessageOnError "ember-cli-azure-deploy build failed"
 
 echo Copy web.config to the dist folder
 cp web.config dist\
-
-##################################################################################################################################
-# Test
-# ----
-
-# echo Install phantomjs locally as testem does not find global install
-# eval $NPM_CMD install phantomjs@1.9.13
-# exitWithMessageOnError "local phantomjs install failed"
-
-# echo Executing Tests
-# eval $GRUNT_CMD shell:test --no-color --verbose
-# exitWithMessageOnError "unit tests failed"
 
 ##################################################################################################################################
 # Deployment

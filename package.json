@@ -24,6 +24,7 @@
     "ember-cli": "^0.1.12",
     "ember-cli-6to5": "^3.0.0",
     "ember-cli-app-version": "0.3.1",
+    "ember-cli-azure-deploy": "^0.9.3",
     "ember-cli-content-security-policy": "0.3.0",
     "ember-cli-dependency-checker": "0.0.7",
     "ember-cli-font-awesome": "0.0.4",
