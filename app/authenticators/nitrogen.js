@@ -66,7 +66,7 @@ export default Base.extend({
         return new Ember.RSVP.Promise(function (resolve, reject) {
             var user = new nitrogen.User({
                 nickname: 'current',
-                email: credentials.identification,
+                email: $.trim(credentials.identification),
                 password: credentials.password
             });
 

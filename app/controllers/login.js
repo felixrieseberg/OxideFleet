@@ -42,7 +42,7 @@ export default Ember.Controller.extend(LoginControllerMixin, {
             this._super().then(function () {
                 Ember.Logger.debug('Session authentication succeeded');
             }, function (error) {
-                this.set('loading', false);
+                self.set('loading', false);
                 Ember.Logger.debug('Session authentication failed with message:', error.message);
                 self.notify.warning({message: 'Incorrect email or password.', closeAfter: 7000});
             });
