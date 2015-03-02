@@ -1,6 +1,6 @@
 /* Table of Contents
 ------------------------------------------------------------
- - General Styles                                           
+ - General Styles
  - Menu-Panel
  - Main Content Body
  - NavBar
@@ -333,6 +333,20 @@ form.navbar-form.navbar-right.ng-pristine.ng-valid
     font-size: 2rem;
 
     color: #fff;
+}
+
+.navbar .toggleButton
+{
+  float: left;
+  display: block;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  width: 44px;
+  height: 54px;
+  margin: 0;
+  padding: 0;
+  outline: none;
 }
 
 /* Content */
