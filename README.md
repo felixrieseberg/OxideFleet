@@ -1,4 +1,4 @@
-# Oxide Fleed: Management for the Connected Car [![Build Status](https://travis-ci.org/felixrieseberg/OxideFleet.svg)](https://travis-ci.org/felixrieseberg/OxideFleet)
+# Oxide Fleet: Management for the Connected Car [![Build Status](https://travis-ci.org/felixrieseberg/OxideFleet.svg)](https://travis-ci.org/felixrieseberg/OxideFleet)
 
 This folder contains the source for the client application displaying information about the 'Connected Car'. It's built with Ember Cli and contains a clean build pipeline, asset management, and unit/functional testing. It's pretty heavily WIP - you probably don't need anything in here if you just stumbled in here.
 
