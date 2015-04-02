@@ -684,6 +684,11 @@ li > .bootstrap-switch-square
         padding-right: 0;
         padding-left: 0;
     }
+
+    .navbar-inverse .navbar-collapse {
+        border: none;
+        border-width: 0;
+    }
 }
 
 /* Notifications */

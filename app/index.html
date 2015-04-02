@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Oxide</title>
+    <title>ConnectedCar</title>
     <meta name="description" content="Application to manage your nitrogen enabled devices.">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
 
@@ -20,5 +20,17 @@
     <script src="assets/vendor.js"></script>
     <script src="assets/oxide.js"></script>
     <script charset="UTF-8" type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+    // Wait for device API libraries to load
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    // device APIs are available
+    function onDeviceReady() {
+        setTimeout(function() {
+            navigator.splashscreen.hide();
+        }, 500);
+    }
+    </script>
   </body>
 </html>
