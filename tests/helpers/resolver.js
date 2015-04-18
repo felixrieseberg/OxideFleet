@@ -7,5 +7,5 @@ resolver.namespace = {
   modulePrefix: config.modulePrefix,
   podModulePrefix: config.podModulePrefix
 };
-
+console.dir(resolver.namespace);
 export default resolver;

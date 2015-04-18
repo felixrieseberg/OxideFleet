@@ -2,10 +2,15 @@
   "framework": "qunit",
   "test_page": "tests/index.html?hidepassed",
   "launch_in_ci": [
-    "PhantomJS"
+    "nw"
   ],
   "launch_in_dev": [
-    "PhantomJS",
-    "Chrome"
-  ]
+    "nw"
+  ],
+  "launchers": {
+    "nw": {
+        "command": "node nw-runner.js",
+        "protocol": "tap"
+    }
+  }
 }

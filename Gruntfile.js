@@ -2,13 +2,24 @@ module.exports = function (grunt) {
     // load all grunt tasks matching the `grunt-*` pattern
     require('load-grunt-tasks')(grunt);
 
-    var files = ['gruntfile.js', 'app/**/*.js'];
+    var files = ['app/**/*.js', 'Brocfile.js'];
 
     grunt.initConfig({
         jshint: {
             files: files,
             options: {
                 jshintrc: './.jshintrc'
+            }
+        },
+        js_beautify: {
+            default_options: {
+                options: {
+                    end_with_newline: true,
+                    max_preserve_newlines: 1
+                },
+                files: {
+                  'application_files': ['app/**/*.js']
+                }
             }
         },
         jscs: {
@@ -19,20 +30,12 @@ module.exports = function (grunt) {
                 config: '.jscsrc',
                 esnext: true
             }
-        },
-        shell: {
-          build: {
-            command: 'ember build -prod',
-            options: {
-              stdout: true,
-              stdin: false
-            }
-          }
-      }
+        }
     });
 
-    grunt.registerTask('build', ['shell:build']);
+    grunt.loadNpmTasks('grunt-js-beautify');
     grunt.registerTask('codestyle', ['jshint', 'jscs']);
     grunt.registerTask('test', ['codestyle']);
-    grunt.registerTask('default', ['shell:build']);
+    grunt.registerTask('default', ['test']);
+    grunt.registerTask('beautify', ['js_beautify']);
 };

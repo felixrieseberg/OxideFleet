@@ -1,0 +1,45 @@
+@import 'color-overrides';
+
+.main-container {
+    width: calc(100vw - 50px);
+    margin-left: 50px;
+}
+
+#map {
+    position: relative;
+}
+
+.cards {
+    position: absolute;
+    z-index: 1001;
+    width: 350px;
+    margin-left: 10px;
+
+    .card {
+        .card-title {
+            color: $primary-color-dark;
+        }
+
+        .collection {
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        .collection-item {
+            height: inherit;
+            padding-left: 55px;
+            position: relative;
+
+            .circle {
+                position: absolute;
+                width: 42px;
+                height: 42px;
+                overflow: hidden;
+                left: 0;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+    }
+}

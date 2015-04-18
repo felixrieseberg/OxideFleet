@@ -1,28 +1,38 @@
-<div class="darkbackground">
-    <div class="container">
-        <div class="row login_box">
-            <div class="col-md-12 col-xs-12" align="center">
-                <div class="line"><h5 class="white">Connected Car</h5></div>
-                <div class="outter"><img src="assets/img/tile2.png" class="image-circle"/></div>   
-                <h3 class="white">Welcome</h3>
-                <p class="white">Please Sign In With Nitrogen.io</p>
-            </div>
-            
-            <div class="col-md-12 col-xs-12 login_control">
-                <form {{action 'authenticate' on='submit'}} >
-                    <div class="control">
-                        {{input class='form-control floating-label login-field' id='identification' placeholder='Enter Login' value=identification}}
+<div class="container">
+    <div class="row">
+        <div class="col s10 m8 offset-m2 welcome-offset">
+            <div class="card card-account">
+                <div class="card-image">
+                    <img src="images/clouds-1.jpg">
+                </div>
+                <div class="card-content">
+                    {{#liquid-if loading}}
+                        <div {{bind-attr class="loading"}}></div>
+                        <div class="welcome-loading">
+                            {{cc-spinner}}
+                        </div>
+                    {{/liquid-if}}
+                    <span class="card-title grey-text text-darken-4">Storage Account</span>
+                    <div class="row">
+                        <form id="login" {{action 'authenticate' on='submit'}} >
+                            <div class="input-field col s12">
+                                <i class="mdi-action-bookmark-outline prefix"></i>
+                                {{input class="validate" id="identification" value=identification}}
+                                <label for="identification">Username</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <i class="mdi-action-bookmark-outline prefix"></i>
+                                {{input class="validate" id="password" type="password" value=password}}
+                                <label for="password">Password</label>
+                            </div>
+                            <div class="col s12">
+                                <br />
+                                <a {{action "login"}} class="waves-effect waves-light btn center">
+                                    <i class="mdi-content-add-circle left"></i>Login
+                                </a>
+                            </div>
+                        </form>
                     </div>
-                    
-                    <div class="control">
-                        {{input class='form-control floating-label login-field' id='password' placeholder='Enter Password' type='password' value=password}}
-                    </div>
-                    <div align="center">
-                         <button {{bind-attr disabled=loading }} class="btn btn-primary btn-lg">Login</button>
-                    </div>
-                </form>
-                <div {{bind-attr class="loading:show:hidden :login-loading"}}>
-                    {{loading-spin color='red' size=50}}
                 </div>
             </div>
         </div>

@@ -39,6 +39,7 @@
         "ok": true,
         "md5": true,
         "nitrogen": true,
-        "QUnit": true
+        "QUnit": true,
+        "toast": true
     }
 }

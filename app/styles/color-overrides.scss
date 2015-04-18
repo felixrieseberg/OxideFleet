@@ -1,0 +1,9 @@
+/*** Colors ***/
+$primary-color: #2e80ab;
+$primary-color-light: lighten($primary-color, 15%);
+$primary-color-dark: darken($primary-color, 15%);
+
+$secondary-color: #2e80ab;
+$success-color: color("green", "base");
+$error-color: color("red", "base");
+$link-color: color("light-blue", "darken-1");

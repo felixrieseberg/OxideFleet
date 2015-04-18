@@ -12,28 +12,6 @@ export default Ember.Controller.extend(LoginControllerMixin, {
     },
 
     actions: {
-        authenticateWithGoogle: function () {
-            var self = this;
-
-            this.get('session').authenticate('simple-auth-authenticator:torii', 'google-oauth2')
-                .then(function () {
-                    self.transitionToRoute('dashboard');
-                }, function (error) {
-                    console.log(error);
-                });
-        },
-
-        authenticateWithFacebook: function () {
-            var self = this;
-
-            this.get('session').authenticate('simple-auth-authenticator:torii', 'facebook-oauth2')
-                .then(function () {
-                    self.transitionToRoute('dashboard');
-                }, function (error) {
-                    console.log(error);
-                });
-        },
-
         // display an error when authentication fails
         authenticate: function () {
             var self = this;
@@ -46,6 +24,11 @@ export default Ember.Controller.extend(LoginControllerMixin, {
                 Ember.Logger.debug('Session authentication failed with message:', error.message);
                 self.notify.warning({message: 'Incorrect email or password.', closeAfter: 7000});
             });
+        },
+
+        login: function () {
+            Ember.$('#login').submit();
+            return false;
         }
     }
 });

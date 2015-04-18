@@ -1,92 +1,76 @@
 /* jshint node: true */
 
-module.exports = function (environment) {
-    var ENV = {
-        modulePrefix: 'oxide',
-        environment: environment,
-        baseURL: '/',
-        locationType: 'hash',
+module.exports = function(environment) {
+  var ENV = {
+    modulePrefix: 'oxide',
+    environment: environment,
+    baseURL: '/',
+    locationType: 'hash',
+    EmberENV: {
+      FEATURES: {
+        // Here you can enable experimental features on an ember canary build
+        // e.g. 'with-controller': true
+      }
+    },
 
-        EmberENV: {
-          FEATURES: {
-            // Here you can enable experimental features on an ember canary build
-            // e.g. 'with-controller': true
-          }
-        },
+    APP: {
+      // Here you can pass flags/options to your application instance
+      // when it is created
+      nitrogen: {
+        host: 'api.nitrogen.io',
+        protocol: 'https',
+        http_port: 443,
+        log_levels: ['warn', 'error']
+      }
+    },
+    
+    sassOptions: {
+      includePaths: ['bower_components/materialize/sass']
+    },
 
-        APP: {
-          // Here you can pass flags/options to your application instance
-          // when it is created
-          nitrogen: {
-            host: 'api.nitrogen.io',
-            protocol: 'https',
-            http_port: 443,
-            log_levels: ['warn', 'error']
-          }
-        },
-      };
-
-
-    ENV.version = require('../package.json').version
-
-    ENV['simple-auth'] = {
-        routeAfterAuthentication: 'dashboard',
-        routeIfAlreadyAuthenticated: 'dashboard'
-    };
-
-    ENV['cordova'] = {
-        // Rebuild the cordova project on file changes. Blocks the server until it's
-        // finished.
-        rebuildOnChange: true,
-
-        // Run the cordova emulate command after the build is finished
-        emulate: false,
-
-        // Which platform to build and/or emulate
-        platform: 'ios',
-
-        // Which URL the ember server is running on. This is used when using
-        // live-reload that comes with the starter kit.
-        emberUrl: 'http://10.0.1.12:4200',
-
-        // Whether or not to use liveReload on the device simulator. Requires a few
-        // plugins to be installed that come with the starter-kit. It will cause your
-        // app to not boot up in the browser
-        liveReload: {
-            enabled: false,
-            platform: 'ios'
-        }
-    };
-
-
-    if (environment === 'development') {
-        // ENV.APP.LOG_RESOLVER = true;
-        ENV.APP.LOG_ACTIVE_GENERATION = true;
-        ENV.APP.LOG_TRANSITIONS = true;
-        ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
-        ENV.APP.LOG_VIEW_LOOKUPS = true;
-        ENV.contentSecurityPolicyHeader = 'Disabled-Content-Security-Policy';
+    /*jshint -W109 */
+    contentSecurityPolicy: {
+      'default-src': "'none'",
+      'script-src': "'unsafe-inline' 'self' https://cdn.mxpnl.com https://api.nitrogen.io http://dev.virtualearth.net http://ecn.dev.virtualearth.net", // Allow scripts from https://cdn.mxpnl.com
+      'font-src': "'self' http://fonts.gstatic.com", // Allow fonts to be loaded from http://fonts.gstatic.com
+      'connect-src': "'self' https://messaging-production.nitrogen.io:4200 https://messaging-production.nitrogen.io https://api.mixpanel.com https://api.nitrogen.io", // Allow data (ajax/websocket) from api.mixpanel.com and custom-api.local
+      'img-src': "'self' http://*.virtualearth.net",
+      'style-src': "'self' 'unsafe-inline' http://ecn.dev.virtualearth.net http://fonts.googleapis.com", // Allow inline styles and loaded CSS from http://fonts.googleapis.com 
+      'media-src': "'self'",
+      'object-src': "'self'"
     }
+    /*jshint +W109 */
+  };
 
-    if (environment === 'test') {
-        // Testem prefers this...
-        ENV.baseURL = '/';
-        ENV.locationType = 'auto';
+  if (environment === 'test') {
+    // Testem prefers this...
+    ENV.baseURL = '/';
+    ENV.locationType = 'none';
 
-        // keep test console output quieter
-        ENV.APP.LOG_ACTIVE_GENERATION = false;
-        ENV.APP.LOG_VIEW_LOOKUPS = false;
+    // keep test console output quieter
+    ENV.APP.LOG_ACTIVE_GENERATION = false;
+    ENV.APP.LOG_VIEW_LOOKUPS = false;
 
-        ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.rootElement = '#ember-testing';
+  }
 
-        ENV['simple-auth'] = {
-            store: 'simple-auth-session-store:ephemeral'
-        }
-    }
+  ENV['simple-auth'] = {
+      routeAfterAuthentication: 'dashboard',
+      routeIfAlreadyAuthenticated: 'dashboard'
+  };
 
-    if (environment === 'production') {
+/*
+  if (environment === 'production') {
+  }
 
-    }
+  if (environment === 'development') {
+    ENV.APP.LOG_RESOLVER = true;
+    ENV.APP.LOG_ACTIVE_GENERATION = true;
+    ENV.APP.LOG_TRANSITIONS = true;
+    ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
+    ENV.APP.LOG_VIEW_LOOKUPS = true;
+  }
+*/
 
-    return ENV;
+  return ENV;
 };
