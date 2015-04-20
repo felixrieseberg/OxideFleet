@@ -1,0 +1,54 @@
+@import 'color-overrides';
+
+.bg {
+    background-image: url('img/bg.jpg');
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+    display:table-cell;
+    vertical-align:middle;
+}
+
+// Ensure correct color in login form
+form#login {
+    input[type=text]:focus, 
+    input[type=password]:focus {
+        color: #000;
+        border-bottom: 1px solid #000;
+        -webkit-box-shadow: #000 0px 1px 0px 0px;
+    }
+
+    .input-field input[type=text]:focus + label,
+    .input-field input[type=password]:focus + label {
+        color: #000;
+    }
+
+    .input-field .prefix.active {
+        color: #000;
+    }
+
+    a.btn {
+        color: #fff;
+    }
+}
+
+// Loading Spinner
+.welcome-loading {
+    position: absolute;
+    left: calc(50% - 30px);
+    padding-top: 50px;
+}
+
+.loading {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(255, 255, 255, 0.75);
+    z-index: 10;
+}
+
+.welcome-loading {
+    z-index: 50;
+}

@@ -1,7 +1,11 @@
 <div class="hamburger">
     <ul>
-        <li>
-            <i {{action "toggleSideNav"}} class="mdi-navigation-menu"></i>
+        <li {{action "toggleSideNav"}}>
+            <i class="mdi-navigation-menu"></i>
+        </li>
+        <li {{action 'invalidateSession' }}>
+            <i class="mdi-social-person"></i>
+            <span>Sign Out</span>
         </li>
     </ul>
 </div>

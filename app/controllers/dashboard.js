@@ -119,6 +119,8 @@ export default Ember.ArrayController.extend({
         },
 
         updateCar: function (device) {
+            console.log(device);
+
             var map = this.get('mapReference'),
                 name = device.get('nitrogen_id'),
                 mapEntityTracker = this.get('mapEntityTracker'),

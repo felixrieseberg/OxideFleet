@@ -1,7 +1,7 @@
 var transition = function () {
     this.transition(
-        this.fromRoute('welcome'),
-        this.toRoute('explorer'),
+        this.fromRoute('login'),
+        this.toRoute('dashboard'),
         this.use('toLeft'),
         this.reverse('toRight')
     );
