@@ -58,7 +58,6 @@ export default Ember.ArrayController.extend({
         var nitrogenController = this.get('nitrogenController');
 
         this._super();
-        console.log(this);
         nitrogenController.send('subscribeToNitrogen', this, 'handleSocketMessage');
     },
 
@@ -162,11 +161,11 @@ export default Ember.ArrayController.extend({
         addCarToMap: function (device) {
             var locations = device.get('gps'),
                 lastLocation = locations[0],
-                iconUrl = 'assets/img/carIcon.png',
-                iconOptions = {'icon': iconUrl, height: 50, width: 50},
+                iconUrl = 'assets/img/carIcon_smaller.png',
+                iconOptions = {'icon': iconUrl, height: 40, width: 40},
                 map = this.get('mapReference'),
                 mapLocations = [],
-                pathOptions = {strokeColor: new Microsoft.Maps.Color.fromHex('#009587'), strokeThickness: 5},
+                pathOptions = {strokeColor: new Microsoft.Maps.Color.fromHex('#4caf50'), strokeThickness: 5},
                 path, pin, entityLength;
 
             for (var i = 0; i < locations.length; i += 1) {

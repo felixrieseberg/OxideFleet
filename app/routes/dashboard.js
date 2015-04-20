@@ -8,15 +8,14 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
     actions: {
         toggleSideNav: function () {
-            var $menu = Ember.$('.hamburger'),
-                $container = Ember.$('.main-container'),
+            var $container = Ember.$('.main-container'),
                 $containerMargin = $container.css('margin-left');
 
             // If the menu isn't out, pull it out
             if ($containerMargin !== '250px') {
-                $container.animate({"margin-left": "250px"}, { duration: 200, queue: false}); 
+                $container.animate({'margin-left': '250px'}, { duration: 200, queue: false}); 
             } else {
-                $container.animate({"margin-left": "50px"}, { duration: 200, queue: false}); 
+                $container.animate({'margin-left': '50px'}, { duration: 200, queue: false}); 
             }
             
         }

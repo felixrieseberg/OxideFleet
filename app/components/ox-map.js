@@ -13,7 +13,8 @@ export default Ember.Component.extend({
             credentials: 'Akbhia6_9IoahE9Q2TyAVORP_IHbhkxmTiy25f8WXYpnt_pzIA0AhgvyDVHKJkhi',
             enableSearchLogo: false,
             zoom: this.get('zoom'),
-            showDashboard: this.get('showDashboard')
+            showDashboard: this.get('showDashboard'),
+            enableHighDpi: true
         });
 
         this.set('mapReference', map);
