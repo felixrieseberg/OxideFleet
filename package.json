@@ -41,7 +41,7 @@
     "ember-cli-uglify": "1.0.1",
     "ember-data": "1.0.0-beta.16.1",
     "ember-export-application-global": "1.0.2",
-    "ember-localstorage-adapter": "kurko/ember-localstorage-adapter#2e4b6f482a09953cf12f774c4242b79c832fce6a",
+    "ember-localstorage-adapter": "0.5.3",
     "extract-zip": "^1.0.3",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.10.0",
