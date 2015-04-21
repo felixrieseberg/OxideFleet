@@ -35,7 +35,6 @@
     "ember-cli-inline-content": "^0.4.0",
     "ember-cli-materialize": "^0.5.2",
     "ember-cli-moment": "0.0.2",
-    "ember-cli-node-webkit": "0.2.0",
     "ember-cli-qunit": "0.3.9",
     "ember-cli-sass": "3.3.0",
     "ember-cli-simple-auth": "0.8.0-beta.1",
@@ -50,8 +49,7 @@
     "grunt-jscodesniffer": "^0.1.8",
     "grunt-jscs": "^0.8.1",
     "liquid-fire": "ef4/liquid-fire#8fcefd057478ab6852d7b8b3fc8526aa5079553c",
-    "load-grunt-tasks": "^1.0.0",
-    "nw": "0.12.0"
+    "load-grunt-tasks": "^1.0.0"
   },
   "main": "dist/index.html",
   "window": {
