@@ -1,7 +1,7 @@
 {
   "name": "oxide",
   "version": "0.0.0",
-  "description": "Small description for azureexplorer goes here",
+  "description": "",
   "private": true,
   "directories": {
     "doc": "doc",
@@ -14,7 +14,7 @@
   },
   "repository": "",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": "0.10.32"
   },
   "author": "",
   "license": "MIT",
@@ -22,8 +22,6 @@
     "broccoli-asset-rev": "2.0.2",
     "broccoli-funnel": "^0.2.3",
     "broccoli-merge-trees": "^0.2.1",
-    "download": "^4.1.2",
-    "download-file": "^0.1.5",
     "ember-cli": "0.2.3",
     "ember-cli-app-version": "0.3.3",
     "ember-cli-babel": "^4.0.0",
@@ -42,7 +40,6 @@
     "ember-data": "1.0.0-beta.16.1",
     "ember-export-application-global": "1.0.2",
     "ember-localstorage-adapter": "0.5.3",
-    "extract-zip": "^1.0.3",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-js-beautify": "^0.1.1",
@@ -50,14 +47,5 @@
     "grunt-jscs": "^0.8.1",
     "liquid-fire": "ef4/liquid-fire#8fcefd057478ab6852d7b8b3fc8526aa5079553c",
     "load-grunt-tasks": "^1.0.0"
-  },
-  "main": "dist/index.html",
-  "window": {
-    "title": "Connected Car Client",
-    "width": 1200,
-    "height": 800,
-    "min_width": 800,
-    "min_height": 600,
-    "toolbar": true
   }
 }
