@@ -33,7 +33,4 @@ Make use of the many generators for code, try `ember help generate` for more det
 * `ember build --environment production` (production)
 
 #### Tests
-The tests are currently stubs; fully fledged testing suites should be created once the key components (models, controllers, view behaviour) has been fledged out.
-
-* `ember test`
-* `ember test --server`
+Integration and unit tests can be run with `ember test`; use `ember test --server` if you'd like to test continuously during development. Code style and good JavaScript practices are enforced via JSHint and JSCS, use `grunt test` to run those tools.
