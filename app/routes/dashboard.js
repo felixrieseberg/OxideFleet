@@ -13,11 +13,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
             // If the menu isn't out, pull it out
             if ($containerMargin !== '250px') {
-                $container.animate({'margin-left': '250px'}, { duration: 200, queue: false}); 
+                $container.animate({'margin-left': '250px'}, { duration: 200, queue: false});
             } else {
-                $container.animate({'margin-left': '50px'}, { duration: 200, queue: false}); 
+                $container.animate({'margin-left': '50px'}, { duration: 200, queue: false});
             }
-            
+
         }
     }
 });
