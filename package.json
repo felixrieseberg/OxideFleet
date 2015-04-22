@@ -10,7 +10,7 @@
   "scripts": {
     "start": "ember server",
     "build": "ember build",
-    "test": "ember build && grunt test && node nw-runner.js"
+    "test": "grunt test && ember test"
   },
   "repository": "",
   "engines": {
