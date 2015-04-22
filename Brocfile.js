@@ -16,24 +16,10 @@ var app = new EmberApp();
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
-var Funnel = require('broccoli-funnel');
-var mergeTrees = require('broccoli-merge-trees');
 var app;
 
 // brocfile-env module hasn't been decided on how to expose more build options
 
-app = new EmberApp({
-  inlineContent: {
-    'qunit-logger': './tests/helpers/qunit-logger.js',
-    'test-base': {
-        content: '<base href=\"../\"/>'
-    }
-  }
-});
+app = new EmberApp();
 
-var tree = new Funnel('tests', {
-    files: ['package.json'],
-    destDir: 'tests'
-});
-
-module.exports = mergeTrees([app.toTree(), tree]);
+module.exports = app.toTree();
