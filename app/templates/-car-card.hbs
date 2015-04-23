@@ -1,9 +1,10 @@
-<li class="collection-item avatar" {{action 'toggleCar' car}}>
-    <i {{bind-attr class="car.trackOnMap:green:grey :mdi-maps-my-location :circle"}}></i>
+<li class="collection-item avatar">
+    <i {{action 'toggleCar' car}} {{bind-attr class="car.trackOnMap:green:grey :mdi-maps-my-location :circle"}}></i>
     <span class="title">{{car.name}}</span>
     <p>
         {{#if car.gps.firstObject.timestamp}}
-            Seen: {{pretty-Date car.gps.firstObject.timestamp}}
+            <p>Seen: {{pretty-Date car.gps.firstObject.timestamp}}</p>
+            <a {{action 'centerOnCar' car}}>Go to last known location</a>
         {{else}}
             Never seen
         {{/if}}

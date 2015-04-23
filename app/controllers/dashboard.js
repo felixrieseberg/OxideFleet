@@ -20,6 +20,26 @@ export default Ember.ArrayController.extend({
         }
     }),
 
+    // Add all cars to the 'tracked' list on init
+    trackAllCars: function () {
+        var trackedCars = this.get('trackedCars');
+
+        this.store.find('device').then(devices => {
+            if (devices && devices.content) {
+                for (let i = 0; i < devices.content.length; i += 1) {
+                    let device = devices.content[i];
+                    device.set('trackOnMap', true);
+                    trackedCars.pushObject(device.get('nitrogen_id'));
+                }
+            }
+        });
+    }.on('init'),
+
+    // Subscribe to Nitrogen on init of dashboard
+    subscribeToNitrogen: function () {
+        this.get('nitrogenController').send('subscribeToNitrogen', this, 'handleSocketMessage');
+    }.on('init'),
+
     // Observes `trackedCars` to sync map pushpins and tracked cars
     trackedCarsObserver: function () {
         var mapEntityTracker = this.get('mapEntityTracker'),
@@ -53,13 +73,6 @@ export default Ember.ArrayController.extend({
             }
         }
     }.observes('trackedCars.[]').on('init'),
-
-    init: function () {
-        var nitrogenController = this.get('nitrogenController');
-
-        this._super();
-        nitrogenController.send('subscribeToNitrogen', this, 'handleSocketMessage');
-    },
 
     actions: {
         toggleCar: function (device) {
@@ -160,9 +173,16 @@ export default Ember.ArrayController.extend({
             map.setView(mapOptions);
         },
 
+        centerOnCar: function (device) {
+            var locations = device.get('gps'),
+                lastLocation = locations[locations.length - 1];
+
+            this.send('centerMap', {'latitude': lastLocation.latitude, 'longitude': lastLocation.longitude});
+        },
+
         addCarToMap: function (device) {
             var locations = device.get('gps'),
-                lastLocation = locations[0],
+                lastLocation = locations[locations.length - 1],
                 iconUrl = 'assets/img/carIcon_smaller.png',
                 iconOptions = {'icon': iconUrl, height: 40, width: 40},
                 map = this.get('mapReference'),
@@ -171,7 +191,7 @@ export default Ember.ArrayController.extend({
                 path, pin, entityLength;
 
             for (var i = 0; i < locations.length; i += 1) {
-                mapLocations.push({'latitude': locations[i].latitude, 'longitude': lastLocation.longitude});
+                mapLocations.push({'latitude': locations[i].latitude, 'longitude': locations[i].longitude});
             }
 
             pin = new Microsoft.Maps.Pushpin({'latitude': lastLocation.latitude, 'longitude': lastLocation.longitude}, iconOptions);
@@ -189,8 +209,6 @@ export default Ember.ArrayController.extend({
             // Push objects to map
             map.entities.push(pin);
             map.entities.push(path);
-
-            this.send('centerMap', {'latitude': lastLocation.latitude, 'longitude': lastLocation.longitude});
         }
     }
 });
