@@ -14,7 +14,10 @@ export default Ember.Component.extend({
             enableSearchLogo: false,
             zoom: this.get('zoom'),
             showDashboard: this.get('showDashboard'),
-            enableHighDpi: true
+            enableHighDpi: true,
+            disableBirdseye: true,
+            enableClickableLogo: false,
+            inertiaIntensity: 0.5
         });
 
         this.set('mapReference', map);
