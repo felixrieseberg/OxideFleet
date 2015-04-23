@@ -4,14 +4,30 @@
     float: left;
 
     ul {
-        width: 50px;
+        width: 250px;
         color: #fff;
         margin-top: 0;
+        height: 45px;
+        line-height: 45px;
 
-        li {
+        li i {
             font-size: 30px;
-            width: 50px;
+            margin-left: 10px;
             text-align: center;
+            vertical-align: middle;
+        }
+
+        li span {
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        li:first-child {
+            background-color: #191C1D;
+        }
+
+        li:hover {
+            background-color: #3F3F3F;
         }
     }
 
