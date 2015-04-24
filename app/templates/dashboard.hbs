@@ -6,11 +6,13 @@
         <div class="card white">
             <div class="card-content">
                 <span class="card-title"><i class="mdi-maps-directions-car left"></i>Tracked Vehicles</span>
-                <ul class="collection">
-                    {{#each car in model}}
-                        {{partial "car-card"}}
-                    {{/each}}
-                </ul>
+                <div class="carlist">
+                    <ul class="collection">
+                        {{#each car in model}}
+                            {{partial "car-card"}}
+                        {{/each}}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
