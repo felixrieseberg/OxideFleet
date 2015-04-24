@@ -14,6 +14,9 @@ If you have none of the tools outlined below, consider using the amazing [Chocol
 * [Node.js](http://nodejs.org/) (with NPM).
 * [Bower](http://bower.io/)
 
+### Development Hints
+* Nitrogen will attempt to call itself on the same port the host is running on. Unless you're developing with `ember serve --port 80`, Nitrogen won't be able to get in touch with the mothership. If the app is started with `ember serve`, live tracking will therefore not work.
+
 ### Installation
 * `git clone https://github.com/felixrieseberg/OxideFleet.git` this repository
 * `cd OxideFleet`

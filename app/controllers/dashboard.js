@@ -20,6 +20,30 @@ export default Ember.ArrayController.extend({
         }
     }),
 
+    // Add all cars to the 'tracked' list on init
+    trackAllCars: function () {
+        var replaceCars = [];
+
+        this.store.find('device').then(devices => {
+            if (devices && devices.content) {
+                for (let i = 0; i < devices.content.length; i += 1) {
+                    console.log('adding device');
+                    let device = devices.content[i];
+                    device.set('trackOnMap', true);
+                    device.save();
+                    replaceCars.push(device.get('nitrogen_id'));
+                }
+            }
+
+            this.set('trackedCars', replaceCars);
+        });
+    }.on('init'),
+
+    // Subscribe to Nitrogen on init of dashboard
+    subscribeToNitrogen: function () {
+        this.get('nitrogenController').send('subscribeToNitrogen', this, 'handleSocketMessage');
+    }.on('init'),
+
     // Observes `trackedCars` to sync map pushpins and tracked cars
     trackedCarsObserver: function () {
         var mapEntityTracker = this.get('mapEntityTracker'),
@@ -27,6 +51,8 @@ export default Ember.ArrayController.extend({
             nitrogenController = this.get('nitrogenController'),
             map = this.get('mapReference'),
             self = this;
+
+        console.log(this.get('trackedCars.[]').length);
 
         function handleFoundDevices (foundDevices) {
             let foundDevice;
@@ -37,29 +63,27 @@ export default Ember.ArrayController.extend({
             }
         }
 
-        for (let i = 0; i < mapEntityTracker.length; i += 1) {
-            if (trackedCars.indexOf(mapEntityTracker[i].name) === -1) {
-                // Car is on map, but not in trackedCars - remove from map
-                map.entities.removeAt(mapEntityTracker[i].path);
-                map.entities.removeAt(mapEntityTracker[i].pin);
-                mapEntityTracker.splice(i, 1);
+        function addOrRemoveCars () {
+            console.log('addOrRemoveCars');
+            for (let i = 0; i < mapEntityTracker.length; i += 1) {
+                if (trackedCars.indexOf(mapEntityTracker[i].name) === -1) {
+                    // Car is on map, but not in trackedCars - remove from map
+                    map.entities.removeAt(mapEntityTracker[i].path);
+                    map.entities.removeAt(mapEntityTracker[i].pin);
+                    mapEntityTracker.splice(i, 1);
+                }
+            }
+
+            for (let i = 0; i < trackedCars.length; i += 1) {
+                if (!mapEntityTracker.findBy('name', trackedCars[i])) {
+                    // Car is not on map, but in trackedCars - add to map
+                    self.store.find('device', { nitrogen_id: trackedCars[i] }).then(handleFoundDevices);
+                }
             }
         }
 
-        for (let i = 0; i < trackedCars.length; i += 1) {
-            if (!mapEntityTracker.findBy('name', trackedCars[i])) {
-                // Car is not on map, but in trackedCars - add to map
-                this.store.find('device', { nitrogen_id: trackedCars[i] }).then(handleFoundDevices);
-            }
-        }
-    }.observes('trackedCars.[]').on('init'),
-
-    init: function () {
-        var nitrogenController = this.get('nitrogenController');
-
-        this._super();
-        nitrogenController.send('subscribeToNitrogen', this, 'handleSocketMessage');
-    },
+        Ember.run.scheduleOnce('afterRender', addOrRemoveCars);
+    }.observes('trackedCars.[]'),
 
     actions: {
         toggleCar: function (device) {
@@ -160,9 +184,16 @@ export default Ember.ArrayController.extend({
             map.setView(mapOptions);
         },
 
+        centerOnCar: function (device) {
+            var locations = device.get('gps'),
+                lastLocation = locations[locations.length - 1];
+
+            this.send('centerMap', {'latitude': lastLocation.latitude, 'longitude': lastLocation.longitude});
+        },
+
         addCarToMap: function (device) {
             var locations = device.get('gps'),
-                lastLocation = locations[0],
+                lastLocation = locations[locations.length - 1],
                 iconUrl = 'assets/img/carIcon_smaller.png',
                 iconOptions = {'icon': iconUrl, height: 40, width: 40},
                 map = this.get('mapReference'),
@@ -171,26 +202,25 @@ export default Ember.ArrayController.extend({
                 path, pin, entityLength;
 
             for (var i = 0; i < locations.length; i += 1) {
-                mapLocations.push({'latitude': locations[i].latitude, 'longitude': lastLocation.longitude});
+                mapLocations.push({'latitude': locations[i].latitude, 'longitude': locations[i].longitude});
             }
 
-            pin = new Microsoft.Maps.Pushpin({'latitude': lastLocation.latitude, 'longitude': lastLocation.longitude}, iconOptions);
-            path = new Microsoft.Maps.Polyline(mapLocations, pathOptions);
+            if (mapLocations && mapLocations.length > 0) {
+                pin = new Microsoft.Maps.Pushpin({'latitude': lastLocation.latitude, 'longitude': lastLocation.longitude}, iconOptions);
+                path = new Microsoft.Maps.Polyline(mapLocations, pathOptions);
 
-            // Save index of entities pushed (so we can update them later)
-            entityLength = map.entities.getLength();
-            this.get('mapEntityTracker').pushObject({
-                name: device.get('nitrogen_id'),
-                pin: entityLength,
-                path: entityLength + 1
-            });
-            this.get('trackedCars').pushObject(device.get('nitrogen_id'));
+                // Save index of entities pushed (so we can update them later)
+                entityLength = map.entities.getLength();
+                this.get('mapEntityTracker').pushObject({
+                    name: device.get('nitrogen_id'),
+                    pin: entityLength,
+                    path: entityLength + 1
+                });
 
-            // Push objects to map
-            map.entities.push(pin);
-            map.entities.push(path);
-
-            this.send('centerMap', {'latitude': lastLocation.latitude, 'longitude': lastLocation.longitude});
+                // Push objects to map
+                map.entities.push(pin);
+                map.entities.push(path);
+            }
         }
     }
 });

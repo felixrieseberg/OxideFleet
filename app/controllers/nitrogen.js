@@ -6,28 +6,6 @@ export default Ember.Controller.extend({
     subscribeToNitrogen: false,
 
     actions: {
-        createNewDevice: function (options) {
-            var appController = this.get('appController'),
-                nitrogenService = appController.get('nitrogenService'),
-                currentUsers = appController.get('currentUser'),
-                apikey = currentUsers.content.get('api_key'),
-                newDevice;
-
-            if (apikey) {
-                options = _.defaults(options, {
-                    nickname: 'OxideDevice',
-                    name: 'Oxide Device',
-                    tags: ['oxide'],
-                    api_key: apikey
-                });
-
-                newDevice = new nitrogen.Device(options);
-                nitrogenService.connect(newDevice, function (err, session, principal) {
-                    console.log(session, principal);
-                });
-            }
-        },
-
         subscribeToNitrogen: function (originalController, callback) {
             var appController = this.get('appController'),
                 nitrogenSession = appController.get('nitrogenSession');
@@ -36,11 +14,7 @@ export default Ember.Controller.extend({
                 return;
             }
 
-            nitrogenSession.onMessage({
-                $or: [
-                    { type: 'location' }
-                ]
-            }, function (message) {
+            nitrogenSession.onMessage({ type: 'location' }, message => {
                 originalController.send(callback, message);
             });
 

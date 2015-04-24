@@ -20,6 +20,11 @@
             color: $primary-color-dark;
         }
 
+        .card-content {
+            margin-bottom: 10px;
+            max-height: calc(100vh * 0.90);
+        }
+
         .collection {
             margin: 0;
             padding: 0;
@@ -41,5 +46,14 @@
                 vertical-align: middle;
             }
         }
+
+        a {
+            text-transform: none;
+        }
     }
+}
+
+.carlist {
+    overflow-y: auto;
+    max-height: calc(100vh * 0.90 - 70px);
 }
