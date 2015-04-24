@@ -22,4 +22,6 @@ var app;
 
 app = new EmberApp();
 
+app.import('vendor/api_mocks/nitrogen.js', {prepend: true});
+
 module.exports = app.toTree();
