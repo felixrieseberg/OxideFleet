@@ -11,7 +11,12 @@
         return "";
     }
 
-
+    function doAssert(value) {
+        var assert = nitrogen.assert;
+        if(assert) {
+            assert.ok(value);
+        }
+    }
     var env = JSON.parse(getMetaContent());
     
     if (env.APP.rootElement !== "#ember-testing") {
@@ -28,16 +33,16 @@
             this.api_key = 'askjflhawlqkjfh',
             this.password = 'p@ssw0rd',
             this.updated_at = new Date(Date.now()),
-            this.created_at = new Date(Date.now() - 3000)
+            this.created_at = new Date(Date.now() - 3000),
+            this.id = 'abc-123'
         }
     };
     
     nitrogen.Principal.find = function (session, options, sortOptions, callback) {
-        var assert = nitrogen.assert;
-        assert.ok(session);
-        assert.ok(options);
-        assert.ok(sortOptions);
-        assert.ok(callback);
+        doAssert(session);
+        doAssert(options);
+        doAssert(sortOptions);
+        doAssert(callback);
         return callback(null, [new nitrogen.Principal()]);
     };
     nitrogen.Service.prototype.resume = function () {
