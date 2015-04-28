@@ -13,6 +13,7 @@
     "ember-qunit-notifications": "0.0.7",
     "qunit": "~1.17.1",
     "materialize": "~0.95.0",
+	"open-sans-fontface": "~1.4.0",
     "ember-simple-auth": "0.8.0-beta.1"
   },
   "resolutions": {
