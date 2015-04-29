@@ -5,7 +5,8 @@
 ### Sample Response:
 
 ```json
-{ "data": [
+{
+  "data": [
     {
         "type": "vehicle",
         "name": "553ac59934dff597a9708c71",
@@ -40,7 +41,8 @@
             }
         }
     }
-]}
+  ]
+}
 ```
  
 ## GET /vehicles/:id - Returns an array of size 1 with the vehicle which mataches :id
@@ -62,14 +64,94 @@
         "links": {
             "self": "http://localhost:3000/vehicles/553ac59934dff597a9708c71",
             "trips": {
-                "related": "http://localhost:3000/trips/553ac59934dff597a9708c71"
+                "related": "http://localhost:3000/trips/553ac59934dff597a9708c71",
+                "linkage": [
+                        { "type": "trip", "id": "acf3ba91-8ee0-4b64-814a-52df6bdad442" },
+                        { "type": "trip", "id": "acf3ba91-8ee0-4b64-814a-52df6bdad443" }
+                ]
             }
         }
-    }
-]}
+    }   
+  ],
+  "included": [
+  {
+            "id": "acf3ba91-8ee0-4b64-814a-52df6bdad442",
+            "type": "trip",
+            "trip_events": [
+                {
+                    "id": "553ac599cb49af5c772f9982",
+                    "event_type": "direction_change",
+                    "timestamp": "2014-06-27T03:28:35 +07:00",
+                    "speed": 8,
+                    "location": {
+                        "latitude": 56.649237,
+                        "longitude": 136.74491,
+                        "direction": 51,
+                        "altitude": 681
+                    }
+                },
+                {
+                    "id": "553ac599685144ba00e7f8cb",
+                    "event_type": "engine_stop",
+                    "timestamp": "2014-05-22T07:05:24 +07:00",
+                    "speed": 3,
+                    "location": {
+                        "latitude": -21.687184,
+                        "longitude": -77.175881,
+                        "direction": 158,
+                        "altitude": 9
+                    }
+                }
+            ],
+            "links": {
+                "self": "http://localhost:3000/trips/acf3ba91-8ee0-4b64-814a-52df6bdad442",
+                "driver": {
+                    "related":"http://localhost:3000/drivers/acf3ba91-8ee0-4b64-814a-52df6bdad442"
+                }
+            }
+        },
+        {
+            "id": "acf3ba91-8ee0-4b64-814a-52df6bdad443",
+            "type": "trip",
+            "trip_events": [
+                {
+                    "id": "553ac599cb49af5c772f9982",
+                    "event_type": "direction_change",
+                    "timestamp": "2014-06-27T03:28:35 +07:00",
+                    "speed": 8,
+                    "location": {
+                        "latitude": 56.649237,
+                        "longitude": 136.74491,
+                        "direction": 51,
+                        "altitude": 681
+                    }
+                },
+                {
+                    "id": "553ac599685144ba00e7f8cb",
+                    "event_type": "engine_stop",
+                    "timestamp": "2014-05-22T07:05:24 +07:00",
+                    "speed": 3,
+                    "location": {
+                        "latitude": -21.687184,
+                        "longitude": -77.175881,
+                        "direction": 158,
+                        "altitude": 9
+                    }
+                }
+            ],
+            "links": {
+                "self": "http://localhost:3000/trips/acf3ba91-8ee0-4b64-814a-52df6bdad442",
+                "driver": {
+                    "related":"http://localhost:3000/drivers/553ac59965094b476a817fa6"
+                }
+            }
+        }
+    ]
+
+}
 ```
 
-# TRIPS
+# Trips
 --
 ## GET /vehicle/:id/trips - Returns all trip for a particular vehicle with :id
  
@@ -107,9 +189,9 @@
                 }
             ],
             "links": {
-                "self": "http://localhost:3000/vehicles/553ac59934dff597a9708c71/trip/acf3ba91-8ee0-4b64-814a-52df6bdad442",
+                "self": "http://localhost:3000//tripS/acf3ba91-8ee0-4b64-814a-52df6bdad442",
                 "driver": {
-                    "related":"http://localhost:3000/vehicles/553ac59934dff597a9708c71/trips/acf3ba91-8ee0-4b64-814a-52df6bdad442/driver"
+                    "related":"related":"http://localhost:3000/drivers/553ac59965094b476a817fa6"
                 }
             }
         },
@@ -192,6 +274,7 @@
                 "self": "http://localhost:3000/trips/acf3ba91-8ee0-4b64-814a-52df6bdad442",
                 "driver": {
                    "related":"http://localhost:3000/drivers/553ac59965094b476a817fa6"
+                }
             }
         },
         {
@@ -271,7 +354,7 @@
                 }
             ],
             "links": {
-                "self": "http://localhost:3000/vehicles/553ac59934dff597a9708c71/trip/acf3ba91-8ee0-4b64-814a-52df6bdad442",
+                "self": "http://localhost:3000/trip/acf3ba91-8ee0-4b64-814a-52df6bdad442",
                 "driver": {
                     "related":"http://localhost:3000/drivers/553ac59965094b476a817fa6"
                 }
@@ -280,7 +363,7 @@
     ]
 }
 ```
-## Drivers
+# Drivers
 ## GET /drivers - Returns all drivers
 
 ### Sample Response:
@@ -289,12 +372,14 @@
     "data": [{
         "id": "553ac599580b76009c7bd482",
         "type": "driver",
-        "name": "Manning, Gilliam"
+        "name": "Manning, Gilliam",
+        "driver_score": 4.2
     },
     {
         "id": "553ac599580b76009c7bd483",
         "type": "driver",
-        "name": "Manning, Gil"
+        "name": "Manning, Gil",
+        "driver_score": 4.1
     }] 
 }
 ```
@@ -308,7 +393,8 @@
     "data": [{
         "id": "553ac599580b76009c7bd482",
         "type": "driver",
-        "name": "Manning, Gilliam"
+        "name": "Manning, Gilliam",
+        "driver_score": 4.4
     }] 
 }
 ```
