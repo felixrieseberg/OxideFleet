@@ -1,5 +1,5 @@
 {
-  "name": "azureexplorer",
+  "name": "OxideFleet",
   "dependencies": {
     "jquery": "^2.1.1",
     "ember": "1.11.0",
@@ -13,7 +13,8 @@
     "ember-qunit-notifications": "0.0.7",
     "qunit": "~1.17.1",
     "materialize": "~0.95.0",
-    "ember-simple-auth": "0.8.0-beta.1"
+    "ember-simple-auth": "0.8.0-beta.1",
+    "jquery-mockjax": "~1.6.2"
   },
   "resolutions": {
     "jquery": "~2.1.1"

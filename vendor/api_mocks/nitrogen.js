@@ -32,8 +32,8 @@
             this. email = 'test@microsoft.com',
             this.api_key = 'askjflhawlqkjfh',
             this.password = 'p@ssw0rd',
-            this.updated_at = new Date(Date.now()),
-            this.created_at = new Date(Date.now() - 3000),
+            this.updated_at = (new Date(Date.now())).toString(),
+            this.created_at = (new Date(Date.now() - 3000)).toString(),
             this.id = 'abc-123'
         }
     };

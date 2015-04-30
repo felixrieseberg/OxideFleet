@@ -44,6 +44,9 @@
     "grunt-jscodesniffer": "^0.1.8",
     "grunt-jscs": "^0.8.1",
     "liquid-fire": "ef4/liquid-fire#8fcefd057478ab6852d7b8b3fc8526aa5079553c",
-    "load-grunt-tasks": "^1.0.0"
+    "load-grunt-tasks": "^1.0.0",
+    "ember-json-api": "git+https://git@github.com/eneuhauser/ember-json-api.git#jsonapi-rc3"
+  },
+  "dependencies": {
   }
 }
