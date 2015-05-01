@@ -9,14 +9,12 @@ import startApp from 'oxide/tests/helpers/start-app';
 var App, store, session;
 
 moduleFor('model:vehicle', {
-    needs: ['adapter:jsonapi', 'model:driver', 'model:trip', 'model:event'],
+    needs: ['model:driver', 'model:trip', 'model:event'],
     
     setup: function () {
         App = startApp(null);
         store = App.__container__.lookup('store:main');
         session = App.__container__.lookup('simple-auth-session:main');
-        var serializer = App.__container__.lookup('serializer:jsonapi');
-        serializer.store = store;
     },
     teardown: function () {
         Ember.run(App, App.destroy);

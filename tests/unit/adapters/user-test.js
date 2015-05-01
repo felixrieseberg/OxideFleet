@@ -3,7 +3,7 @@ import {
   test
 } from 'ember-qunit';
 
-moduleFor('adapter:jsonapi', 'JsonapiAdapter', {
+moduleFor('adapter:user', 'UserAdapter', {
   // Specify the other units that are required for this test.
   // needs: ['serializer:foo']
 });
