@@ -24,4 +24,8 @@ app = new EmberApp();
 
 app.import('vendor/api_mocks/nitrogen.js', {prepend: true});
 app.import('vendor/api_mocks/microsoft-maps.js', {prepend: true});
+
+if (app.env === 'test') {
+    app.import('bower_components/jquery-mockjax/jquery.mockjax.js');
+}
 module.exports = app.toTree();
