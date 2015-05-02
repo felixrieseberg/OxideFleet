@@ -28,7 +28,7 @@ module.exports = function(environment) {
     },
     
     sassOptions: {
-      includePaths: ['bower_components/materialize/sass']
+      includePaths: ['bower_components/materialize/sass', 'bower_components/open-sans-fontface']
     },
 
     /*jshint -W109 */

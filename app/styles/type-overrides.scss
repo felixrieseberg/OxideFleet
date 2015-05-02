@@ -1,0 +1,36 @@
+/*** Typography ***/
+
+/* Explicit base sizing for type stack to prepare
+   for mobile and pixel-density awareness */
+$font-size-h1: 112px;
+$font-size-h2: 56px;
+$font-size-h3: 45px;
+$font-size-h4: 34px;
+$font-size-headline: 24px;
+$font-size-title: 20px;
+$font-size-sub-headline: 16px;
+$font-size-body: 14px;
+$font-size-caption: 12px;
+$font-size-button: 14px;
+
+
+body, html {
+    background-color: #212527;
+	font-family: "Open Sans", courier;
+	font-weight: normal;
+	font-size: $font-size-body;
+}
+
+.card .card-content .card-title {
+		font-size: $font-size-title;
+		line-height: $font-size-title;
+}
+
+.collection .collection-item.avatar .title {
+	font-size: $font-size-sub-headline;
+}
+
+  
+  
+  
+  

@@ -1,12 +1,15 @@
 @import 'color-overrides';
 @import 'materialize';
+@import 'type-overrides';
+@import 'open-sans';
 @import 'preview';
 @import 'hamburger';
+@import 'menu';
 @import 'dashboard';
 @import 'login';
 
 body, html {
-    background-color: #212527;
+    background-color: $primary-background-color;
 }
 
 [data-ember-action] {

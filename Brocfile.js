@@ -24,6 +24,26 @@ app = new EmberApp();
 
 app.import('vendor/api_mocks/nitrogen.js', {prepend: true});
 app.import('vendor/api_mocks/microsoft-maps.js', {prepend: true});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Light/OpenSans-Light.eot', {destDir: 'assets/fonts/Light'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Light/OpenSans-Light.svg', {destDir: 'assets/fonts/Light'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Light/OpenSans-Light.ttf', {destDir: 'assets/fonts/Light'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Light/OpenSans-Light.woff', {destDir: 'assets/fonts/Light'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Light/OpenSans-Light.woff2', {destDir: 'assets/fonts/Light'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Regular/OpenSans-Regular.eot', {destDir: 'assets/fonts/Regular'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Regular/OpenSans-Regular.svg', {destDir: 'assets/fonts/Regular'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Regular/OpenSans-Regular.ttf', {destDir: 'assets/fonts/Regular'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Regular/OpenSans-Regular.woff', {destDir: 'assets/fonts/Regular'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Regular/OpenSans-Regular.woff2', {destDir: 'assets/fonts/Regular'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Bold/OpenSans-Bold.eot', {destDir: 'assets/fonts/Bold'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Bold/OpenSans-Bold.svg', {destDir: 'assets/fonts/Bold'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Bold/OpenSans-Bold.ttf', {destDir: 'assets/fonts/Bold'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Bold/OpenSans-Bold.woff', {destDir: 'assets/fonts/Bold'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Bold/OpenSans-Bold.woff2', {destDir: 'assets/fonts/Bold'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Semibold/OpenSans-Semibold.eot', {destDir: 'assets/fonts/Semibold'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Semibold/OpenSans-Semibold.svg', {destDir: 'assets/fonts/Semibold'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Semibold/OpenSans-Semibold.ttf', {destDir: 'assets/fonts/Semibold'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Semibold/OpenSans-Semibold.woff', {destDir: 'assets/fonts/Semibold'});
+app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Semibold/OpenSans-Semibold.woff2', {destDir: 'assets/fonts/Semibold'});
 
 if (app.env === 'test') {
     app.import('bower_components/jquery-mockjax/jquery.mockjax.js');
