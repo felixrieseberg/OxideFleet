@@ -10,7 +10,7 @@
 }
 
 .content-overlay {
-	position: absolute;
+    position: absolute;
     z-index: 1001;
     width: 350px;
 }
@@ -20,30 +20,30 @@
     z-index: 1001;
     width: 350px;
     margin-left: 53px;
-	margin-top: -7px;
-	
-	.card:first-child {
-		border-radius: 0 0 2px 2px;
-		padding-top:0;
-		
-		.card-content {
-			padding:0;
-		}
-		
-		.card-title {
-			color: #fff;
-			background-color: $primary-color;
-			padding: 0 20px;
-			line-height: 48px;
-			font-weight: normal;
-		}
-		
-		.collection {
-			padding: 0 20px 20px 20px;
-			background-color: transparent;
-		}
-	}
-	
+    margin-top: -7px;
+    
+    .card:first-child {
+        border-radius: 0 0 2px 2px;
+        padding-top:0;
+        
+        .card-content {
+            padding:0;
+        }
+        
+        .card-title {
+            color: #fff;
+            background-color: $primary-color;
+            padding: 0 20px;
+            line-height: 48px;
+            font-weight: normal;
+        }
+        
+        .collection {
+            padding: 0 20px 20px 20px;
+            background-color: transparent;
+        }
+    }
+    
     .card {
         .card-title {
             color: $primary-color-dark;
@@ -52,7 +52,7 @@
         .card-content {
             margin-bottom: 10px;
             max-height: calc(100vh * 0.90);
-			padding: 0;
+            padding: 0;
         }
 
         .collection {
@@ -64,9 +64,9 @@
         .collection-item {
             height: inherit;
             padding-left: 55px;
-			padding-right: 0px;
-			overflow: hidden;
-			text-overflow: ellipsis;
+            padding-right: 0px;
+            overflow: hidden;
+            text-overflow: ellipsis;
             position: relative;
 
             .circle {

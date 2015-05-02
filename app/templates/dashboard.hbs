@@ -1,23 +1,23 @@
 {{partial "menu"}}
 
 <div class="main-container">
-	<div class="content-overlay">
-		{{partial "hamburger"}}
-		<div class="cards">
-			<div class="card white">
-				<div class="card-content">
-					<div class="card-title">Tracked Vehicles</div>
-					<div class="carlist">
-						<ul class="collection">
-							{{#each car in model}}
-								{{partial "car-card"}}
-							{{/each}}
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="content-overlay">
+        {{partial "hamburger"}}
+        <div class="cards">
+            <div class="card white">
+                <div class="card-content">
+                    <div class="card-title">Tracked Vehicles</div>
+                    <div class="carlist">
+                        <ul class="collection">
+                            {{#each car in model}}
+                                {{partial "car-card"}}
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{!-- Map --}}
 
