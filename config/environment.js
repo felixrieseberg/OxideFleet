@@ -21,7 +21,10 @@ module.exports = function(environment) {
         protocol: 'https',
         http_port: 443,
         log_levels: ['warn', 'error']
-      }
+      },
+      // TODO: Fill in with the correct address
+      // Also - make sure we add CORS rules for this host
+      API_HOST: 'http://whateverdougpicks.azurewebsites.net'
     },
     
     sassOptions: {
@@ -42,6 +45,8 @@ module.exports = function(environment) {
     /*jshint +W109 */
   };
 
+  
+
   if (environment === 'test') {
     // Testem prefers this...
     ENV.baseURL = '/';
@@ -50,7 +55,7 @@ module.exports = function(environment) {
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
-
+    ENV.APP.API_HOST = 'http://localhost:3000';
     ENV.APP.rootElement = '#ember-testing';
   }
 
@@ -71,6 +76,5 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = true;
   }
 */
-
   return ENV;
 };

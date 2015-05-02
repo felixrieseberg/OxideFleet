@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import Application from '../../app';
 import config from '../../config/environment';
-
+import './ajax-mock';
 export default function startApp(attrs, assert) {
     var application;
     var attributes = Ember.merge({}, config.APP);

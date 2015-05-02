@@ -45,4 +45,7 @@ app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Semibold/OpenSans-Sem
 app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Semibold/OpenSans-Semibold.woff', {destDir: 'assets/fonts/Semibold'});
 app.import(app.bowerDirectory + '/open-sans-fontface/fonts/Semibold/OpenSans-Semibold.woff2', {destDir: 'assets/fonts/Semibold'});
 
+if (app.env === 'test') {
+    app.import('bower_components/jquery-mockjax/jquery.mockjax.js');
+}
 module.exports = app.toTree();

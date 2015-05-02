@@ -1,7 +1,5 @@
-import App from '../app';
-import DS from 'ember-data';
-App.ApplicationSerializer = DS.LSSerializer.extend();
-
-export default DS.LSAdapter.extend({
-    namespace: 'ConnectedCar'
+import JsonApiAdapter from 'ember-json-api/json-api-adapter';
+import config from '../config/environment';
+export default JsonApiAdapter.extend({
+    host: config.APP.API_HOST
 });
