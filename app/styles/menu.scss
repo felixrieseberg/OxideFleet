@@ -6,7 +6,7 @@
     ul {
         width: 250px;
         color: #fff;
-		background-color: $primary-background-color;
+        background-color: $primary-background-color;
         margin-top: 0;
         height: 45px;
         line-height: 45px;
@@ -25,14 +25,14 @@
 
         li:first-child {
             background-color: $primary-color;
-			font-size: $font-size-title;
-			font-weight: normal;
+            font-size: $font-size-title;
+            font-weight: normal;
         }
 
-		li:first-child:hover {
-			background-color: $primary-color;
-		}
-		
+        li:first-child:hover {
+            background-color: $primary-color;
+        }
+        
         li:hover {
             background-color: $primary-background-color-light;
         }

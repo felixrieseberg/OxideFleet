@@ -24,7 +24,11 @@
 
         li:first-child {
             background-color: $primary-color;
-			color: #fff;
+            color: #fff;
+        }
+        
+        li:first-child:hover {
+            background-color: $primary-color;
         }
 		
 		li:first-child:hover {
