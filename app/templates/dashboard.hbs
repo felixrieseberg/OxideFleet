@@ -6,14 +6,12 @@
             <div class="card white">
                 <div class="card-content">
                     <div class="card-title">Tracked Vehicles</div>
-                    <div class="carlist">
-                        <ul class="collection">
-                            {{#each car in model}}
-                                {{partial "car-card"}}
-                            {{/each}}
-                            <li class="bottompad"></li>
-                        </ul>
-                    </div>
+                    <ul class="carlist collection">
+                        {{#each car in model}}
+                            {{partial "car-card"}}
+                        {{/each}}
+                        
+                    </ul>
                 </div>
             </div>
         </div>

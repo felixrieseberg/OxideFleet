@@ -24,8 +24,8 @@
         padding-top:0;
         
         .card-title {
-            padding: 0 20px;
-            line-height: 48px;
+            padding: 18px 20px 13px;
+            line-height: $font-size-title;
             font-weight: normal;
             color: color("shades", "black");
         }
@@ -37,34 +37,53 @@
             border-radius: 0;
         }
         
-        .carlist {
+        .collection.carlist {
             overflow-y: auto;
             max-height: calc(100vh * 0.90 - 70px);
             margin-bottom: -10px;
-            
-            .collection {
-                padding: 0 20px 20px 20px;
-                margin-top:-10px;
-                background-color: transparent;
-            }
+            padding: 0 20px 20px 20px;
+            background-color: transparent;
+        }
+        
+        /* Provides guaranteed padding inside scroll-overflow collections 
+           without misaligning scroll bar */
+        .collection::before {
+            content: "";
+            position:absolute;
+            height: 10px;
+            left: 0px;
+            /* scrollbars are 17px wide on desktop browsers */
+            width: calc(100% - 17px);
+            z-index:1;
+            background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
+        }
+        .collection::after {
+            content: "";
+            position:absolute;
+            height: 30px;
+            bottom: 0px;
+            left: 0px;
+            /* scrollbars are 17px wide on desktop browsers */
+            width: calc(100% - 17px);
+            background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(50%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,1) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,1) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
         }
 
         .collection {
             margin: 0;
             padding: 0;
             border: none;
-            
-            /* Provides guaranteed padding inside scroll-overflow collections 
-               without misaligning scroll bar */
-            .bottompad {
-                position:absolute;
-                height: 20px;
-                background-color: color("shades", "white");
-                bottom: 0px;
-                left: 0px;
-                /* scrollbars are 17px wide on desktop browsers */
-                width: calc(100% - 17px);
-            }
         }
 
         .collection-item {
