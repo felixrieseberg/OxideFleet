@@ -1,19 +1,16 @@
 <div class="menu">
     <ul>
-        <li>
+        <li {{action "toggleSideNav"}}>
+            <i class="mdi-navigation-menu" title="Menu"></i>
             <span>Connected Car</span>
         </li>
-        <li>
-            <i class="mdi-maps-layers"></i>
-            <span>Map Overview</span>
+        <li class="selected">
+            <i class="mdi-maps-layers" title="Overview"></i>
+            <span>Overview</span>
         </li>
-        <li>
-            <i class="mdi-maps-directions-car"></i>
-            <span>Vehicles</span>
-        </li>
-        <li>
-            <i class="mdi-social-group"></i>
-            <span>Drivers</span>
+        <li {{action 'invalidateSession' }}>
+            <i class="mdi-social-person" title="Sign out"></i>
+            <span>Sign out</span>
         </li>
     </ul>
 </div>

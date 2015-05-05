@@ -2,7 +2,6 @@
 
 <div class="main-container">
     <div class="content-overlay">
-        {{partial "hamburger"}}
         <div class="cards">
             <div class="card white">
                 <div class="card-content">
@@ -12,6 +11,7 @@
                             {{#each car in model}}
                                 {{partial "car-card"}}
                             {{/each}}
+                            <li class="bottompad"></li>
                         </ul>
                     </div>
                 </div>

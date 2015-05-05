@@ -1,8 +1,5 @@
-@import 'color-overrides';
-
 .main-container {
-    width: 100vw;
-    margin-left: 0px;
+    margin-left: 50px;
 }
 
 #map {
@@ -19,46 +16,55 @@
     position: absolute;
     z-index: 1001;
     width: 350px;
-    margin-left: 53px;
-    margin-top: -7px;
+    margin-left: 20px;
+    margin-top: 3px;
     
-    .card:first-child {
-        border-radius: 0 0 2px 2px;
+    .card {
+        border-radius: 0;
         padding-top:0;
         
-        .card-content {
-            padding:0;
-        }
-        
         .card-title {
-            color: #fff;
-            background-color: $primary-color;
             padding: 0 20px;
             line-height: 48px;
             font-weight: normal;
-        }
-        
-        .collection {
-            padding: 0 20px 20px 20px;
-            background-color: transparent;
-        }
-    }
-    
-    .card {
-        .card-title {
-            color: $primary-color-dark;
+            color: color("shades", "black");
         }
 
         .card-content {
             margin-bottom: 10px;
             max-height: calc(100vh * 0.90);
             padding: 0;
+            border-radius: 0;
+        }
+        
+        .carlist {
+            overflow-y: auto;
+            max-height: calc(100vh * 0.90 - 70px);
+            margin-bottom: -10px;
+            
+            .collection {
+                padding: 0 20px 20px 20px;
+                margin-top:-10px;
+                background-color: transparent;
+            }
         }
 
         .collection {
             margin: 0;
             padding: 0;
             border: none;
+            
+            /* Provides guaranteed padding inside scroll-overflow collections 
+               without misaligning scroll bar */
+            .bottompad {
+                position:absolute;
+                height: 20px;
+                background-color: color("shades", "white");
+                bottom: 0px;
+                left: 0px;
+                /* scrollbars are 17px wide on desktop browsers */
+                width: calc(100% - 17px);
+            }
         }
 
         .collection-item {
@@ -84,9 +90,4 @@
             text-transform: none;
         }
     }
-}
-
-.carlist {
-    overflow-y: auto;
-    max-height: calc(100vh * 0.90 - 70px);
 }

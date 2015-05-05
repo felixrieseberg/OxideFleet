@@ -1,11 +1,10 @@
 /*** Colors ***/
-/*$primary-color: #4caf50;*/
-$primary-color: #eb0a1e;
-$primary-color-light: lighten($primary-color, 15%);
-$primary-color-dark: darken($primary-color, 15%);
+$brand-color: #eb0a1e;
+$brand-color-light: lighten($brand-color, 15%);
+$brand-color-dark: darken($brand-color, 15%);
 
-$primary-background-color: #212527;
-$primary-background-color-light: #3F3F3F;
+$primary-background-color: color("grey", "darken-4");
+$primary-background-color-light: color("grey", "darken-3");
 
 $secondary-color: #2e80ab;
 $success-color: color("green", "base");
