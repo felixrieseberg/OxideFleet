@@ -15,7 +15,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             if ($containerMargin !== '250px') {
                 $container.animate({'margin-left': '250px'}, { duration: 200, queue: false});
             } else {
-                $container.animate({'margin-left': '0px'}, { duration: 200, queue: false});
+                $container.animate({'margin-left': '50px'}, { duration: 200, queue: false});
             }
 
         }

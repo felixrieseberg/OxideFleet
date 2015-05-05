@@ -1,6 +1,6 @@
 .menu {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
     float: left;
 
     ul {
@@ -10,7 +10,14 @@
         margin-top: 0;
         height: 45px;
         line-height: 45px;
-
+        
+        li.selected {
+            background-color: rgba(255,255,255,.20);
+        }
+        li.selected:hover {
+            background-color: rgba(255,255,255,.30);
+        }
+        
         li i {
             font-size: 30px;
             margin-left: 10px;
@@ -24,21 +31,21 @@
         }
 
         li:first-child {
-            background-color: $primary-color;
+            background-color: $brand-color;
             font-size: $font-size-title;
             font-weight: normal;
         }
+        
+        li:first-child span {
+            margin-left: 7px;
+        }
 
         li:first-child:hover {
-            background-color: $primary-color;
+            background-color: $brand-color;
         }
         
         li:hover {
-            background-color: $primary-background-color-light;
+            background-color: rgba(255,255,255,.10);
         }
-    }
-
-    ul.active {
-        
     }
 }
