@@ -8,12 +8,17 @@
                     <div class="card-title">Tracked Vehicles</div>
                     <ul class="carlist collection">
                         {{#each car in model}}
-                            {{partial "car-card"}}
+                            {{partial "car-list-item"}}
                         {{/each}}
                         
                     </ul>
                 </div>
             </div>
+
+            {{#if selectedCar}}
+                {{partial "car-selected-card"}}
+            {{/if}}
+
         </div>
     </div>
 

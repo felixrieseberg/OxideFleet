@@ -1,0 +1,39 @@
+<div class="card white car-selected">
+    <div class="card-content">
+        <div class="card-title">{{selectedCar.name}}</div>
+        {{!-- Info --}}
+        <div class="info">
+            <img src="http://placehold.it/110x100" width="110" height="100" />
+            <span>{{selectedCar.production_year}} {{selectedCar.make}} {{selectedCar.model}}</span>
+            <p>
+                <small class="vin">VIN#</small>
+                <small>{{selectedCar.vin}}</small>
+            </p>
+            <p>
+                <small class="vin">Milage</small>
+                <small>{{selectedCar.milage}}</small>
+            </p>
+            <p>
+                <small class="vin">Active</small>
+                {{#if selectedCar.is_active}}
+                <small>Yes</small>
+                {{else}}
+                <small>No</small>
+                {{/if}}
+            </p>
+        </div>
+        {{!-- Driver Score --}}
+        <div class="driverscore clearfix">
+            <div class="score">92</div>
+            <span>Current Driver Score</span>
+            <img src="assets/img/mock_sparkline.png" width="250" />
+        </div>
+        {{!-- Notifications --}}
+        <div class="notifications">
+            {{#if selectedCar.hasNotifications}}
+            {{else}}
+            <p>No notifications for this vehicle</p>
+            {{/if}}
+        </div>
+    </div>
+</div>

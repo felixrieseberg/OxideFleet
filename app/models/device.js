@@ -23,7 +23,6 @@ var Device = DS.Model.extend({
 
     // Mocks until we can marry device & vehicle
     trips: DS.hasMany('trip', {async: true}),
-    name: DS.attr('string'),
     is_active: DS.attr('boolean'),
     vin: DS.attr('string'),
     make: DS.attr('string'),

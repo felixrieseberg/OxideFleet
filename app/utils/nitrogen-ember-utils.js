@@ -67,7 +67,7 @@ var nitrogenEmberUtils = {
         foundDevice.set('make', 'MockMake');
         foundDevice.set('model', 'MockModel');
         foundDevice.set('production_year', '2014');
-        foundDevice.set('milage', "200423");
+        foundDevice.set('milage', '200423');
 
         return foundDevice.save();
     },
