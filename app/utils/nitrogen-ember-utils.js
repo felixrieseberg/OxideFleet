@@ -62,6 +62,13 @@ var nitrogenEmberUtils = {
         foundDevice.set('location', device.location);
         foundDevice.set('owner', owner);
 
+        // Mocks until we marry device & vehicle model
+        foundDevice.set('vin', '19UYA31581L000000');
+        foundDevice.set('make', 'MockMake');
+        foundDevice.set('model', 'MockModel');
+        foundDevice.set('production_year', '2014');
+        foundDevice.set('milage', "200423");
+
         return foundDevice.save();
     },
 
