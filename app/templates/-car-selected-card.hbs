@@ -23,11 +23,13 @@
             </p>
         </div>
         {{!-- Driver Score --}}
-        <div class="driverscore clearfix">
-            <div class="score">92</div>
-            <span>Current Driver Score</span>
-            <img src="assets/img/mock_sparkline.png" width="250" />
-        </div>
+        {{#if selectedCar.is_active}}
+            <div class="driverscore clearfix">
+                <div class="score">92</div>
+                <span>Current Driver Score</span>
+                <img src="assets/img/mock_sparkline.png" width="250" />
+            </div>
+        {{/if}}
         {{!-- Notifications --}}
         <div class="notifications">
             {{#if selectedCar.hasNotifications}}
