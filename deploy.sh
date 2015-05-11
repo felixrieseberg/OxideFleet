@@ -99,8 +99,9 @@ fi
 
 if [[ ! -e "$EMBER_PATH" ]]; then
   echo Installing ember-cli
-  eval $NPM_CMD install -g ember-cli
-  exitWithMessageOnError "ember-cli failed"
+  eval $NPM_CMD install -g --no-optional --no-bin-links ember-cli
+  eval $NPM_CMD install -g --no-optional --no-bin-links node-sass
+  exitWithMessageOnError "ember-cli and node-sass failed"
 else
   echo ember-cli already installed, nothing to do
 fi
