@@ -8311,9 +8311,9 @@
       }
     },
     "ember-cli-simple-auth": {
-      "version": "0.8.0-beta.1",
-      "from": "ember-cli-simple-auth@0.8.0-beta.1",
-      "resolved": "https://registry.npmjs.org/ember-cli-simple-auth/-/ember-cli-simple-auth-0.8.0-beta.1.tgz"
+      "version": "0.8.0-beta.2",
+      "from": "ember-cli-simple-auth@0.8.0-beta.2",
+      "resolved": "https://registry.npmjs.org/ember-cli-simple-auth/-/ember-cli-simple-auth-0.8.0-beta.2.tgz"
     },
     "ember-cli-uglify": {
       "version": "1.0.1",

@@ -25,8 +25,23 @@ export default Base.extend({
     */
     restore: function (data) {
         var self = this;
+
         return new Ember.RSVP.Promise(function (resolve, reject) {
-            var principal = new nitrogen.User({
+            var appController = self.container.lookup('controller:application'),
+                session = appController.get('nitrogenSession'),
+                _nitrogenService = appController.get('nitrogenService'),
+                principal;
+
+            // Let's take a look at our session here - if it looks like it's still good,
+            // we can return right away
+            if (session && session.principal && session.accessToken && _nitrogenService) {
+                return resolve({ 
+                    user: session.principal, 
+                    accessToken: session.accessToken 
+                });
+            }
+
+            principal = new nitrogen.User({
                 accessToken: {
                     token: data.accessToken.token
                 },
@@ -37,16 +52,18 @@ export default Base.extend({
             nitrogenService.resume(principal, function (err, session, principal) {
                 var store;
 
-                if (err) { return reject(err); }
+                if (err) { 
+                    return reject(err); 
+                }
+
                 store = self.container.lookup('store:main');
 
                 nitrogenEmberUtils.findOrCreateUser(store, session, principal)
                 .then(function (storedUser) {
                     return nitrogenEmberUtils.updateOrCreateDevices(store, session, storedUser);
                 }).then(function () {
-                    var appController = self.container.lookup('controller:application');
-
-                    console.log('Resolving Login', session);
+                    console.log('Authenticator: Resolving Login (Restore)', session);
+                    appController = self.container.lookup('controller:application');
                     appController.set('nitrogenSession', session);
                     appController.set('nitrogenService', nitrogenService);
                     resolve({ user: principal, accessToken: session.accessToken });
@@ -83,7 +100,7 @@ export default Base.extend({
                     }).then(function () {
                         var appController = self.container.lookup('controller:application');
 
-                        console.log('Resolving Login', session);
+                        console.log('Authenticator: Resolving Login (Authenticate)', session);
                         appController.set('nitrogenSession', session);
                         appController.set('nitrogenService', nitrogenService);
                         resolve({ user: principal, accessToken: session.accessToken });
