@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 
+// This model should probably be attached to device
 export default DS.Model.extend({
-
   trips: DS.hasMany('trip', {async: true}),
   name: DS.attr('string'),
   is_active: DS.attr('boolean'),

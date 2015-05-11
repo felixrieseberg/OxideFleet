@@ -9,6 +9,7 @@ export default Ember.ArrayController.extend({
     nitrogenController: Ember.computed.alias('controllers.nitrogen'),
     mapEntityTracker: [],
     trackedCars: [],
+    selectedCar: null,
 
     carsConnected: Ember.computed('model', function () {
         var model = this.get('model');
@@ -221,6 +222,11 @@ export default Ember.ArrayController.extend({
                 map.entities.push(pin);
                 map.entities.push(path);
             }
+        },
+
+        selectCar: function (device) {
+            this.set('selectedCar', device);
+            this.send('centerOnCar', device);
         }
     }
 });

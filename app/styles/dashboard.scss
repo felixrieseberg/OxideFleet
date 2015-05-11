@@ -18,6 +18,10 @@
     width: 350px;
     margin-left: 20px;
     margin-top: 3px;
+
+    .vin {
+        color: #7F7F7F;
+    }
     
     .card {
         border-radius: 0;
@@ -32,14 +36,14 @@
 
         .card-content {
             margin-bottom: 10px;
-            max-height: calc(100vh * 0.90);
+            max-height: calc(100vh * 0.40);
             padding: 0;
             border-radius: 0;
         }
         
         .collection.carlist {
             overflow-y: auto;
-            max-height: calc(100vh * 0.90 - 70px);
+            max-height: calc(100vh * 0.40 - 70px);
             margin-bottom: -10px;
             padding: 0 20px 20px 20px;
             background-color: transparent;
@@ -93,20 +97,73 @@
             overflow: hidden;
             text-overflow: ellipsis;
             position: relative;
+        }
 
-            .circle {
-                position: absolute;
-                width: 42px;
-                height: 42px;
-                overflow: hidden;
-                left: 0;
-                display: inline-block;
-                vertical-align: middle;
+        .collection-item.car {
+            padding-left: 0;
+            padding-top: 7px;
+            padding-bottom: 1px;
+
+            h4 {
+                font-size: 1.2em;
+                margin: 0;
+                line-height: 1.1em;
+                text-transform: capitalize;
             }
         }
 
         a {
             text-transform: none;
         }
+    }
+
+    .card.car-selected {
+
+        .card-title {
+            background-color: #DCF0FD;
+        }
+
+        .card-content {
+
+            .info {
+                background-color: #DCF0FD;
+                padding: 0 20px 13px;
+                height: 120px;
+
+                img {
+                    float: left;
+                    margin-right: 10px;
+                }
+            }
+
+            .info:after {
+                clear: both;
+            }
+
+            .driverscore {
+                padding: 13px 20px 13px;
+                clear: both;
+                border-bottom: 1px solid #e0e0e0;
+
+                .score {
+                    float: right;
+                    background-color: #4CAF4F;
+                    font-weight: bold;
+                    color: #FFF;
+                    width: 45px;
+                    height: 45px;
+                    font-size: 1.4em;
+                    text-align: center;
+                    line-height: 45px;
+                }
+            }
+
+            .notifications {
+                padding: 13px 20px 13px;
+                clear: both;
+            }
+            
+        }
+        
     }
 }
