@@ -3,5 +3,5 @@ import Config from '../config/environment';
 
 export default Ember.Controller.extend({
     version: Config.APP.version,
-    fullConfig: Config.APP,
+    fullConfig: Config.APP
 });

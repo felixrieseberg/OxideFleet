@@ -35,9 +35,9 @@ export default Base.extend({
             // Let's take a look at our session here - if it looks like it's still good,
             // we can return right away
             if (session && session.principal && session.accessToken && _nitrogenService) {
-                return resolve({ 
-                    user: session.principal, 
-                    accessToken: session.accessToken 
+                return resolve({
+                    user: session.principal,
+                    accessToken: session.accessToken
                 });
             }
 
@@ -52,8 +52,8 @@ export default Base.extend({
             nitrogenService.resume(principal, function (err, session, principal) {
                 var store;
 
-                if (err) { 
-                    return reject(err); 
+                if (err) {
+                    return reject(err);
                 }
 
                 store = self.container.lookup('store:main');
