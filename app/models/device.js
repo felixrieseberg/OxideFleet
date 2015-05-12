@@ -27,7 +27,7 @@ var Device = DS.Model.extend({
     trackOnMap: DS.attr('boolean'),
 
     // Relations
-    vehicle: DS.belongsTo('vehicle', {async: true}),
+    vehicle: DS.belongsTo('vehicle', {async: true})
 });
 
 export default Device;
