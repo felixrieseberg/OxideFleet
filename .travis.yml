@@ -1,35 +1,32 @@
----
 language: node_js
 node_js:
-  - "0.12"
+- '0.12'
 sudo: false
-
 cache:
   directories:
-    - node_modules
-
+  - node_modules
 before_install:
-  - "npm config set spin false"
-  - "npm install -g npm@^2"
-  - "npm install -g grunt-cli"
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-
+- npm config set spin false
+- npm install -g npm@^2
+- npm install -g grunt-cli
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
 install:
-  - mkdir travis-phantomjs
-  - wget https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2
-  - tar -xvf $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -C $PWD/travis-phantomjs
-  - export PATH=$PWD/travis-phantomjs:$PATH
-  - npm install -g bower
-  - npm install
-  - bower install
-
+- mkdir travis-phantomjs
+- wget https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2
+  -O $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2
+- tar -xvf $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -C $PWD/travis-phantomjs
+- export PATH=$PWD/travis-phantomjs:$PATH
+- npm install -g bower
+- npm install
+- bower install
 script:
-  - npm test
-
+- npm test
 branches:
   only:
-    - master
-
+  - master
 matrix:
   fast_finish: true
+notifications:
+  slack:
+    secure: Xo2s96PCe7UmrGrkMiqH9ICl7otzK5fBfYv20AjVGel6e3Ev7WPVj/Bz8mBGabL6iVO1+tcGv1ntUUBigsmdKKRKlbULg7pHHtHqTmoA7oA2E8otQDmbNOu9cnxheg6Y0gnXppNcteJDW8WElAYVv3aK/Uy+ddXbhocMYmgg7oE=
