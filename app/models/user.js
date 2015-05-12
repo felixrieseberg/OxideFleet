@@ -1,12 +1,11 @@
 import DS from 'ember-data';
 
-var User = DS.Model.extend({
-
-    // Oxide
-    avatarUrl: function () {
-        return 'http://www.gravatar.com/avatar/' + md5(this.get('email')) + '?s=200&r=pg';
-    }.property('email'),
-
+/**
+ * This model describes the user, which is
+ * usually created from a Nitrogen principa;
+ * @type {DS.model}
+ */
+export default DS.Model.extend({
     // Nitrogen
     name: DS.attr('string'),
     email: DS.attr('string'),
@@ -17,10 +16,5 @@ var User = DS.Model.extend({
     last_ip: DS.attr('string'),
     nickname: DS.attr('string'),
     password: DS.attr('string'),
-    updated_at: DS.attr('string'),
-
-    // Relations
-    devices: DS.hasMany('device', {async: true})
+    updated_at: DS.attr('string')
 });
-
-export default User;

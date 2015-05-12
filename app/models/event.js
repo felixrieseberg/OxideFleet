@@ -2,7 +2,7 @@ import DS from 'ember-data';
 
 /**
  * This model describes a trip event as it exists on a trip.
- * @type {[type]}
+ * @type {DS.model}
  */
 export default DS.Model.extend({
     eventType: DS.attr('string'),

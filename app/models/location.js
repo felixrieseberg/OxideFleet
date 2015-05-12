@@ -2,7 +2,7 @@ import DS from 'ember-data';
 
 /**
  * This model describes a location as it es
- * @type {[type]}
+ * @type {DS.model}
  */
 export default DS.Model.extend({
     tripEvent: DS.belongsTo('event'),
