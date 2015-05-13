@@ -7,6 +7,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     },
 
     actions: {
+        /**
+         * Toggle the side/hamburger navigation
+         */
         toggleSideNav: function () {
             var $container = Ember.$('.main-container'),
                 $menu = Ember.$('.menu-flyout');
@@ -16,6 +19,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             $menu.toggleClass('expanded');
         },
 
+        /**
+         * Toggle the list of vehicles
+         */
         toggleVehicleList: function () {
             var $container = Ember.$('.vehicle-list'),
                 $icon = Ember.$('.vehicle-list > .card-content > .card-title > i');

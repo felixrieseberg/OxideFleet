@@ -1,5 +1,9 @@
 import JsonApiSerializer from 'ember-json-api/json-api-serializer';
 import DS from 'ember-data';
+
+/**
+ * Serializer for the JSON API
+ */
 export default JsonApiSerializer.extend(DS.EmbeddedRecordsMixin, {
     attrs: {
         // tell the serializer that these attribute

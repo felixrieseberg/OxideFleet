@@ -12,7 +12,9 @@ export default Ember.Controller.extend(LoginControllerMixin, {
     },
 
     actions: {
-        // display an error when authentication fails
+        /**
+         * Authenticates and displays an error if anything goes wrong
+         */
         authenticate: function () {
             var self = this;
             this.set('loading', true);
@@ -26,6 +28,9 @@ export default Ember.Controller.extend(LoginControllerMixin, {
             });
         },
 
+        /**
+         * Uses jQuery to programmitcally submit the login form
+         */
         login: function () {
             Ember.$('#login').submit();
             return false;
