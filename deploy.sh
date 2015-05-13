@@ -128,7 +128,7 @@ fi
 
 echo Installing npm modules
 eval $NPM_CMD install --no-optional --no-bin-links
-exitWithMessageOnError "npm install failed"
+# exitWithMessageOnError "npm install failed"
 
 echo Installing bower dependencies
 eval $BOWER_CMD install
