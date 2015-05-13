@@ -1,6 +1,9 @@
 <div class="card white car-selected">
     <div class="card-content">
-        <div class="card-title">{{selectedCar.name}}</div>
+        <div class="card-title">
+            <span>{{selectedCar.name}}</span>
+            <i class="mdi-navigation-close right" {{action "deselectCar" car}}></i>
+        </div>
         {{!-- Info --}}
         <div class="info">
             <img src="http://placehold.it/110x100" width="110" height="100" />
