@@ -9,13 +9,24 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     actions: {
         toggleSideNav: function () {
             var $container = Ember.$('.main-container'),
-                $containerMargin = $container.css('margin-left');
+                $menu = Ember.$('.menu-flyout');
 
             // If the menu isn't out, pull it out
-            if ($containerMargin !== '250px') {
-                $container.animate({'margin-left': '250px'}, { duration: 200, queue: false});
+            $container.toggleClass('expanded');
+            $menu.toggleClass('expanded');
+        },
+
+        toggleVehicleList: function () {
+            var $container = Ember.$('.vehicle-list'),
+                $icon = Ember.$('.vehicle-list > .card-content > .card-title > i');
+
+            $container.toggleClass('collapsed');
+            if ($icon.hasClass('mdi-navigation-expand-less')) {
+                $icon.removeClass('mdi-navigation-expand-less');
+                $icon.addClass('mdi-navigation-expand-more');
             } else {
-                $container.animate({'margin-left': '50px'}, { duration: 200, queue: false});
+                $icon.removeClass('mdi-navigation-expand-more');
+                $icon.addClass('mdi-navigation-expand-less');
             }
 
         }

@@ -225,8 +225,20 @@ export default Ember.ArrayController.extend({
         },
 
         selectCar: function (device) {
+            var $container = Ember.$('.carlist');
+
+            $container.addClass('expanded');
+
             this.set('selectedCar', device);
             this.send('centerOnCar', device);
+        },
+
+        deselectCar: function () {
+            var $container = Ember.$('.carlist');
+
+            $container.removeClass('expanded');
+
+            this.set('selectedCar', null);
         }
     }
 });

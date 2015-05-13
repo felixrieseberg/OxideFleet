@@ -1,52 +1,64 @@
-.main-container {
-    margin-left: 50px;
-}
-
 #map {
     position: relative;
+    width: 100%;
+    height: 100vh;
 }
 
 .content-overlay {
-    position: absolute;
+    position: relative;
     z-index: 1001;
-    width: 350px;
+    width: $baseunit * 7;
+}
+
+.cards::before {
+    content: "";
+    width: 100%;
+    height: $marginunit;
+    background-color: transparent;
+    display: block;
+    float:left;
 }
 
 .cards {
-    position: absolute;
+    position: relative;
     z-index: 1001;
-    width: 350px;
-    margin-left: 20px;
-    margin-top: 3px;
-
-    .vin {
-        color: #7F7F7F;
-    }
+    margin: 0 0 0 $marginunit;
     
+
+
     .card {
+        float: left;
         border-radius: 0;
         padding-top:0;
+        margin: $marginunit 0 0 $marginunit;
+        width: $baseunit * 7;
         
         .card-title {
-            padding: 18px 20px 13px;
+            padding: 18px #{$marginunit * 2} 13px;
             line-height: $font-size-title;
             font-weight: normal;
             color: color("shades", "black");
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            span {
+                display: inline-block;
+                max-width: calc( 100% - #{$marginunit * 4});
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+            i.right {
+                margin-left: 12px;
+            }
         }
 
         .card-content {
-            margin-bottom: 10px;
-            max-height: calc(100vh * 0.40);
+            margin-bottom: $marginunit;
+            //max-height: calc(100vh * 0.60);
             padding: 0;
             border-radius: 0;
-        }
-        
-        .collection.carlist {
-            overflow-y: auto;
-            max-height: calc(100vh * 0.40 - 70px);
-            margin-bottom: -10px;
-            padding: 0 20px 20px 20px;
-            background-color: transparent;
         }
         
         /* Provides guaranteed padding inside scroll-overflow collections 
@@ -54,7 +66,7 @@
         .collection::before {
             content: "";
             position:absolute;
-            height: 10px;
+            height: $marginunit;
             left: 0px;
             /* scrollbars are 17px wide on desktop browsers */
             width: calc(100% - 17px);
@@ -67,6 +79,7 @@
             background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
             filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
         }
+
         .collection::after {
             content: "";
             position:absolute;
@@ -94,26 +107,55 @@
             height: inherit;
             padding-left: 55px;
             padding-right: 0px;
-            overflow: hidden;
-            text-overflow: ellipsis;
             position: relative;
-        }
-
-        .collection-item.car {
-            padding-left: 0;
-            padding-top: 7px;
-            padding-bottom: 1px;
-
-            h4 {
-                font-size: 1.2em;
-                margin: 0;
-                line-height: 1.1em;
-                text-transform: capitalize;
-            }
         }
 
         a {
             text-transform: none;
+        }
+    }
+
+    .card.vehicle-list {
+        .collection.carlist {
+            overflow-y: auto;
+            max-height: calc(100vh * 0.70 - 50px);
+            margin-bottom: $marginunit * -1;
+            padding: 0 20px 20px 20px;
+            background-color: transparent;
+        }
+
+        .collection.carlist.expanded {
+            max-height: calc(100vh * 0.70 - 250px);
+        }
+
+        .collection-item.car {
+            padding-left: 0;
+            padding-top: $marginunit - 1;
+            padding-bottom: 1px;
+
+            h4 {
+                font-size: $font-size-sub-headline;
+                margin: 0;
+                line-height: $font-size-sub-headline;
+                text-transform: capitalize;  
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .vin {
+                color: $disabled-text-color;
+            }
+        }
+    }
+
+    .card.vehicle-list.collapsed {
+        .card-content {
+            margin-bottom: 0;
+        }
+
+        .collection.carlist {
+            display: none;
         }
     }
 
@@ -132,7 +174,7 @@
 
                 img {
                     float: left;
-                    margin-right: 10px;
+                    margin-right: $marginunit;
                 }
             }
 
@@ -166,4 +208,42 @@
         }
         
     }
+}
+
+@include tablet-portrait {
+    #map {
+        height: calc( 100vh - #{$baseunit} );
+    }
+    .content-overlay {
+        position: relative;
+        z-index: 1001;
+        width: inherit;
+    }
+
+    .cards {
+        width: inherit;
+
+        .card .collection.carlist,
+        .card .collection.carlist.expanded  {
+            min-height: 160px;
+            max-height: calc(100vh * 0.30 - 50px) !important;
+        }   
+
+        .card.car-selected {
+            min-height: 224px;
+            max-height: calc(100vh * 0.30 - 50px) !important;
+        }
+    }
+
+    
+}
+
+@include desktop {
+     /*.cards::after {
+        content: "";
+        display: block;
+        float: left;
+        height: calc( 100vh * 0.3 );
+        width: 320px;
+    }*/
 }

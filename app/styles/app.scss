@@ -1,5 +1,10 @@
-@import 'color-overrides';
+//Grid unit definition
+$baseunit: 48px;
+$marginunit: $baseunit / 6;
+
+@import 'mediaqueries';
 @import 'materialize';
+@import 'color-overrides';
 @import 'type-overrides';
 @import 'open-sans';
 @import 'preview';
@@ -7,6 +12,7 @@
 @import 'menu';
 @import 'dashboard';
 @import 'login';
+
 
 body, html {
     background-color: $primary-background-color;

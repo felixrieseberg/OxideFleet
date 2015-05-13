@@ -1,14 +1,21 @@
-.menu {
-    width: 50px;
-    height: 50px;
-    float: left;
+.menu-flyout {
+    display: none;
+    width: $baseunit * 5;
+    height:100%;
+}
 
+.menu-nav {
+    width: $baseunit;
+}
+
+.menu-nav, 
+.menu-flyout {
     ul {
-        width: 250px;
+        width: $baseunit * 5;
         color: #fff;
         background-color: $primary-background-color;
         margin-top: 0;
-        height: 45px;
+        height: 100%;
         line-height: 45px;
         
         li.selected {
@@ -20,13 +27,13 @@
         
         li i {
             font-size: 30px;
-            margin-left: 10px;
+            margin-left: $marginunit;
             text-align: center;
             vertical-align: middle;
         }
 
         li span {
-            margin-left: 10px;
+            margin-left: $marginunit;
             vertical-align: middle;
         }
 
@@ -47,5 +54,104 @@
         li:hover {
             background-color: rgba(255,255,255,.10);
         }
+    }
+}
+
+@include tablet-portrait {
+    .main-container {
+        margin-top: 0px;
+    }
+
+    .menu-nav {
+        width: 100%;
+        height: $baseunit;
+
+        ul {
+            width: 100%;
+
+            li {
+                float:left;
+                display: none;
+                height: $baseunit;
+                overflow: hidden;
+            }
+
+            li:hover {
+                background-color: transparent;
+            }
+
+            li:first-child {
+                display: inline-block;
+                width: 50px;
+            }
+
+            li.selected {
+                display: inline-block;
+                background-color: transparent;
+            }
+
+            li.selected:hover {
+                background-color: transparent;
+            }
+
+            li.logout {
+                float:right;
+                display: block;
+                width: $baseunit;
+            }
+        }
+    }
+
+    .menu-flyout.expanded {
+        display: block;
+        position: absolute;
+        top:0px;
+        left:0px;
+        z-index: 1002;
+        width: 100%;
+            ul {
+                background-color: $primary-background-color;
+                height:100%;
+
+                li:first-child {
+                    height: $baseunit;
+                }
+            }
+    }
+}
+
+@include desktop {
+    .main-container {
+        margin-left: 50px;
+        -webkit-transition: .2s ease-in-out;
+        -moz-transition: .2s ease-in-out;
+        -o-transition: .2s ease-in-out;
+        transition: .2s ease-in-out;
+    }
+
+    .main-container.expanded {
+        margin-left: 250px;
+    }
+
+    .menu-nav {
+        float:left;
+    }
+}
+
+@include tablet-landscape {
+    .main-container {
+        margin-left: $baseunit;
+        -webkit-transition: .2s ease-in-out;
+        -moz-transition: .2s ease-in-out;
+        -o-transition: .2s ease-in-out;
+        transition: .2s ease-in-out;
+    }
+
+    .main-container.expanded {
+        margin-left: $baseunit * 5;
+    }
+
+    .menu-nav {
+        float:left;
     }
 }

@@ -1,11 +1,15 @@
-{{partial "menu"}}
-
+<div class="menu-nav">
+    {{partial "menu"}}
+</div>
 <div class="main-container">
     <div class="content-overlay">
         <div class="cards">
-            <div class="card white">
+            <div class="card vehicle-list white">
                 <div class="card-content">
-                    <div class="card-title">Tracked Vehicles</div>
+                    <div class="card-title">
+                        <span>Tracked Vehicles</span>
+                        <i class="mdi-navigation-expand-less right" {{action "toggleVehicleList"}}></i>
+                    </div>
                     <ul class="carlist collection">
                         {{#each car in model}}
                             {{partial "car-list-item"}}
@@ -25,4 +29,7 @@
     {{!-- Map --}}
 
     {{ox-map mapReference=mapReference}}
+</div>
+<div class="menu-flyout" {{action "toggleSideNav"}}>
+    {{partial "menu"}}
 </div>
