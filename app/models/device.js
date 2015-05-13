@@ -1,5 +1,13 @@
 import DS from 'ember-data';
 
+/**
+ * This model describes a Nitrogen device.
+ * For the purpose of OxideFleet, the device is
+ * extended with "car" properties, which are
+ * assigned by the client as soon as the
+ * device is retrieved from Nitrogen.
+ * @type {DS.model}
+ */
 var Device = DS.Model.extend({
     nitrogen_id: DS.attr('string'),
     name: DS.attr('string'),
@@ -19,16 +27,7 @@ var Device = DS.Model.extend({
     trackOnMap: DS.attr('boolean'),
 
     // Relations
-    owner: DS.belongsTo('user', {async: true}),
-
-    // Mocks until we can marry device & vehicle
-    trips: DS.hasMany('trip', {async: true}),
-    is_active: DS.attr('boolean'),
-    vin: DS.attr('string'),
-    make: DS.attr('string'),
-    model: DS.attr('string'),
-    production_year: DS.attr('string'),
-    mileage: DS.attr('string')
+    vehicle: DS.belongsTo('vehicle', {async: true})
 });
 
 export default Device;
