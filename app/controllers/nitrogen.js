@@ -6,6 +6,12 @@ export default Ember.Controller.extend({
     subscribeToNitrogen: false,
 
     actions: {
+        /**
+         * Subcribes to the Nitrogen Socket Message Stream, calling a
+         * callback on a given controller
+         * @param  {Controller}   originalController - The controller on which to call the callback
+         * @param  {string}       callback - The callback (passed as a string, since called via Ember Run Loop)
+         */
         subscribeToNitrogen: function (originalController, callback) {
             var appController = this.get('appController'),
                 nitrogenSession = appController.get('nitrogenSession');
@@ -21,6 +27,13 @@ export default Ember.Controller.extend({
             this.set('subscribedToNitrogen', true);
         },
 
+        /**
+         * Gets the last message for a given car from Nitrogen
+         * @param  {string}       principalId        - Id of the car for which the last message shall be retreived
+         * @param  {number}       messageLimit       - Number of last messages to retreive (usually 1)
+         * @param  {Controller}   originalController - The controller on which to call the callback
+         * @param  {string}       callback           - The callback (passed as a string, since called via Ember Run Loop)
+         */
         getLastMessage: function (principalId, messageLimit, originalController, callback) {
             var appController = this.get('appController'),
                 nitrogenSession = appController.get('nitrogenSession'),

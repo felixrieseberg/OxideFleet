@@ -4,9 +4,11 @@ export default Ember.Controller.extend({
     title: 'Settings',
     needs: ['application'],
     config: Ember.computed.alias('controllers.application.fullConfig'),
+
     configString: function () {
         return JSON.stringify(this.get('config'), null, '\t');
     }.property('config'),
+
     connectionSecure: Ember.computed.equal('config.nitrogen.http_port', 'https'),
 
     localStorageSize: function () {
@@ -22,6 +24,9 @@ export default Ember.Controller.extend({
     }.property(),
 
     actions: {
+        /**
+         * The nuclear option: Clears the local storage
+         */
         clearLocalStorage: function () {
             window.localStorage.clear();
             this.send('invalidateSession');

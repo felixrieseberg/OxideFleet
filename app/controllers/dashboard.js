@@ -11,6 +11,10 @@ export default Ember.ArrayController.extend({
     trackedCars: [],
     selectedCar: null,
 
+    /**
+     * Are any cars in the model?
+     * @return {boolean}
+     */
     carsConnected: Ember.computed('model', function () {
         var model = this.get('model');
 
@@ -21,7 +25,9 @@ export default Ember.ArrayController.extend({
         }
     }),
 
-    // Add all cars to the 'tracked' list on init
+    /**
+     * Add all cars to the 'tracked' list on init
+     */
     trackAllCars: function () {
         var replaceCars = [];
 
@@ -40,20 +46,24 @@ export default Ember.ArrayController.extend({
         });
     }.on('init'),
 
-    // Subscribe to Nitrogen on init of dashboard
+    /**
+     * Subscribe to Nitrogen on init, assign a handler for incoming socket messages
+     */
     subscribeToNitrogen: function () {
         this.get('nitrogenController').send('subscribeToNitrogen', this, 'handleSocketMessage');
     }.on('init'),
 
-    // Observes `trackedCars` to sync map pushpins and tracked cars
+    /**
+     * Observes `trackedCars` to sync map pushpins and tracked cars - if a car is marked as tracked,
+     * this method will schedule `addOrRemoveCars` in the Ember Run Loop, ensuring that the map only
+     * contains pushpins for cars actually tracked.
+     */
     trackedCarsObserver: function () {
         var mapEntityTracker = this.get('mapEntityTracker'),
             trackedCars = this.get('trackedCars'),
             nitrogenController = this.get('nitrogenController'),
             map = this.get('mapReference'),
             self = this;
-
-        console.log(this.get('trackedCars.[]').length);
 
         function handleFoundDevices (foundDevices) {
             let foundDevice;
@@ -65,7 +75,6 @@ export default Ember.ArrayController.extend({
         }
 
         function addOrRemoveCars () {
-            console.log('addOrRemoveCars');
             for (let i = 0; i < mapEntityTracker.length; i += 1) {
                 if (trackedCars.indexOf(mapEntityTracker[i].name) === -1) {
                     // Car is on map, but not in trackedCars - remove from map
@@ -87,6 +96,10 @@ export default Ember.ArrayController.extend({
     }.observes('trackedCars.[]'),
 
     actions: {
+        /**
+         * Toggles whether or not a car should be tracked on map
+         * @param  {Ember Data Record} device  - The car to be tracked
+         */
         toggleCar: function (device) {
             var trackedCars = this.get('trackedCars');
 
@@ -99,6 +112,18 @@ export default Ember.ArrayController.extend({
             }
         },
 
+        /**
+         * Handles a locations array for a given device, cleaning the individual
+         * 'location' data points and putting them into an array property on a
+         * given car.
+         *
+         * This method is called when Nitrogen messages with location data are
+         * retrieved.
+         * @param  {array}   locations     - Locations array (format: {latitude: 1, longitude: 1, speed: 1, heading: 1, timestamp: 1})
+         * @param  {string}   principalId  - Id of the car the locations should be attached to
+         * @param  {Function} callback
+         * @return {Ember Data Record}     - DS Record of the car the locations were added to
+         */
         handleLocations: function (locations, principalId, callback) {
             var self = this;
 
@@ -128,6 +153,22 @@ export default Ember.ArrayController.extend({
             }
         },
 
+        /**
+         * If a car is added to the map and the last location has to be retrieved, this callback is used
+         * to handleLocations followed by adding the car to the map.
+         * @param  {array}   locations     - Locations array (format: {latitude: 1, longitude: 1, speed: 1, heading: 1, timestamp: 1})
+         * @param  {string}   principalId  - Id of the car the locations should be attached to
+         */
+        handleLastLocation: function (locations, principalId) {
+            if (locations && principalId) {
+                this.send('handleLocations', locations, principalId, 'addCarToMap');
+            }
+        },
+
+        /**
+         * Handles incoming socket messages from Nitrogen
+         * @param  {object} message - Nitrogen message
+         */
         handleSocketMessage: function (message) {
             var locations = [];
 
@@ -137,15 +178,11 @@ export default Ember.ArrayController.extend({
             }
         },
 
-        handleLastLocation: function (locations, principalId) {
-            if (locations && principalId) {
-                this.send('handleLocations', locations, principalId, 'addCarToMap');
-            }
-        },
-
+        /**
+         * Updates a car on the map, moving his pushpin and drawing the path
+         * @param  {Ember Data Record} device - Car to update on the map
+         */
         updateCar: function (device) {
-            console.log(device);
-
             var map = this.get('mapReference'),
                 name = device.get('nitrogen_id'),
                 mapEntityTracker = this.get('mapEntityTracker'),
@@ -176,6 +213,10 @@ export default Ember.ArrayController.extend({
             }
         },
 
+        /**
+         * Centers the map on a given location
+         * @param  {object} location - The location to center on (format: {latitude: 1, longitude: 1})
+         */
         centerMap: function (location) {
             var map = this.get('mapReference'),
                 mapOptions = map.getOptions();
@@ -185,6 +226,10 @@ export default Ember.ArrayController.extend({
             map.setView(mapOptions);
         },
 
+        /**
+         * Centers the map on a given car
+         * @param  {Ember Data Record} device - Car to center on
+         */
         centerOnCar: function (device) {
             var locations = device.get('gps'),
                 lastLocation = locations[locations.length - 1];
@@ -192,6 +237,10 @@ export default Ember.ArrayController.extend({
             this.send('centerMap', {'latitude': lastLocation.latitude, 'longitude': lastLocation.longitude});
         },
 
+        /**
+         * Adds a given car to the map
+         * @param  {Ember Data Record} device - Car to add
+         */
         addCarToMap: function (device) {
             var locations = device.get('gps'),
                 lastLocation = locations[locations.length - 1],
@@ -224,19 +273,22 @@ export default Ember.ArrayController.extend({
             }
         },
 
+        /**
+         * Marks a given car as 'selected'
+         * @param  {Ember Data Record} device - Car to select
+         */
         selectCar: function (device) {
-            var $container = Ember.$('.carlist');
-
-            $container.addClass('expanded');
+            Ember.$('.carlist').addClass('expanded');
 
             this.set('selectedCar', device);
             this.send('centerOnCar', device);
         },
 
+        /**
+         * Sets the currently selected car to null
+         */
         deselectCar: function () {
-            var $container = Ember.$('.carlist');
-
-            $container.removeClass('expanded');
+            Ember.$('.carlist').removeClass('expanded');
 
             this.set('selectedCar', null);
         }

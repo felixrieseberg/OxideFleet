@@ -6,6 +6,10 @@ export default Ember.Component.extend({
     zoom: 6,
     showDashboard: false,
 
+    /**
+     * Creates the map object and assigns a object reference to
+     * 'mapReference', if given
+     */
     setup: function () {
         // Create map
         var map = new Microsoft.Maps.Map(document.getElementById('map'), {
