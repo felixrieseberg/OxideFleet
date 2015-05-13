@@ -9,15 +9,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     actions: {
         toggleSideNav: function () {
             var $container = Ember.$('.main-container'),
-                $containerMargin = $container.css('margin-left');
+                $menu = Ember.$('.menu-flyout');
 
             // If the menu isn't out, pull it out
-            if ($containerMargin !== '250px') {
-                $container.animate({'margin-left': '250px'}, { duration: 200, queue: false});
-            } else {
-                $container.animate({'margin-left': '50px'}, { duration: 200, queue: false});
-            }
-
+            $container.toggleClass('expanded');
+            $menu.toggleClass('expanded');
         }
     }
 });

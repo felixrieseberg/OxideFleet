@@ -1,31 +1,37 @@
-.main-container {
-    margin-left: 50px;
-}
-
 #map {
     position: relative;
+    width: 100%;
+    height: 100vh;
 }
 
 .content-overlay {
-    position: absolute;
+    position: relative;
     z-index: 1001;
-    width: 350px;
+    width: $baseunit * 7;
+}
+
+.cards::before {
+    content: "";
+    width: 100%;
+    height: $marginunit;
+    background-color: transparent;
+    display: block;
+    float:left;
 }
 
 .cards {
-    position: absolute;
+    position: relative;
     z-index: 1001;
-    width: 350px;
-    margin-left: 20px;
-    margin-top: 3px;
-
-    .vin {
-        color: #7F7F7F;
-    }
+    margin: 0 0 0 $marginunit;
     
+
+
     .card {
+        float: left;
         border-radius: 0;
         padding-top:0;
+        margin: $marginunit 0 0 $marginunit;
+        width: $baseunit * 7;
         
         .card-title {
             padding: 18px 20px 13px;
@@ -35,7 +41,7 @@
         }
 
         .card-content {
-            margin-bottom: 10px;
+            margin-bottom: $marginunit;
             max-height: calc(100vh * 0.40);
             padding: 0;
             border-radius: 0;
@@ -44,7 +50,7 @@
         .collection.carlist {
             overflow-y: auto;
             max-height: calc(100vh * 0.40 - 70px);
-            margin-bottom: -10px;
+            margin-bottom: $marginunit * -1;
             padding: 0 20px 20px 20px;
             background-color: transparent;
         }
@@ -54,7 +60,7 @@
         .collection::before {
             content: "";
             position:absolute;
-            height: 10px;
+            height: $marginunit;
             left: 0px;
             /* scrollbars are 17px wide on desktop browsers */
             width: calc(100% - 17px);
@@ -101,7 +107,7 @@
 
         .collection-item.car {
             padding-left: 0;
-            padding-top: 7px;
+            padding-top: $marginunit - 1;
             padding-bottom: 1px;
 
             h4 {
@@ -109,6 +115,10 @@
                 margin: 0;
                 line-height: 1.1em;
                 text-transform: capitalize;
+            }
+
+            .vin {
+                color: $disabled-text-color;
             }
         }
 
@@ -132,7 +142,7 @@
 
                 img {
                     float: left;
-                    margin-right: 10px;
+                    margin-right: $marginunit;
                 }
             }
 
@@ -165,5 +175,20 @@
             
         }
         
+    }
+}
+
+@include tablet-portrait {
+    #map {
+        height: calc( 100vh - $baseunit );
+    }
+    .content-overlay {
+        position: relative;
+        z-index: 1001;
+        width: inherit;
+    }
+
+    .cards {
+        width: inherit;
     }
 }

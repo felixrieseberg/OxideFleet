@@ -1,5 +1,6 @@
-{{partial "menu"}}
-
+<div class="menu-nav">
+    {{partial "menu"}}
+</div>
 <div class="main-container">
     <div class="content-overlay">
         <div class="cards">
@@ -25,4 +26,7 @@
     {{!-- Map --}}
 
     {{ox-map mapReference=mapReference}}
+</div>
+<div class="menu-flyout" {{action "toggleSideNav"}}>
+    {{partial "menu"}}
 </div>
