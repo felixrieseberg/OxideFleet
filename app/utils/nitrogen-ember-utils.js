@@ -52,6 +52,7 @@ var nitrogenEmberUtils = {
         if (!user || !principal || !session) {
             return console.error('Called Ember Util updateUser with missing paramters:', arguments);
         }
+
         user.set('name', principal.name);
         user.set('email', principal.email);
         user.set('api_key', principal.api_key);
