@@ -12,7 +12,7 @@ $marginunit: $baseunit / 6;
 @import 'menu';
 @import 'dashboard';
 @import 'login';
-
+@import 'tooltips';
 
 body, html {
     background-color: $primary-background-color;

@@ -65,7 +65,7 @@ export default Ember.ArrayController.extend({
             map = this.get('mapReference'),
             self = this;
 
-        function handleFoundDevices (foundDevices) {
+        function handleFoundDevices(foundDevices) {
             let foundDevice;
 
             if (foundDevices && foundDevices.content && foundDevices.content.length > 0) {
@@ -74,7 +74,7 @@ export default Ember.ArrayController.extend({
             }
         }
 
-        function addOrRemoveCars () {
+        function addOrRemoveCars() {
             for (let i = 0; i < mapEntityTracker.length; i += 1) {
                 if (trackedCars.indexOf(mapEntityTracker[i].name) === -1) {
                     // Car is on map, but not in trackedCars - remove from map
@@ -87,7 +87,9 @@ export default Ember.ArrayController.extend({
             for (let i = 0; i < trackedCars.length; i += 1) {
                 if (!mapEntityTracker.findBy('name', trackedCars[i])) {
                     // Car is not on map, but in trackedCars - add to map
-                    self.store.find('device', { nitrogen_id: trackedCars[i] }).then(handleFoundDevices);
+                    self.store.find('device', {
+                        nitrogen_id: trackedCars[i]
+                    }).then(handleFoundDevices);
                 }
             }
         }
@@ -128,7 +130,9 @@ export default Ember.ArrayController.extend({
             var self = this;
 
             if (locations.length > 0) {
-                this.store.find('device', { nitrogen_id: principalId }).then(function (foundDevices) {
+                this.store.find('device', {
+                    nitrogen_id: principalId
+                }).then(function (foundDevices) {
                     var foundDevice, i,
                         gps;
 
@@ -189,7 +193,10 @@ export default Ember.ArrayController.extend({
                 locations = device.get('gps'),
                 lat = locations[locations.length - 1].latitude,
                 lon = locations[locations.length - 1].longitude,
-                lastLocation = {longitude: lon, latitude: lat},
+                lastLocation = {
+                    longitude: lon,
+                    latitude: lat
+                },
                 pathLocations, path, pin, i;
 
             this.set('speed', Math.round(locations[locations.length - 1].speed));
@@ -222,7 +229,10 @@ export default Ember.ArrayController.extend({
                 mapOptions = map.getOptions();
 
             mapOptions.zoom = 15;
-            mapOptions.center = {'latitude': location.latitude, 'longitude': location.longitude};
+            mapOptions.center = {
+                'latitude': location.latitude,
+                'longitude': location.longitude
+            };
             map.setView(mapOptions);
         },
 
@@ -234,7 +244,10 @@ export default Ember.ArrayController.extend({
             var locations = device.get('gps'),
                 lastLocation = locations[locations.length - 1];
 
-            this.send('centerMap', {'latitude': lastLocation.latitude, 'longitude': lastLocation.longitude});
+            this.send('centerMap', {
+                'latitude': lastLocation.latitude,
+                'longitude': lastLocation.longitude
+            });
         },
 
         /**
@@ -245,18 +258,32 @@ export default Ember.ArrayController.extend({
             var locations = device.get('gps'),
                 lastLocation = locations[locations.length - 1],
                 iconUrl = 'assets/img/carIcon_smaller.png',
-                iconOptions = {'icon': iconUrl, height: 40, width: 40},
+                iconOptions = {
+                    'icon': iconUrl,
+                    height: 40,
+                    width: 40,
+                    typeName: 'tooltipped'
+                },
                 map = this.get('mapReference'),
                 mapLocations = [],
-                pathOptions = {strokeColor: new Microsoft.Maps.Color.fromHex('#4caf50'), strokeThickness: 5},
+                pathOptions = {
+                    strokeColor: new Microsoft.Maps.Color.fromHex('#4caf50'),
+                    strokeThickness: 5
+                },
                 path, pin, entityLength;
 
             for (var i = 0; i < locations.length; i += 1) {
-                mapLocations.push({'latitude': locations[i].latitude, 'longitude': locations[i].longitude});
+                mapLocations.push({
+                    'latitude': locations[i].latitude,
+                    'longitude': locations[i].longitude
+                });
             }
 
             if (mapLocations && mapLocations.length > 0) {
-                pin = new Microsoft.Maps.Pushpin({'latitude': lastLocation.latitude, 'longitude': lastLocation.longitude}, iconOptions);
+                pin = new Microsoft.Maps.Pushpin({
+                    'latitude': lastLocation.latitude,
+                    'longitude': lastLocation.longitude
+                }, iconOptions);
                 path = new Microsoft.Maps.Polyline(mapLocations, pathOptions);
 
                 // Save index of entities pushed (so we can update them later)
@@ -267,10 +294,43 @@ export default Ember.ArrayController.extend({
                     path: entityLength + 1
                 });
 
+                // Tooltip
+                this.send('addPinTooltip', pin, device.get('name'));
+
                 // Push objects to map
                 map.entities.push(pin);
                 map.entities.push(path);
             }
+        },
+
+        /**
+         * Adds a tooltip for a pushpin
+         * @param {object} pin pushin
+         */
+        addPinTooltip: function (pin, tooltipText) {
+            // Create Mouse Over Handler
+            Microsoft.Maps.Events.addHandler(pin, 'mouseover', function (e) {
+                var target = e.target.cm1002_er_etr.dom,
+                    tiprCont = '.tiprContainer_bottom',
+                    wt, ml;
+
+                var out = '<div class="tiprContainer_bottom"><div class="tipr_point_bottom"><div class="tiprContent">' + tooltipText + '</div></div></div>';
+
+                $(target).after(out);
+
+                wt = $(tiprCont).outerWidth();
+                ml = -(wt / 2 + 20);
+
+                $(tiprCont).css('top', e.pageY + 20);
+                $(tiprCont).css('left', e.pageX);
+                $(tiprCont).css('margin-left', ml + 'px');
+
+                $(tiprCont).fadeIn('200');
+            });
+
+            Microsoft.Maps.Events.addHandler(pin, 'mouseout', function () {
+                $('.tiprContainer_bottom').remove();
+            });
         },
 
         /**
