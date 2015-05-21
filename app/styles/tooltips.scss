@@ -1,0 +1,30 @@
+.tipr_content
+{
+    font: 13px/1.7 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    padding: 9px 17px;
+
+    color: #333;
+    border: 1px solid #dcdcdc;
+    background-color: #fff;
+}
+
+.tipr_container_bottom
+{
+    position: fixed;
+    z-index: 1000;
+
+    display: none;
+
+    margin-top: 13px;
+}
+
+.tipr_container_top
+{
+    position: fixed;
+    z-index: 1000;
+
+    display: none;
+
+    margin-top: -77px;
+}
