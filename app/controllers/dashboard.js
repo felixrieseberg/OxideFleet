@@ -308,13 +308,17 @@ export default Ember.ArrayController.extend({
          * @param {object} pin pushin
          */
         addPinTooltip: function (pin, tooltipText) {
+            if (!pin || !tooltipText || !Microsoft || !Microsoft.Maps.Events) {
+                return;
+            }
+
             // Create Mouse Over Handler
             Microsoft.Maps.Events.addHandler(pin, 'mouseover', function (e) {
                 var target = e.target.cm1002_er_etr.dom,
-                    tiprCont = '.tiprContainer_bottom',
+                    tiprCont = '.tipr_container_bottom',
                     wt, ml;
 
-                var out = '<div class="tiprContainer_bottom"><div class="tipr_point_bottom"><div class="tiprContent">' + tooltipText + '</div></div></div>';
+                var out = '<div class="tipr_container_bottom"><div class="tipr_content">' + tooltipText + '</div></div>';
 
                 $(target).after(out);
 
@@ -328,8 +332,9 @@ export default Ember.ArrayController.extend({
                 $(tiprCont).fadeIn('200');
             });
 
+            // Create Mouse Out Handler
             Microsoft.Maps.Events.addHandler(pin, 'mouseout', function () {
-                $('.tiprContainer_bottom').remove();
+                $('.tipr_container_bottom').remove();
             });
         },
 
