@@ -78,8 +78,6 @@ test('it returns vehicle with specified id', function(assert) {
         });
       });
       start();
-
-      
     });
   });
   

@@ -24,8 +24,6 @@
     z-index: 1001;
     margin: 0 0 0 $marginunit;
     
-
-
     .card {
         float: left;
         border-radius: 0;
@@ -59,6 +57,11 @@
             //max-height: calc(100vh * 0.60);
             padding: 0;
             border-radius: 0;
+        }
+
+        .filter-selector {
+            padding-left: 19px;
+            margin-top: -6px;
         }
         
         /* Provides guaranteed padding inside scroll-overflow collections 

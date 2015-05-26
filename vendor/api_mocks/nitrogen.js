@@ -17,11 +17,13 @@
             assert.ok(value);
         }
     }
+
     var env = JSON.parse(getMetaContent());
     
     if (env.APP.rootElement !== "#ember-testing") {
         return;
     }
+
     var nitrogen = {
         Service: function Service(config) {
         },
@@ -29,7 +31,7 @@
         Principal: function Principal() {
             this.user = 'testuser',
             this.name = 'testuser',
-            this. email = 'test@microsoft.com',
+            this.email = 'test@microsoft.com',
             this.api_key = 'askjflhawlqkjfh',
             this.password = 'p@ssw0rd',
             this.updated_at = (new Date(Date.now())).toString(),
@@ -39,10 +41,13 @@
     };
     
     nitrogen.Principal.find = function (session, options, sortOptions, callback) {
+        console.log('Running nitrogen.Principal.find');
+
         doAssert(session);
         doAssert(options);
         doAssert(sortOptions);
         doAssert(callback);
+
         return callback(null, [new nitrogen.Principal()]);
     };
     nitrogen.Service.prototype.resume = function () {
@@ -55,7 +60,7 @@
         }, new nitrogen.Principal() );
     };
     
-    nitrogen.User = function ( user ) {
+    nitrogen.User = function (user) {
         this.user = user;        
     },
     

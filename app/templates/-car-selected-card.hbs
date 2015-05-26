@@ -2,31 +2,31 @@
     <div class="card-content">
         <div class="card-title">
             <span>{{selectedCar.name}}</span>
-            <i class="mdi-navigation-close right" {{action "deselectCar" car}}></i>
+            <i class="mdi-navigation-close right" {{action "deselectCar" selectedCar}}></i>
         </div>
         {{!-- Info --}}
         <div class="info">
             <img src="http://placehold.it/110x100" width="110" height="100" />
-            <span>{{selectedCar.production_year}} {{selectedCar.make}} {{selectedCar.model}}</span>
+            <span>{{selectedCar.vehicle.production_year}} {{selectedCar.vehicle.make}} {{selectedCar.vehicle.model}}</span>
             <p>
                 <small class="vin">VIN#</small>
-                <small>{{selectedCar.vin}}</small>
+                <small>{{selectedCar.vehicle.vin}}</small>
             </p>
             <p>
                 <small class="vin">Milage</small>
-                <small>{{selectedCar.milage}}</small>
+                <small>{{selectedCar.vehicle.mileage}}</small>
             </p>
             <p>
                 <small class="vin">Active</small>
-                {{#if selectedCar.is_active}}
-                <small>Yes</small>
+                {{#if selectedCar.vehicle.isActive}}
+                    <small>Yes</small>
                 {{else}}
-                <small>No</small>
+                    <small>No</small>
                 {{/if}}
             </p>
         </div>
         {{!-- Driver Score --}}
-        {{#if selectedCar.is_active}}
+        {{#if selectedCar.vehicle.isActive}}
             <div class="driverscore clearfix">
                 <div class="score">92</div>
                 <span>Current Driver Score</span>
@@ -35,7 +35,7 @@
         {{/if}}
         {{!-- Notifications --}}
         <div class="notifications">
-            {{#if selectedCar.hasNotifications}}
+            {{#if selectedCar.vehicle.hasNotifications}}
             {{else}}
             <p>No notifications for this vehicle</p>
             {{/if}}

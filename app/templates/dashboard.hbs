@@ -10,11 +10,24 @@
                         <span>Tracked Vehicles</span>
                         <i class="mdi-navigation-expand-less right" {{action "toggleVehicleList"}}></i>
                     </div>
+                    <div class="filter-selector">
+                        <form action="#">
+                            <p>
+                                {{input type="checkbox" id="showOnlyActiveCars" checked=showOnlyActiveCars}}
+                                <label for="showOnlyActiveCars">Show Active Cars Only</label>
+                            </p>
+                        </form>
+                    </div>
                     <ul class="carlist collection">
+                    {{#if showOnlyActiveCars}}
+                        {{#each car in activeCars}}
+                            {{partial "car-list-item"}}
+                        {{/each}}
+                    {{else}}
                         {{#each car in model}}
                             {{partial "car-list-item"}}
                         {{/each}}
-                        
+                    {{/if}}
                     </ul>
                 </div>
             </div>

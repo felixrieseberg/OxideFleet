@@ -10,6 +10,7 @@ export default Ember.ArrayController.extend({
     mapEntityTracker: [],
     trackedCars: [],
     selectedCar: null,
+    showOnlyActiveCars: true,
 
     /**
      * Are any cars in the model?
@@ -26,6 +27,17 @@ export default Ember.ArrayController.extend({
     }),
 
     /**
+     * A DS.PromiseArray containing all the devices that are currently active
+     * (as determined by their vehicle)
+     * @return {DS.PromiseArray}   [Devices (Vehicles) currently active]
+     */
+    activeCars: Ember.computed(function () {
+        return this.store.filter('device', device => {
+            return device.get('vehicle.isActive');
+        });
+    }),
+
+    /**
      * Add all cars to the 'tracked' list on init
      */
     trackAllCars: function () {
@@ -34,7 +46,6 @@ export default Ember.ArrayController.extend({
         this.store.find('device').then(devices => {
             if (devices && devices.content) {
                 for (let i = 0; i < devices.content.length; i += 1) {
-                    console.log('adding device');
                     let device = devices.content[i];
                     device.set('trackOnMap', true);
                     device.save();
