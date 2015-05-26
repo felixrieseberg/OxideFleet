@@ -18,7 +18,7 @@ If you have none of the tools outlined below, consider using the amazing [Chocol
 * Nitrogen will attempt to call itself on the same port the host is running on. Unless you're developing with `ember serve --port 80`, Nitrogen won't be able to get in touch with the mothership. If the app is started with `ember serve`, live tracking will therefore not work.
 
 ### Installation
-* `git clone https://github.com/felixrieseberg/OxideFleet.git` this repository
+* `git clone https://github.com/felixrieseberg/OxideFleet.git`
 * `cd OxideFleet`
 * `npm install`
 * `bower install`
@@ -37,3 +37,5 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 #### Tests
 Integration and unit tests can be run with `ember test`; use `ember test --server` if you'd like to test continuously during development. Code style and good JavaScript practices are enforced via JSHint and JSCS, use `grunt test` to run those tools.
+
+Travis will run `npm test`, which will run both code style and integration tests.
