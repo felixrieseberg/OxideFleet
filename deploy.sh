@@ -97,14 +97,10 @@ if [[ ! -n "$KUDU_SYNC_CMD" ]]; then
   fi
 fi
 
-if [[ ! -e "$EMBER_PATH" ]]; then
-  echo Installing ember-cli
-  eval $NPM_CMD install -g --no-optional --no-bin-links ember-cli
-  eval $NPM_CMD install -g --no-optional --no-bin-links node-sass
-  exitWithMessageOnError "ember-cli and node-sass failed"
-else
-  echo ember-cli already installed, nothing to do
-fi
+echo Installing ember-cli
+eval $NPM_CMD install -g --no-optional --no-bin-links ember-cli
+eval $NPM_CMD install -g --no-optional --no-bin-links node-sass
+exitWithMessageOnError "ember-cli and node-sass failed"
 
 if [[ ! -e "$BOWER_PATH" ]]; then
   echo Installing bower
