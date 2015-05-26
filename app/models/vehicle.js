@@ -7,7 +7,7 @@ import DS from 'ember-data';
 export default DS.Model.extend({
     trips: DS.hasMany('trip', {async: true}),
     name: DS.attr('string'),
-    is_active: DS.attr('boolean'),
+    isActive: DS.attr('boolean', {defaultValue: false}),
     vin: DS.attr('string'),
     make: DS.attr('string'),
     model: DS.attr('string'),
