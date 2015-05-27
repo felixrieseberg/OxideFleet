@@ -97,10 +97,14 @@ if [[ ! -n "$KUDU_SYNC_CMD" ]]; then
   fi
 fi
 
-echo Installing ember-cli
-eval $NPM_CMD install -g --no-optional --no-bin-links ember-cli
-eval $NPM_CMD install -g --no-optional --no-bin-links node-sass
-exitWithMessageOnError "ember-cli and node-sass failed"
+if [[ ! -e "$EMBER_PATH" ]]; then
+  echo Installing ember-cli
+  eval $NPM_CMD install -g --no-optional --no-bin-links ember-cli
+  eval $NPM_CMD install -g --no-optional --no-bin-links node-sass
+  exitWithMessageOnError "ember-cli and node-sass failed"
+else
+  echo ember-cli already installed, nothing to do
+fi
 
 if [[ ! -e "$BOWER_PATH" ]]; then
   echo Installing bower
@@ -133,9 +137,6 @@ exitWithMessageOnError "bower install failed"
 echo Build the dist folder
 eval $AZUREDEPLOY_CMD build
 exitWithMessageOnError "ember-cli-azure-deploy build failed"
-
-echo Copy web.config to the dist folder
-cp web.config dist\
 
 ##################################################################################################################################
 # Deployment
