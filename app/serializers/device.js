@@ -6,7 +6,7 @@ import DS from 'ember-data';
 export default DS.LSSerializer.extend({
     // TODO: Update with the actual principal.id
     extractSingle: function (store, typeClass, payload) {
-        payload.vehicle = '553ac59934dff597a9708c71';
+        payload.vehicle = '54d01ed20eabba6304eded64';
         return this._super(store, typeClass, payload);
     }
 });
