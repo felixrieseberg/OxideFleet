@@ -14,29 +14,52 @@ $marginunit: $baseunit / 6;
 @import 'login';
 @import 'tooltips';
 
-body, html {
+body,
+html
+{
     background-color: $primary-background-color;
 }
 
-[data-ember-action] {
-  cursor: pointer;
+[data-ember-action]
+{
+    cursor: pointer;
 }
 
-html {
+html
+{
     overflow: hidden;
+
     height: 100%;
 }
 
-body {
-    height: 100%;
+body
+{
     overflow: auto;
+
+    height: 100%;
 }
 
-.hidden {
+.hidden
+{
     display: none;
     visibility: hidden;
 }
 
-.clearfix {
+.clearfix
+{
     overflow: auto;
+}
+
+.background-loader
+{
+    width: 100px;
+    height: 100px;
+
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
 }
