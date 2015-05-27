@@ -37,7 +37,7 @@ module.exports = function(environment) {
       'script-src': "'unsafe-inline' 'self' https://cdn.mxpnl.com https://api.nitrogen.io http://dev.virtualearth.net http://ecn.dev.virtualearth.net", // Allow scripts from https://cdn.mxpnl.com
       'font-src': "'self' http://fonts.gstatic.com", // Allow fonts to be loaded from http://fonts.gstatic.com
       'connect-src': "'self' https://messaging-production.nitrogen.io:4200 https://messaging-production.nitrogen.io wss://messaging-production.nitrogen.io https://api.mixpanel.com https://api.nitrogen.io http://demo2736407.mockable.io", // Allow data (ajax/websocket) from api.mixpanel.com and custom-api.local
-      'img-src': "'self' http://*.virtualearth.net",
+      'img-src': "'self' http://*.virtualearth.net http://placehold.it/110x100",
       'style-src': "'self' 'unsafe-inline' http://ecn.dev.virtualearth.net http://fonts.googleapis.com", // Allow inline styles and loaded CSS from http://fonts.googleapis.com 
       'media-src': "'self'",
       'object-src': "'self'"
