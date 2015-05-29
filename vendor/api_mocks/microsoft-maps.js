@@ -1,6 +1,4 @@
 (function() {
-
-    
     function getMetaContent() {
         var metas = window.document.getElementsByTagName('meta');
         for (var i = 0; i < metas.length; i++) {
@@ -27,9 +25,7 @@
 
     var Microsoft = {
         Maps: {
-
             Color: {
-
                 fromHex: function (hex) {
                     Microsoft.assert.ok(typeof hex === 'string' && hex.indexOf('#') > -1);
                 }

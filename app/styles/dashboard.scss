@@ -221,6 +221,7 @@
                 li {
                     border-bottom: 1px solid rgb(224, 224, 224);
                     padding-bottom: 4px;
+                    width: 296px;
                 }
 
                 li:last-of-type {
@@ -260,14 +261,4 @@
     }
 
     
-}
-
-@include desktop {
-     /*.cards::after {
-        content: "";
-        display: block;
-        float: left;
-        height: calc( 100vh * 0.3 );
-        width: 320px;
-    }*/
 }
