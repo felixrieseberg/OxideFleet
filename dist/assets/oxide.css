@@ -8339,10 +8339,12 @@ div.preview {
     width: inherit; }
     .cards .card .collection.carlist, .cards .card .collection.carlist.expanded {
       min-height: 160px;
-      max-height: calc(100vh * 0.30 - 50px) !important; }
+      max-height: calc(100vh * 0.30 - 50px) !important;
+      overflow: scroll; }
     .cards .card.car-selected {
       min-height: 224px;
-      max-height: calc(100vh * 0.30 - 50px) !important; } }
+      max-height: calc(100vh * 0.30 - 50px) !important;
+      overflow: scroll; } }
 
 /*** Colors ***/
 .bg {
