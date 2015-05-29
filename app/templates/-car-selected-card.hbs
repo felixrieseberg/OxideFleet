@@ -33,12 +33,24 @@
                 <img src="assets/img/mock_sparkline.png" width="250" />
             </div>
         {{/if}}
+        <div class="trips">
+            <h4>Trips</h4>
+            <ul>
+            {{#each trip in selectedCar.vehicle.trips}}
+                <li>
+                    {{pretty-Date trip.tripEvents.firstObject.timestamp}} <span class="badge">{{time-length trip.tripEvents.firstObject.timestamp trip.tripEvents.lastObject.timestamp}}</span>
+                </li>
+            {{else}}
+                <li>No trips recorded yet.</li>
+            {{/each}}
+            </ul>
+        </div>
         {{!-- Notifications --}}
-        <div class="notifications">
+        {{!-- <div class="notifications">
             {{#if selectedCar.vehicle.hasNotifications}}
             {{else}}
             <p>No notifications for this vehicle</p>
             {{/if}}
-        </div>
+        </div> --}}
     </div>
 </div>

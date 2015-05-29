@@ -203,9 +203,30 @@
                 }
             }
 
-            .notifications {
+            .notifications, .trips {
                 padding: 13px 20px 13px;
                 clear: both;
+            }
+
+            .trips {
+                h4 {
+                    font-size: $font-size-sub-headline;
+                    margin: 0;
+                }
+
+                ul {
+                    margin: 0;
+                }
+
+                li {
+                    border-bottom: 1px solid rgb(224, 224, 224);
+                    padding-bottom: 4px;
+                }
+
+                li:last-of-type {
+                    border-bottom: none;
+                    padding-bottom: 0;
+                }
             }
             
         }

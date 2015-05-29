@@ -90,6 +90,7 @@ var nitrogenEmberUtils = {
         device.set('tags', principal.tags);
         device.set('type', principal.type);
         device.set('location', principal.location);
+        device.set('gps', []);
 
         return device.save();
     },
