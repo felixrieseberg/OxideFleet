@@ -340,7 +340,7 @@ export default Ember.ArrayController.extend({
                 });
 
                 // Tooltip
-                this.send('addPinTooltip', pin, device.get('name'));
+                this.send('createTooltipHandlers', pin, device.get('name'), device);
 
                 // Push objects to map
                 map.entities.push(pin);
@@ -349,13 +349,15 @@ export default Ember.ArrayController.extend({
         },
 
         /**
-         * Adds a tooltip for a pushpin
+         * Adds a tooltip and a click handler for a pushpin
          * @param {object} pin pushin
          */
-        addPinTooltip: function (pin, tooltipText) {
+        createTooltipHandlers: function (pin, tooltipText, device) {
             if (!pin || !tooltipText || !Microsoft || !Microsoft.Maps.Events) {
                 return;
             }
+
+            var self = this;
 
             // Create Mouse Over Handler
             Microsoft.Maps.Events.addHandler(pin, 'mouseover', function (e) {
@@ -380,6 +382,11 @@ export default Ember.ArrayController.extend({
             // Create Mouse Out Handler
             Microsoft.Maps.Events.addHandler(pin, 'mouseout', function () {
                 $('.tipr_container_bottom').remove();
+            });
+
+            // Create Click Handler
+            Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+                self.send('selectCar', device);
             });
         },
 
