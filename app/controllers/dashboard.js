@@ -255,10 +255,12 @@ export default Ember.ArrayController.extend({
             var locations = device.get('gps'),
                 lastLocation = locations[locations.length - 1];
 
-            this.send('centerMap', {
-                'latitude': lastLocation.latitude,
-                'longitude': lastLocation.longitude
-            });
+            if (lastLocation) {
+                this.send('centerMap', {
+                    'latitude': lastLocation.latitude,
+                    'longitude': lastLocation.longitude
+                });
+            }
         },
 
         /**
