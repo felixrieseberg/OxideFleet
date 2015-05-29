@@ -11,6 +11,7 @@ export default Ember.ArrayController.extend({
     trackedCars: [],
     selectedCar: null,
     showOnlyActiveCars: true,
+    selectedTripPathEntityId: undefined,
 
     /**
      * Are any cars in the model?
@@ -36,6 +37,28 @@ export default Ember.ArrayController.extend({
             return device.get('vehicle.isActive');
         });
     }),
+
+    /**
+     * Creates a path object on the map entity collection,
+     * allowing us to later just modify that path object
+     * if the user selects a trip
+     */
+    setupSelectedPath: function () {
+        Ember.run.scheduleOnce('afterRender', () => {
+            var map = this.get('mapReference'),
+            pathOptions = {
+                    strokeColor: new Microsoft.Maps.Color.fromHex('#DE0416'),
+                    strokeThickness: 5
+                },
+            path = new Microsoft.Maps.Polyline([], pathOptions);
+
+            if (map) {
+                map.entities.insert(path, 0);
+            } else {
+                console.info('Bing Maps Reference not found, trip path display might malfuction');
+            }
+        });
+    }.on('init'),
 
     /**
      * Add all cars to the 'tracked' list on init
@@ -369,6 +392,60 @@ export default Ember.ArrayController.extend({
             Ember.$('.carlist').removeClass('expanded');
 
             this.set('selectedCar', null);
+            this.send('clearTripPath');
+        },
+
+        /**
+         * Selects a trip, getting it's individual trip events and
+         * adding a path for said events to the map
+         * @param  {DS.Model trip} trip
+         */
+        selectTrip: function (trip) {
+            var events = trip.get('tripEvents').content.currentState;
+            this.send('drawPathFromEvents', events);
+        },
+
+        /**
+         * Draws a 'selected trip' path on the map
+         * @param  {Array of DS.Model TripEvent} events
+         */
+        drawPathFromEvents: function (events) {
+            var pathLocations = [],
+                map = this.get('mapReference'),
+                path;
+
+            // First, get the selected path. It should always be the first entity
+            // on the map
+            path = map.entities.get(0);
+
+            // Then, add the path from the events
+            for (let i = 0; i < events.length; i = i + 1) {
+                pathLocations.push({
+                    'latitude': events[i].get('location').get('latitude'),
+                    'longitude': events[i].get('location').get('longitude')
+                });
+            }
+
+            path.setLocations(pathLocations);
+
+            // Center map on beginning of path
+            if (events && events.length > 0) {
+                this.send('centerMap', {
+                    'latitude': events[0].get('location').get('longitude'),
+                    'longitude': events[0].get('location').get('latitude')
+                });
+            }
+        },
+
+        /**
+         * Resets the path for the currently selected trip by
+         * filling said path on the map EntityCollection with 0 locations
+         */
+        clearTripPath: function () {
+            var map = this.get('mapReference'),
+                path = map.entities.get(0);
+
+            path.setLocations([]);
         }
     }
 });

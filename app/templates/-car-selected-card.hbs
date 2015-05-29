@@ -37,7 +37,7 @@
             <h4>Trips</h4>
             <ul>
             {{#each trip in selectedCar.vehicle.trips}}
-                <li>
+                <li {{action "selectTrip" trip}}>
                     {{pretty-Date trip.tripEvents.firstObject.timestamp}} <span class="badge">{{time-length trip.tripEvents.firstObject.timestamp trip.tripEvents.lastObject.timestamp}}</span>
                 </li>
             {{else}}
@@ -45,12 +45,5 @@
             {{/each}}
             </ul>
         </div>
-        {{!-- Notifications --}}
-        {{!-- <div class="notifications">
-            {{#if selectedCar.vehicle.hasNotifications}}
-            {{else}}
-            <p>No notifications for this vehicle</p>
-            {{/if}}
-        </div> --}}
     </div>
 </div>
