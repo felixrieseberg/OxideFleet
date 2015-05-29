@@ -977,8 +977,17 @@ define('oxide/controllers/dashboard', ['exports', 'ember'], function (exports, E
         mapEntityTracker: [],
         trackedCars: [],
         selectedCar: null,
+        selectedDriver: null,
         showOnlyActiveCars: true,
         selectedTripPathEntityId: undefined,
+        driverViewVisible: false,
+
+        /**
+         * An array containing all the drivers in the store (aka on the API)
+         */
+        drivers: Ember['default'].computed(function () {
+            return this.store.find("driver");
+        }),
 
         /**
          * Are any cars in the model?
@@ -1422,6 +1431,34 @@ define('oxide/controllers/dashboard', ['exports', 'ember'], function (exports, E
                     path = map.entities.get(0);
 
                 path.setLocations([]);
+            },
+
+            /**
+             * Toggles between the 'Drivers' and the 'Vehicles' card
+             */
+            toggleDriverView: function toggleDriverView() {
+                this.toggleProperty("driverViewVisible");
+                this.send("toggleDriverIcon");
+            },
+
+            /**
+             * Marks a given driver as 'selected'
+             * @param  {Ember Data Record} device - Driver to select
+             */
+            selectDriver: function selectDriver(driver) {
+                Ember['default'].$(".driverlist").addClass("expanded");
+
+                this.set("selectedDriver", driver);
+                this.send("centerOnCar", driver);
+            },
+
+            /**
+             * Sets the currently selected driver to null
+             */
+            deselectDriver: function deselectDriver() {
+                Ember['default'].$(".driverlist").removeClass("expanded");
+
+                this.set("selectedDriver", null);
             }
         }
     });
@@ -1815,7 +1852,7 @@ define('oxide/models/driver', ['exports', 'ember-data'], function (exports, DS) 
 
   exports['default'] = DS['default'].Model.extend({
     name: DS['default'].attr("string"),
-    driver_score: DS['default'].attr("number")
+    driverScore: DS['default'].attr("number")
   });
 
 });
@@ -1955,6 +1992,13 @@ define('oxide/routes/dashboard', ['exports', 'ember', 'simple-auth/mixins/authen
             },
 
             /**
+             * Toggle the driver view
+             */
+            toggleDriverIcon: function toggleDriverIcon() {
+                Ember['default'].$("#driversMenuButton").toggleClass("selected");
+            },
+
+            /**
              * Toggle the list of vehicles
              */
             toggleVehicleList: function toggleVehicleList() {
@@ -1962,6 +2006,7 @@ define('oxide/routes/dashboard', ['exports', 'ember', 'simple-auth/mixins/authen
                     $icon = Ember['default'].$(".vehicle-list > .card-content > .card-title > i");
 
                 $container.toggleClass("collapsed");
+
                 if ($icon.hasClass("mdi-navigation-expand-less")) {
                     $icon.removeClass("mdi-navigation-expand-less");
                     $icon.addClass("mdi-navigation-expand-more");
@@ -2146,6 +2191,294 @@ define('oxide/templates/-car-list-item', ['exports'], function (exports) {
   }()));
 
 });
+define('oxide/templates/-car-list', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      var child0 = (function() {
+        return {
+          isHTMLBars: true,
+          revision: "Ember@1.11.0",
+          blockParams: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          build: function build(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("                ");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createComment("");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createTextNode("\n");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          render: function render(context, env, contextualElement) {
+            var dom = env.dom;
+            var hooks = env.hooks, inline = hooks.inline;
+            dom.detectNamespace(contextualElement);
+            var fragment;
+            if (env.useFragmentCache && dom.canClone) {
+              if (this.cachedFragment === null) {
+                fragment = this.build(dom);
+                if (this.hasRendered) {
+                  this.cachedFragment = fragment;
+                } else {
+                  this.hasRendered = true;
+                }
+              }
+              if (this.cachedFragment) {
+                fragment = dom.cloneNode(this.cachedFragment, true);
+              }
+            } else {
+              fragment = this.build(dom);
+            }
+            var morph0 = dom.createMorphAt(fragment,1,1,contextualElement);
+            inline(env, morph0, context, "partial", ["car-list-item"], {});
+            return fragment;
+          }
+        };
+      }());
+      return {
+        isHTMLBars: true,
+        revision: "Ember@1.11.0",
+        blockParams: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        build: function build(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        render: function render(context, env, contextualElement) {
+          var dom = env.dom;
+          var hooks = env.hooks, get = hooks.get, block = hooks.block;
+          dom.detectNamespace(contextualElement);
+          var fragment;
+          if (env.useFragmentCache && dom.canClone) {
+            if (this.cachedFragment === null) {
+              fragment = this.build(dom);
+              if (this.hasRendered) {
+                this.cachedFragment = fragment;
+              } else {
+                this.hasRendered = true;
+              }
+            }
+            if (this.cachedFragment) {
+              fragment = dom.cloneNode(this.cachedFragment, true);
+            }
+          } else {
+            fragment = this.build(dom);
+          }
+          var morph0 = dom.createMorphAt(fragment,0,0,contextualElement);
+          dom.insertBoundary(fragment, null);
+          dom.insertBoundary(fragment, 0);
+          block(env, morph0, context, "each", [get(env, context, "activeCars")], {"keyword": "car"}, child0, null);
+          return fragment;
+        }
+      };
+    }());
+    var child1 = (function() {
+      var child0 = (function() {
+        return {
+          isHTMLBars: true,
+          revision: "Ember@1.11.0",
+          blockParams: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          build: function build(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("                ");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createComment("");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createTextNode("\n");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          render: function render(context, env, contextualElement) {
+            var dom = env.dom;
+            var hooks = env.hooks, inline = hooks.inline;
+            dom.detectNamespace(contextualElement);
+            var fragment;
+            if (env.useFragmentCache && dom.canClone) {
+              if (this.cachedFragment === null) {
+                fragment = this.build(dom);
+                if (this.hasRendered) {
+                  this.cachedFragment = fragment;
+                } else {
+                  this.hasRendered = true;
+                }
+              }
+              if (this.cachedFragment) {
+                fragment = dom.cloneNode(this.cachedFragment, true);
+              }
+            } else {
+              fragment = this.build(dom);
+            }
+            var morph0 = dom.createMorphAt(fragment,1,1,contextualElement);
+            inline(env, morph0, context, "partial", ["car-list-item"], {});
+            return fragment;
+          }
+        };
+      }());
+      return {
+        isHTMLBars: true,
+        revision: "Ember@1.11.0",
+        blockParams: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        build: function build(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        render: function render(context, env, contextualElement) {
+          var dom = env.dom;
+          var hooks = env.hooks, get = hooks.get, block = hooks.block;
+          dom.detectNamespace(contextualElement);
+          var fragment;
+          if (env.useFragmentCache && dom.canClone) {
+            if (this.cachedFragment === null) {
+              fragment = this.build(dom);
+              if (this.hasRendered) {
+                this.cachedFragment = fragment;
+              } else {
+                this.hasRendered = true;
+              }
+            }
+            if (this.cachedFragment) {
+              fragment = dom.cloneNode(this.cachedFragment, true);
+            }
+          } else {
+            fragment = this.build(dom);
+          }
+          var morph0 = dom.createMorphAt(fragment,0,0,contextualElement);
+          dom.insertBoundary(fragment, null);
+          dom.insertBoundary(fragment, 0);
+          block(env, morph0, context, "each", [get(env, context, "model")], {"keyword": "car"}, child0, null);
+          return fragment;
+        }
+      };
+    }());
+    return {
+      isHTMLBars: true,
+      revision: "Ember@1.11.0",
+      blockParams: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      build: function build(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"class","card vehicle-list white");
+        var el2 = dom.createTextNode("\n    ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","card-content");
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","card-title");
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("span");
+        var el5 = dom.createTextNode("Tracked Vehicles");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("i");
+        dom.setAttribute(el4,"class","mdi-navigation-expand-less right");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","filter-selector");
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("form");
+        dom.setAttribute(el4,"action","#");
+        var el5 = dom.createTextNode("\n                ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("p");
+        var el6 = dom.createTextNode("\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("label");
+        dom.setAttribute(el6,"for","showOnlyActiveCars");
+        var el7 = dom.createTextNode("Show Active Cars Only");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n                ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n            ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("ul");
+        dom.setAttribute(el3,"class","carlist collection");
+        var el4 = dom.createTextNode("\n");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createComment("");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("        ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      render: function render(context, env, contextualElement) {
+        var dom = env.dom;
+        var hooks = env.hooks, element = hooks.element, get = hooks.get, inline = hooks.inline, block = hooks.block;
+        dom.detectNamespace(contextualElement);
+        var fragment;
+        if (env.useFragmentCache && dom.canClone) {
+          if (this.cachedFragment === null) {
+            fragment = this.build(dom);
+            if (this.hasRendered) {
+              this.cachedFragment = fragment;
+            } else {
+              this.hasRendered = true;
+            }
+          }
+          if (this.cachedFragment) {
+            fragment = dom.cloneNode(this.cachedFragment, true);
+          }
+        } else {
+          fragment = this.build(dom);
+        }
+        var element0 = dom.childAt(fragment, [0, 1]);
+        var element1 = dom.childAt(element0, [1, 3]);
+        var morph0 = dom.createMorphAt(dom.childAt(element0, [3, 1, 1]),1,1);
+        var morph1 = dom.createMorphAt(dom.childAt(element0, [5]),1,1);
+        element(env, element1, context, "action", ["toggleVehicleList"], {});
+        inline(env, morph0, context, "input", [], {"type": "checkbox", "id": "showOnlyActiveCars", "checked": get(env, context, "showOnlyActiveCars")});
+        block(env, morph1, context, "if", [get(env, context, "showOnlyActiveCars")], {}, child0, child1);
+        return fragment;
+      }
+    };
+  }()));
+
+});
 define('oxide/templates/-car-selected-card', ['exports'], function (exports) {
 
   'use strict';
@@ -2265,7 +2598,7 @@ define('oxide/templates/-car-selected-card', ['exports'], function (exports) {
           dom.appendChild(el1, el2);
           var el2 = dom.createElement("img");
           dom.setAttribute(el2,"src","assets/img/mock_sparkline.png");
-          dom.setAttribute(el2,"width","250");
+          dom.setAttribute(el2,"width","245");
           dom.appendChild(el1, el2);
           var el2 = dom.createTextNode("\n            ");
           dom.appendChild(el1, el2);
@@ -2599,6 +2932,321 @@ define('oxide/templates/-car-selected-card', ['exports'], function (exports) {
   }()));
 
 });
+define('oxide/templates/-driver-list-item', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    return {
+      isHTMLBars: true,
+      revision: "Ember@1.11.0",
+      blockParams: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      build: function build(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("li");
+        dom.setAttribute(el1,"class","collection-item car");
+        var el2 = dom.createTextNode("\n    ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("h4");
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n    ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("p");
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("small");
+        dom.setAttribute(el3,"class","vin");
+        var el4 = dom.createTextNode("Driver Score: ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createComment("");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      render: function render(context, env, contextualElement) {
+        var dom = env.dom;
+        var hooks = env.hooks, get = hooks.get, element = hooks.element, content = hooks.content;
+        dom.detectNamespace(contextualElement);
+        var fragment;
+        if (env.useFragmentCache && dom.canClone) {
+          if (this.cachedFragment === null) {
+            fragment = this.build(dom);
+            if (this.hasRendered) {
+              this.cachedFragment = fragment;
+            } else {
+              this.hasRendered = true;
+            }
+          }
+          if (this.cachedFragment) {
+            fragment = dom.cloneNode(this.cachedFragment, true);
+          }
+        } else {
+          fragment = this.build(dom);
+        }
+        var element0 = dom.childAt(fragment, [0]);
+        var morph0 = dom.createMorphAt(dom.childAt(element0, [1]),0,0);
+        var morph1 = dom.createMorphAt(dom.childAt(element0, [3, 1]),1,1);
+        element(env, element0, context, "action", ["selectDriver", get(env, context, "driver")], {});
+        content(env, morph0, context, "driver.name");
+        content(env, morph1, context, "driver.driverScore");
+        return fragment;
+      }
+    };
+  }()));
+
+});
+define('oxide/templates/-driver-list', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      return {
+        isHTMLBars: true,
+        revision: "Ember@1.11.0",
+        blockParams: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        build: function build(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("                ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        render: function render(context, env, contextualElement) {
+          var dom = env.dom;
+          var hooks = env.hooks, inline = hooks.inline;
+          dom.detectNamespace(contextualElement);
+          var fragment;
+          if (env.useFragmentCache && dom.canClone) {
+            if (this.cachedFragment === null) {
+              fragment = this.build(dom);
+              if (this.hasRendered) {
+                this.cachedFragment = fragment;
+              } else {
+                this.hasRendered = true;
+              }
+            }
+            if (this.cachedFragment) {
+              fragment = dom.cloneNode(this.cachedFragment, true);
+            }
+          } else {
+            fragment = this.build(dom);
+          }
+          var morph0 = dom.createMorphAt(fragment,1,1,contextualElement);
+          inline(env, morph0, context, "partial", ["driver-list-item"], {});
+          return fragment;
+        }
+      };
+    }());
+    return {
+      isHTMLBars: true,
+      revision: "Ember@1.11.0",
+      blockParams: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      build: function build(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"class","card vehicle-list white");
+        var el2 = dom.createTextNode("\n    ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","card-content");
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","card-title");
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("span");
+        var el5 = dom.createTextNode("Drivers");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("i");
+        dom.setAttribute(el4,"class","mdi-navigation-expand-less right");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("ul");
+        dom.setAttribute(el3,"class","carlist collection");
+        var el4 = dom.createTextNode("\n");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createComment("");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("        ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      render: function render(context, env, contextualElement) {
+        var dom = env.dom;
+        var hooks = env.hooks, element = hooks.element, get = hooks.get, block = hooks.block;
+        dom.detectNamespace(contextualElement);
+        var fragment;
+        if (env.useFragmentCache && dom.canClone) {
+          if (this.cachedFragment === null) {
+            fragment = this.build(dom);
+            if (this.hasRendered) {
+              this.cachedFragment = fragment;
+            } else {
+              this.hasRendered = true;
+            }
+          }
+          if (this.cachedFragment) {
+            fragment = dom.cloneNode(this.cachedFragment, true);
+          }
+        } else {
+          fragment = this.build(dom);
+        }
+        var element0 = dom.childAt(fragment, [0, 1]);
+        var element1 = dom.childAt(element0, [1, 3]);
+        var morph0 = dom.createMorphAt(dom.childAt(element0, [3]),1,1);
+        element(env, element1, context, "action", ["toggleVehicleList"], {});
+        block(env, morph0, context, "each", [get(env, context, "drivers")], {"keyword": "driver"}, child0, null);
+        return fragment;
+      }
+    };
+  }()));
+
+});
+define('oxide/templates/-driver-selected-card', ['exports'], function (exports) {
+
+  'use strict';
+
+  exports['default'] = Ember.HTMLBars.template((function() {
+    return {
+      isHTMLBars: true,
+      revision: "Ember@1.11.0",
+      blockParams: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      build: function build(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1,"class","card white car-selected");
+        var el2 = dom.createTextNode("\n    ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2,"class","card-content");
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","card-title");
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("span");
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("i");
+        dom.setAttribute(el4,"class","mdi-navigation-close right");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","driverscore clearfix");
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4,"class","score");
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("span");
+        var el5 = dom.createTextNode("Current Driver Score");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("img");
+        dom.setAttribute(el4,"src","assets/img/mock_sparkline.png");
+        dom.setAttribute(el4,"width","245");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","trips");
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      render: function render(context, env, contextualElement) {
+        var dom = env.dom;
+        var hooks = env.hooks, content = hooks.content, element = hooks.element;
+        dom.detectNamespace(contextualElement);
+        var fragment;
+        if (env.useFragmentCache && dom.canClone) {
+          if (this.cachedFragment === null) {
+            fragment = this.build(dom);
+            if (this.hasRendered) {
+              this.cachedFragment = fragment;
+            } else {
+              this.hasRendered = true;
+            }
+          }
+          if (this.cachedFragment) {
+            fragment = dom.cloneNode(this.cachedFragment, true);
+          }
+        } else {
+          fragment = this.build(dom);
+        }
+        var element0 = dom.childAt(fragment, [0, 1]);
+        var element1 = dom.childAt(element0, [1]);
+        var element2 = dom.childAt(element1, [3]);
+        var morph0 = dom.createMorphAt(dom.childAt(element1, [1]),0,0);
+        var morph1 = dom.createMorphAt(dom.childAt(element0, [3, 1]),0,0);
+        content(env, morph0, context, "selectedDriver.name");
+        element(env, element2, context, "action", ["deselectDriver"], {});
+        content(env, morph1, context, "selectedDriver.driverScore");
+        return fragment;
+      }
+    };
+  }()));
+
+});
 define('oxide/templates/-menu', ['exports'], function (exports) {
 
   'use strict';
@@ -2653,11 +3301,31 @@ define('oxide/templates/-menu', ['exports'], function (exports) {
         var el2 = dom.createTextNode("\n    ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("li");
+        dom.setAttribute(el2,"class","");
+        dom.setAttribute(el2,"id","driversMenuButton");
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("i");
+        dom.setAttribute(el3,"class","mdi-action-account-child");
+        dom.setAttribute(el3,"title","Drivers");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n        ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("span");
+        var el4 = dom.createTextNode("Drivers");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n    ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
         dom.setAttribute(el2,"class","logout");
         var el3 = dom.createTextNode("\n        ");
         dom.appendChild(el2, el3);
         var el3 = dom.createElement("i");
-        dom.setAttribute(el3,"class","mdi-social-person");
+        dom.setAttribute(el3,"class","mdi-navigation-close");
         dom.setAttribute(el3,"title","Sign out");
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n        ");
@@ -2697,8 +3365,10 @@ define('oxide/templates/-menu', ['exports'], function (exports) {
         var element0 = dom.childAt(fragment, [0]);
         var element1 = dom.childAt(element0, [1]);
         var element2 = dom.childAt(element0, [5]);
+        var element3 = dom.childAt(element0, [7]);
         element(env, element1, context, "action", ["toggleSideNav"], {});
-        element(env, element2, context, "action", ["invalidateSession"], {});
+        element(env, element2, context, "action", ["toggleDriverView"], {});
+        element(env, element3, context, "action", ["invalidateSession"], {});
         return fragment;
       }
     };
@@ -5381,7 +6051,7 @@ define('oxide/templates/dashboard', ['exports'], function (exports) {
           hasRendered: false,
           build: function build(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("                            ");
+            var el1 = dom.createTextNode("                    ");
             dom.appendChild(el0, el1);
             var el1 = dom.createComment("");
             dom.appendChild(el0, el1);
@@ -5410,136 +6080,11 @@ define('oxide/templates/dashboard', ['exports'], function (exports) {
               fragment = this.build(dom);
             }
             var morph0 = dom.createMorphAt(fragment,1,1,contextualElement);
-            inline(env, morph0, context, "partial", ["car-list-item"], {});
+            inline(env, morph0, context, "partial", ["driver-selected-card"], {});
             return fragment;
           }
         };
       }());
-      return {
-        isHTMLBars: true,
-        revision: "Ember@1.11.0",
-        blockParams: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        build: function build(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createComment("");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        render: function render(context, env, contextualElement) {
-          var dom = env.dom;
-          var hooks = env.hooks, get = hooks.get, block = hooks.block;
-          dom.detectNamespace(contextualElement);
-          var fragment;
-          if (env.useFragmentCache && dom.canClone) {
-            if (this.cachedFragment === null) {
-              fragment = this.build(dom);
-              if (this.hasRendered) {
-                this.cachedFragment = fragment;
-              } else {
-                this.hasRendered = true;
-              }
-            }
-            if (this.cachedFragment) {
-              fragment = dom.cloneNode(this.cachedFragment, true);
-            }
-          } else {
-            fragment = this.build(dom);
-          }
-          var morph0 = dom.createMorphAt(fragment,0,0,contextualElement);
-          dom.insertBoundary(fragment, null);
-          dom.insertBoundary(fragment, 0);
-          block(env, morph0, context, "each", [get(env, context, "activeCars")], {"keyword": "car"}, child0, null);
-          return fragment;
-        }
-      };
-    }());
-    var child1 = (function() {
-      var child0 = (function() {
-        return {
-          isHTMLBars: true,
-          revision: "Ember@1.11.0",
-          blockParams: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          build: function build(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("                            ");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createComment("");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("\n");
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          render: function render(context, env, contextualElement) {
-            var dom = env.dom;
-            var hooks = env.hooks, inline = hooks.inline;
-            dom.detectNamespace(contextualElement);
-            var fragment;
-            if (env.useFragmentCache && dom.canClone) {
-              if (this.cachedFragment === null) {
-                fragment = this.build(dom);
-                if (this.hasRendered) {
-                  this.cachedFragment = fragment;
-                } else {
-                  this.hasRendered = true;
-                }
-              }
-              if (this.cachedFragment) {
-                fragment = dom.cloneNode(this.cachedFragment, true);
-              }
-            } else {
-              fragment = this.build(dom);
-            }
-            var morph0 = dom.createMorphAt(fragment,1,1,contextualElement);
-            inline(env, morph0, context, "partial", ["car-list-item"], {});
-            return fragment;
-          }
-        };
-      }());
-      return {
-        isHTMLBars: true,
-        revision: "Ember@1.11.0",
-        blockParams: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        build: function build(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createComment("");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        render: function render(context, env, contextualElement) {
-          var dom = env.dom;
-          var hooks = env.hooks, get = hooks.get, block = hooks.block;
-          dom.detectNamespace(contextualElement);
-          var fragment;
-          if (env.useFragmentCache && dom.canClone) {
-            if (this.cachedFragment === null) {
-              fragment = this.build(dom);
-              if (this.hasRendered) {
-                this.cachedFragment = fragment;
-              } else {
-                this.hasRendered = true;
-              }
-            }
-            if (this.cachedFragment) {
-              fragment = dom.cloneNode(this.cachedFragment, true);
-            }
-          } else {
-            fragment = this.build(dom);
-          }
-          var morph0 = dom.createMorphAt(fragment,0,0,contextualElement);
-          dom.insertBoundary(fragment, null);
-          dom.insertBoundary(fragment, 0);
-          block(env, morph0, context, "each", [get(env, context, "model")], {"keyword": "car"}, child0, null);
-          return fragment;
-        }
-      };
-    }());
-    var child2 = (function() {
       return {
         isHTMLBars: true,
         revision: "Ember@1.11.0",
@@ -5552,13 +6097,15 @@ define('oxide/templates/dashboard', ['exports'], function (exports) {
           dom.appendChild(el0, el1);
           var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
+          var el1 = dom.createTextNode("\n\n");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
           return el0;
         },
         render: function render(context, env, contextualElement) {
           var dom = env.dom;
-          var hooks = env.hooks, inline = hooks.inline;
+          var hooks = env.hooks, inline = hooks.inline, get = hooks.get, block = hooks.block;
           dom.detectNamespace(contextualElement);
           var fragment;
           if (env.useFragmentCache && dom.canClone) {
@@ -5577,7 +6124,101 @@ define('oxide/templates/dashboard', ['exports'], function (exports) {
             fragment = this.build(dom);
           }
           var morph0 = dom.createMorphAt(fragment,1,1,contextualElement);
-          inline(env, morph0, context, "partial", ["car-selected-card"], {});
+          var morph1 = dom.createMorphAt(fragment,3,3,contextualElement);
+          dom.insertBoundary(fragment, null);
+          inline(env, morph0, context, "partial", ["driver-list"], {});
+          block(env, morph1, context, "if", [get(env, context, "selectedDriver")], {}, child0, null);
+          return fragment;
+        }
+      };
+    }());
+    var child1 = (function() {
+      var child0 = (function() {
+        return {
+          isHTMLBars: true,
+          revision: "Ember@1.11.0",
+          blockParams: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          build: function build(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("                    ");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createComment("");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createTextNode("\n");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          render: function render(context, env, contextualElement) {
+            var dom = env.dom;
+            var hooks = env.hooks, inline = hooks.inline;
+            dom.detectNamespace(contextualElement);
+            var fragment;
+            if (env.useFragmentCache && dom.canClone) {
+              if (this.cachedFragment === null) {
+                fragment = this.build(dom);
+                if (this.hasRendered) {
+                  this.cachedFragment = fragment;
+                } else {
+                  this.hasRendered = true;
+                }
+              }
+              if (this.cachedFragment) {
+                fragment = dom.cloneNode(this.cachedFragment, true);
+              }
+            } else {
+              fragment = this.build(dom);
+            }
+            var morph0 = dom.createMorphAt(fragment,1,1,contextualElement);
+            inline(env, morph0, context, "partial", ["car-selected-card"], {});
+            return fragment;
+          }
+        };
+      }());
+      return {
+        isHTMLBars: true,
+        revision: "Ember@1.11.0",
+        blockParams: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        build: function build(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("                ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n\n");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        render: function render(context, env, contextualElement) {
+          var dom = env.dom;
+          var hooks = env.hooks, inline = hooks.inline, get = hooks.get, block = hooks.block;
+          dom.detectNamespace(contextualElement);
+          var fragment;
+          if (env.useFragmentCache && dom.canClone) {
+            if (this.cachedFragment === null) {
+              fragment = this.build(dom);
+              if (this.hasRendered) {
+                this.cachedFragment = fragment;
+              } else {
+                this.hasRendered = true;
+              }
+            }
+            if (this.cachedFragment) {
+              fragment = dom.cloneNode(this.cachedFragment, true);
+            }
+          } else {
+            fragment = this.build(dom);
+          }
+          var morph0 = dom.createMorphAt(fragment,1,1,contextualElement);
+          var morph1 = dom.createMorphAt(fragment,3,3,contextualElement);
+          dom.insertBoundary(fragment, null);
+          inline(env, morph0, context, "partial", ["car-list"], {});
+          block(env, morph1, context, "if", [get(env, context, "selectedCar")], {}, child0, null);
           return fragment;
         }
       };
@@ -5611,85 +6252,11 @@ define('oxide/templates/dashboard', ['exports'], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createElement("div");
         dom.setAttribute(el3,"class","cards");
-        var el4 = dom.createTextNode("\n            ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("div");
-        dom.setAttribute(el4,"class","card vehicle-list white");
-        var el5 = dom.createTextNode("\n                ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5,"class","card-content");
-        var el6 = dom.createTextNode("\n                    ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createElement("div");
-        dom.setAttribute(el6,"class","card-title");
-        var el7 = dom.createTextNode("\n                        ");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createElement("span");
-        var el8 = dom.createTextNode("Tracked Vehicles");
-        dom.appendChild(el7, el8);
-        dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n                        ");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createElement("i");
-        dom.setAttribute(el7,"class","mdi-navigation-expand-less right");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n                    ");
-        dom.appendChild(el6, el7);
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n                    ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createElement("div");
-        dom.setAttribute(el6,"class","filter-selector");
-        var el7 = dom.createTextNode("\n                        ");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createElement("form");
-        dom.setAttribute(el7,"action","#");
-        var el8 = dom.createTextNode("\n                            ");
-        dom.appendChild(el7, el8);
-        var el8 = dom.createElement("p");
-        var el9 = dom.createTextNode("\n                                ");
-        dom.appendChild(el8, el9);
-        var el9 = dom.createComment("");
-        dom.appendChild(el8, el9);
-        var el9 = dom.createTextNode("\n                                ");
-        dom.appendChild(el8, el9);
-        var el9 = dom.createElement("label");
-        dom.setAttribute(el9,"for","showOnlyActiveCars");
-        var el10 = dom.createTextNode("Show Active Cars Only");
-        dom.appendChild(el9, el10);
-        dom.appendChild(el8, el9);
-        var el9 = dom.createTextNode("\n                            ");
-        dom.appendChild(el8, el9);
-        dom.appendChild(el7, el8);
-        var el8 = dom.createTextNode("\n                        ");
-        dom.appendChild(el7, el8);
-        dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n                    ");
-        dom.appendChild(el6, el7);
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n                    ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createElement("ul");
-        dom.setAttribute(el6,"class","carlist collection");
-        var el7 = dom.createTextNode("\n");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createComment("");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("                    ");
-        dom.appendChild(el6, el7);
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n                ");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n            ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n\n");
+        var el4 = dom.createTextNode("\n");
         dom.appendChild(el3, el4);
         var el4 = dom.createComment("");
         dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n        ");
+        var el4 = dom.createTextNode("        ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n    ");
@@ -5717,7 +6284,7 @@ define('oxide/templates/dashboard', ['exports'], function (exports) {
       },
       render: function render(context, env, contextualElement) {
         var dom = env.dom;
-        var hooks = env.hooks, inline = hooks.inline, element = hooks.element, get = hooks.get, block = hooks.block;
+        var hooks = env.hooks, inline = hooks.inline, get = hooks.get, block = hooks.block, element = hooks.element;
         dom.detectNamespace(contextualElement);
         var fragment;
         if (env.useFragmentCache && dom.canClone) {
@@ -5736,24 +6303,16 @@ define('oxide/templates/dashboard', ['exports'], function (exports) {
           fragment = this.build(dom);
         }
         var element0 = dom.childAt(fragment, [2]);
-        var element1 = dom.childAt(element0, [1, 1]);
-        var element2 = dom.childAt(element1, [1, 1]);
-        var element3 = dom.childAt(element2, [1, 3]);
-        var element4 = dom.childAt(fragment, [4]);
+        var element1 = dom.childAt(fragment, [4]);
         var morph0 = dom.createMorphAt(dom.childAt(fragment, [0]),1,1);
-        var morph1 = dom.createMorphAt(dom.childAt(element2, [3, 1, 1]),1,1);
-        var morph2 = dom.createMorphAt(dom.childAt(element2, [5]),1,1);
-        var morph3 = dom.createMorphAt(element1,3,3);
-        var morph4 = dom.createMorphAt(element0,3,3);
-        var morph5 = dom.createMorphAt(element4,1,1);
+        var morph1 = dom.createMorphAt(dom.childAt(element0, [1, 1]),1,1);
+        var morph2 = dom.createMorphAt(element0,3,3);
+        var morph3 = dom.createMorphAt(element1,1,1);
         inline(env, morph0, context, "partial", ["menu"], {});
-        element(env, element3, context, "action", ["toggleVehicleList"], {});
-        inline(env, morph1, context, "input", [], {"type": "checkbox", "id": "showOnlyActiveCars", "checked": get(env, context, "showOnlyActiveCars")});
-        block(env, morph2, context, "if", [get(env, context, "showOnlyActiveCars")], {}, child0, child1);
-        block(env, morph3, context, "if", [get(env, context, "selectedCar")], {}, child2, null);
-        inline(env, morph4, context, "ox-map", [], {"mapReference": get(env, context, "mapReference")});
-        element(env, element4, context, "action", ["toggleSideNav"], {});
-        inline(env, morph5, context, "partial", ["menu"], {});
+        block(env, morph1, context, "if", [get(env, context, "driverViewVisible")], {}, child0, child1);
+        inline(env, morph2, context, "ox-map", [], {"mapReference": get(env, context, "mapReference")});
+        element(env, element1, context, "action", ["toggleSideNav"], {});
+        inline(env, morph3, context, "partial", ["menu"], {});
         return fragment;
       }
     };
@@ -8654,7 +9213,7 @@ catch(err) {
 if (runningTests) {
   require("oxide/tests/test-helper");
 } else {
-  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"API_HOST":"http://connected-car-api.azurewebsites.net","name":"oxide","version":"0.0.0.d3fda3ff"});
+  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"API_HOST":"http://demo2736407.mockable.io","name":"oxide","version":"0.0.0.701bbfb9"});
 }
 
 /* jshint ignore:end */
