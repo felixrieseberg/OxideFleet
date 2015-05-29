@@ -1,0 +1,13 @@
+<div class="card vehicle-list white">
+    <div class="card-content">
+        <div class="card-title">
+            <span>Drivers</span>
+            <i class="mdi-navigation-expand-less right" {{action "toggleVehicleList"}}></i>
+        </div>
+        <ul class="carlist collection">
+            {{#each driver in drivers}}
+                {{partial "driver-list-item"}}
+            {{/each}}
+        </ul>
+    </div>
+</div>

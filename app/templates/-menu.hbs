@@ -7,8 +7,12 @@
         <i class="mdi-maps-layers" title="Overview"></i>
         <span>Overview</span>
     </li>
-    <li class="logout" {{action 'invalidateSession' }}>
-        <i class="mdi-social-person" title="Sign out"></i>
+    <li class="" {{action "toggleDriverView"}} id="driversMenuButton">
+        <i class="mdi-action-account-child" title="Drivers"></i>
+        <span>Drivers</span>
+    </li>
+    <li class="logout" {{action "invalidateSession"}}>
+        <i class="mdi-navigation-close" title="Sign out"></i>
         <span>Sign out</span>
     </li>
 </ul>
