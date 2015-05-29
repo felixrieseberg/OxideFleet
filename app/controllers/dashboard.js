@@ -23,6 +23,20 @@ export default Ember.ArrayController.extend({
     }),
 
     /**
+     * Returns the trips driven by the currently selected driver
+     * @return {DS.PromiseArray} The trips driven by the selected driver
+     */
+    selectedDriverTrips: Ember.computed(function () {
+        var selectedDriver = this.get('selectedDriver');
+
+        if (selectedDriver) {
+            return this.store.find('trips', {driver: selectedDriver});
+        } else {
+            return [];
+        }
+    }),
+
+    /**
      * Are any cars in the model?
      * @return {boolean}
      */
