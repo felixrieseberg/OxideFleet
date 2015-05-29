@@ -30,33 +30,16 @@ exitWithMessageOnError "Missing tar. I figured as much."
 # Setup
 # -----
 echo Copy assets to $DEPLOYMENT_TEMP for build
-tar cf - --exclude=node_modules --exclude=bower_components --exclude=dist --exclude=tmp --exclude=.git . | (cd $DEPLOYMENT_TEMP && tar xvf - )
+tar cf - --exclude=node_modules --exclude=bower_components --exclude=tmp --exclude=.git . | (cd $DEPLOYMENT_TEMP && tar xvf - )
 exitWithMessageOnError "Failed to create and extract tarball"
 
 echo Switch to the temp directory
 cd $DEPLOYMENT_TEMP
 
-if [[ -d node_modules ]]; then
-  echo Removing node_modules folder
-  rm -Rf node_modules
-  exitWithMessageOnError "node_modules removal failed"
-fi
-
 SCRIPT_DIR="${BASH_SOURCE[0]%\\*}"
 SCRIPT_DIR="${SCRIPT_DIR%/*}"
 ARTIFACTS=$SCRIPT_DIR/../artifacts
 KUDU_SYNC_CMD=${KUDU_SYNC_CMD//\"}
-NODE_EXE="$PROGRAMFILES\\nodejs\\0.10.32\\node.exe"
-NPM_CMD="\"$NODE_EXE\" \"$PROGRAMFILES\\npm\\1.4.28\\node_modules\\npm\\bin\\npm-cli.js\""
-NODE_MODULES_DIR="$APPDATA\\npm\\node_modules"
-
-EMBER_PATH="$NODE_MODULES_DIR\\ember-cli\\bin\\ember"
-BOWER_PATH="$NODE_MODULES_DIR\\bower\\bin\\bower"
-AZUREDEPLOY_PATH="$NODE_MODULES_DIR\\ember-cli-azure-deploy\\bin\\azure-deploy"
-
-EMBER_CMD="\"$NODE_EXE\" \"$EMBER_PATH\""
-BOWER_CMD="\"$NODE_EXE\" \"$BOWER_PATH\""
-AZUREDEPLOY_CMD="\"$NODE_EXE\" \"$AZUREDEPLOY_PATH\""
 
 if [[ ! -n "$DEPLOYMENT_SOURCE" ]]; then
   DEPLOYMENT_SOURCE=$SCRIPT_DIR
@@ -96,47 +79,6 @@ if [[ ! -n "$KUDU_SYNC_CMD" ]]; then
     KUDU_SYNC_CMD=$APPDATA/npm/node_modules/kuduSync/bin/kuduSync
   fi
 fi
-
-if [[ ! -e "$EMBER_PATH" ]]; then
-  echo Installing ember-cli
-  eval $NPM_CMD install -g --no-optional --no-bin-links ember-cli
-  eval $NPM_CMD install -g --no-optional --no-bin-links node-sass
-  exitWithMessageOnError "ember-cli and node-sass failed"
-else
-  echo ember-cli already installed, nothing to do
-fi
-
-if [[ ! -e "$BOWER_PATH" ]]; then
-  echo Installing bower
-  eval $NPM_CMD install -g bower
-  exitWithMessageOnError "bower failed"
-else
-  echo bower already installed, nothing to do
-fi
-
-if [[ ! -e "$AZUREDEPLOY_PATH" ]]; then
-  echo Installing ember-cli-azure-deploy
-  eval $NPM_CMD install -g ember-cli-azure-deploy
-  exitWithMessageOnError "ember-cli-azure-deploy failed"
-else
-  echo ember-cli-azure-deploy already installed, nothing to do
-fi
-
-##################################################################################################################################
-# Build
-# -----
-
-echo Installing npm modules
-eval $NPM_CMD install --no-optional --no-bin-links
-# exitWithMessageOnError "npm install failed"
-
-echo Installing bower dependencies
-eval $BOWER_CMD install
-exitWithMessageOnError "bower install failed"
-
-echo Build the dist folder
-eval $AZUREDEPLOY_CMD build
-exitWithMessageOnError "ember-cli-azure-deploy build failed"
 
 ##################################################################################################################################
 # Deployment
