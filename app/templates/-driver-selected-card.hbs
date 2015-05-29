@@ -1,0 +1,26 @@
+<div class="card white car-selected">
+    <div class="card-content">
+        <div class="card-title">
+            <span>{{selectedDriver.name}}</span>
+            <i class="mdi-navigation-close right" {{action "deselectDriver"}}></i>
+        </div>
+        {{!-- Driver Score --}}
+        <div class="driverscore clearfix">
+            <div class="score">{{selectedDriver.driverScore}}</div>
+            <span>Current Driver Score</span>
+            <img src="assets/img/mock_sparkline.png" width="245" />
+        </div>
+        <div class="trips">
+            {{!-- <h4>Trips</h4>
+            <ul>
+            {{#each trip in selectedCar.vehicle.trips}}
+                <li {{action "selectTrip" trip}}>
+                    {{pretty-Date trip.tripEvents.firstObject.timestamp}} <span class="badge">{{time-length trip.tripEvents.firstObject.timestamp trip.tripEvents.lastObject.timestamp}}</span>
+                </li>
+            {{else}}
+                <li>No trips recorded yet.</li>
+            {{/each}}
+            </ul> --}}
+        </div>
+    </div>
+</div>

@@ -10,8 +10,17 @@ export default Ember.ArrayController.extend({
     mapEntityTracker: [],
     trackedCars: [],
     selectedCar: null,
+    selectedDriver: null,
     showOnlyActiveCars: true,
     selectedTripPathEntityId: undefined,
+    driverViewVisible: false,
+
+    /**
+     * An array containing all the drivers in the store (aka on the API)
+     */
+    drivers: Ember.computed(function () {
+        return this.store.find('driver');
+    }),
 
     /**
      * Are any cars in the model?
@@ -446,6 +455,34 @@ export default Ember.ArrayController.extend({
                 path = map.entities.get(0);
 
             path.setLocations([]);
+        },
+
+        /**
+         * Toggles between the 'Drivers' and the 'Vehicles' card
+         */
+        toggleDriverView: function () {
+            this.toggleProperty('driverViewVisible');
+            this.send('toggleDriverIcon');
+        },
+
+        /**
+         * Marks a given driver as 'selected'
+         * @param  {Ember Data Record} device - Driver to select
+         */
+        selectDriver: function (driver) {
+            Ember.$('.driverlist').addClass('expanded');
+
+            this.set('selectedDriver', driver);
+            this.send('centerOnCar', driver);
+        },
+
+        /**
+         * Sets the currently selected driver to null
+         */
+        deselectDriver: function () {
+            Ember.$('.driverlist').removeClass('expanded');
+
+            this.set('selectedDriver', null);
         }
     }
 });

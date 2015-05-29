@@ -20,6 +20,13 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         },
 
         /**
+         * Toggle the driver view
+         */
+        toggleDriverIcon: function () {
+            Ember.$('#driversMenuButton').toggleClass('selected');
+        },
+
+        /**
          * Toggle the list of vehicles
          */
         toggleVehicleList: function () {
@@ -27,6 +34,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                 $icon = Ember.$('.vehicle-list > .card-content > .card-title > i');
 
             $container.toggleClass('collapsed');
+
             if ($icon.hasClass('mdi-navigation-expand-less')) {
                 $icon.removeClass('mdi-navigation-expand-less');
                 $icon.addClass('mdi-navigation-expand-more');
@@ -34,7 +42,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
                 $icon.removeClass('mdi-navigation-expand-more');
                 $icon.addClass('mdi-navigation-expand-less');
             }
-
         }
     }
 });

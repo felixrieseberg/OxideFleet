@@ -24,7 +24,8 @@ module.exports = function(environment) {
       },
       // TODO: Fill in with the correct address
       // Also - make sure we add CORS rules for this host
-      API_HOST: 'http://connected-car-api.azurewebsites.net'
+      // API_HOST: 'http://connected-car-api.azurewebsites.net'
+      API_HOST: 'http://demo2736407.mockable.io'
     },
     
     sassOptions: {
