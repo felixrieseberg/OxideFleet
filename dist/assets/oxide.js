@@ -990,6 +990,20 @@ define('oxide/controllers/dashboard', ['exports', 'ember'], function (exports, E
         }),
 
         /**
+         * Returns the trips driven by the currently selected driver
+         * @return {DS.PromiseArray} The trips driven by the selected driver
+         */
+        selectedDriverTrips: Ember['default'].computed(function () {
+            var selectedDriver = this.get("selectedDriver");
+
+            if (selectedDriver) {
+                return this.store.find("trips", { driver: selectedDriver });
+            } else {
+                return [];
+            }
+        }),
+
+        /**
          * Are any cars in the model?
          * @return {boolean}
          */
@@ -1315,7 +1329,7 @@ define('oxide/controllers/dashboard', ['exports', 'ember'], function (exports, E
                     });
 
                     // Tooltip
-                    this.send("addPinTooltip", pin, device.get("name"));
+                    this.send("createTooltipHandlers", pin, device.get("name"), device);
 
                     // Push objects to map
                     map.entities.push(pin);
@@ -1324,13 +1338,15 @@ define('oxide/controllers/dashboard', ['exports', 'ember'], function (exports, E
             },
 
             /**
-             * Adds a tooltip for a pushpin
+             * Adds a tooltip and a click handler for a pushpin
              * @param {object} pin pushin
              */
-            addPinTooltip: function addPinTooltip(pin, tooltipText) {
+            createTooltipHandlers: function createTooltipHandlers(pin, tooltipText, device) {
                 if (!pin || !tooltipText || !Microsoft || !Microsoft.Maps.Events) {
                     return;
                 }
+
+                var self = this;
 
                 // Create Mouse Over Handler
                 Microsoft.Maps.Events.addHandler(pin, "mouseover", function (e) {
@@ -1356,6 +1372,11 @@ define('oxide/controllers/dashboard', ['exports', 'ember'], function (exports, E
                 // Create Mouse Out Handler
                 Microsoft.Maps.Events.addHandler(pin, "mouseout", function () {
                     $(".tipr_container_bottom").remove();
+                });
+
+                // Create Click Handler
+                Microsoft.Maps.Events.addHandler(pin, "click", function () {
+                    self.send("selectCar", device);
                 });
             },
 
@@ -3140,6 +3161,108 @@ define('oxide/templates/-driver-selected-card', ['exports'], function (exports) 
   'use strict';
 
   exports['default'] = Ember.HTMLBars.template((function() {
+    var child0 = (function() {
+      return {
+        isHTMLBars: true,
+        revision: "Ember@1.11.0",
+        blockParams: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        build: function build(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("                ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("li");
+          var el2 = dom.createTextNode("\n                    ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createComment("");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode(" ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("span");
+          dom.setAttribute(el2,"class","badge");
+          var el3 = dom.createComment("");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n                ");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        render: function render(context, env, contextualElement) {
+          var dom = env.dom;
+          var hooks = env.hooks, get = hooks.get, element = hooks.element, inline = hooks.inline;
+          dom.detectNamespace(contextualElement);
+          var fragment;
+          if (env.useFragmentCache && dom.canClone) {
+            if (this.cachedFragment === null) {
+              fragment = this.build(dom);
+              if (this.hasRendered) {
+                this.cachedFragment = fragment;
+              } else {
+                this.hasRendered = true;
+              }
+            }
+            if (this.cachedFragment) {
+              fragment = dom.cloneNode(this.cachedFragment, true);
+            }
+          } else {
+            fragment = this.build(dom);
+          }
+          var element0 = dom.childAt(fragment, [1]);
+          var morph0 = dom.createMorphAt(element0,1,1);
+          var morph1 = dom.createMorphAt(dom.childAt(element0, [3]),0,0);
+          element(env, element0, context, "action", ["selectTrip", get(env, context, "trip")], {});
+          inline(env, morph0, context, "pretty-Date", [get(env, context, "trip.tripEvents.firstObject.timestamp")], {});
+          inline(env, morph1, context, "time-length", [get(env, context, "trip.tripEvents.firstObject.timestamp"), get(env, context, "trip.tripEvents.lastObject.timestamp")], {});
+          return fragment;
+        }
+      };
+    }());
+    var child1 = (function() {
+      return {
+        isHTMLBars: true,
+        revision: "Ember@1.11.0",
+        blockParams: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        build: function build(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("                ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("li");
+          var el2 = dom.createTextNode("No trips recorded yet.");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        render: function render(context, env, contextualElement) {
+          var dom = env.dom;
+          dom.detectNamespace(contextualElement);
+          var fragment;
+          if (env.useFragmentCache && dom.canClone) {
+            if (this.cachedFragment === null) {
+              fragment = this.build(dom);
+              if (this.hasRendered) {
+                this.cachedFragment = fragment;
+              } else {
+                this.hasRendered = true;
+              }
+            }
+            if (this.cachedFragment) {
+              fragment = dom.cloneNode(this.cachedFragment, true);
+            }
+          } else {
+            fragment = this.build(dom);
+          }
+          return fragment;
+        }
+      };
+    }());
     return {
       isHTMLBars: true,
       revision: "Ember@1.11.0",
@@ -3202,6 +3325,22 @@ define('oxide/templates/-driver-selected-card', ['exports'], function (exports) 
         dom.appendChild(el2, el3);
         var el3 = dom.createElement("div");
         dom.setAttribute(el3,"class","trips");
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("h4");
+        var el5 = dom.createTextNode("Trips");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("ul");
+        var el5 = dom.createTextNode("\n");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("            ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
         var el4 = dom.createTextNode("\n        ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
@@ -3215,7 +3354,7 @@ define('oxide/templates/-driver-selected-card', ['exports'], function (exports) 
       },
       render: function render(context, env, contextualElement) {
         var dom = env.dom;
-        var hooks = env.hooks, content = hooks.content, element = hooks.element;
+        var hooks = env.hooks, content = hooks.content, element = hooks.element, get = hooks.get, block = hooks.block;
         dom.detectNamespace(contextualElement);
         var fragment;
         if (env.useFragmentCache && dom.canClone) {
@@ -3233,14 +3372,16 @@ define('oxide/templates/-driver-selected-card', ['exports'], function (exports) 
         } else {
           fragment = this.build(dom);
         }
-        var element0 = dom.childAt(fragment, [0, 1]);
-        var element1 = dom.childAt(element0, [1]);
-        var element2 = dom.childAt(element1, [3]);
-        var morph0 = dom.createMorphAt(dom.childAt(element1, [1]),0,0);
-        var morph1 = dom.createMorphAt(dom.childAt(element0, [3, 1]),0,0);
+        var element1 = dom.childAt(fragment, [0, 1]);
+        var element2 = dom.childAt(element1, [1]);
+        var element3 = dom.childAt(element2, [3]);
+        var morph0 = dom.createMorphAt(dom.childAt(element2, [1]),0,0);
+        var morph1 = dom.createMorphAt(dom.childAt(element1, [3, 1]),0,0);
+        var morph2 = dom.createMorphAt(dom.childAt(element1, [5, 3]),1,1);
         content(env, morph0, context, "selectedDriver.name");
-        element(env, element2, context, "action", ["deselectDriver"], {});
+        element(env, element3, context, "action", ["deselectDriver"], {});
         content(env, morph1, context, "selectedDriver.driverScore");
+        block(env, morph2, context, "each", [get(env, context, "selectedDriverTrips")], {"keyword": "trip"}, child0, child1);
         return fragment;
       }
     };
@@ -9213,7 +9354,7 @@ catch(err) {
 if (runningTests) {
   require("oxide/tests/test-helper");
 } else {
-  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"API_HOST":"http://demo2736407.mockable.io","name":"oxide","version":"0.0.0.701bbfb9"});
+  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"API_HOST":"http://demo2736407.mockable.io","name":"oxide","version":"0.0.0.4abd52f7"});
 }
 
 /* jshint ignore:end */
