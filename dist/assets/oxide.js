@@ -2068,9 +2068,8 @@ define('oxide/serializers/device', ['exports', 'ember-data'], function (exports,
     'use strict';
 
     exports['default'] = DS['default'].LSSerializer.extend({
-        // TODO: Update with the actual principal.id
         extractSingle: function extractSingle(store, typeClass, payload) {
-            payload.vehicle = "54d01ed20eabba6304eded64";
+            payload.vehicle = payload.nitrogen_id;
             return this._super(store, typeClass, payload);
         }
     });
@@ -9354,7 +9353,7 @@ catch(err) {
 if (runningTests) {
   require("oxide/tests/test-helper");
 } else {
-  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"API_HOST":"http://demo2736407.mockable.io","name":"oxide","version":"0.0.0.4abd52f7"});
+  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"API_HOST":"http://connected-car-api.azurewebsites.net","name":"oxide","version":"0.0.0.311f59b0"});
 }
 
 /* jshint ignore:end */
