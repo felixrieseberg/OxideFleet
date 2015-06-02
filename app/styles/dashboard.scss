@@ -32,8 +32,8 @@
         width: $baseunit * 7;
         
         .card-title {
-            padding: 18px #{$marginunit * 2} 13px;
-            line-height: $font-size-title;
+            padding: #{($marginunit * 2) - ceil($font-size-title /8)} #{$marginunit * 2} #{($marginunit * 2) - ceil($font-size-title /8)};
+            line-height: $font-size-title + ceil($font-size-title / 4);
             font-weight: normal;
             color: color("shades", "black");
             overflow: hidden;
@@ -59,13 +59,14 @@
         }
 
         .filter-selector {
-            padding-left: 19px;
-            margin-top: -6px;
+            padding-left: #{$marginunit * 2};
+            margin: #{$marginunit * -1} 0 #{$marginunit} 0; 
         }
         
         /* Provides guaranteed padding inside scroll-overflow collections 
            without misaligning scroll bar */
-        .collection::before {
+           
+        .collection-wrapper::before {
             content: "";
             position:absolute;
             height: $marginunit;
@@ -82,7 +83,7 @@
             filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
         }
 
-        .collection::after {
+        .collection-wrapper::after {
             content: "";
             position:absolute;
             height: 30px;
@@ -122,12 +123,14 @@
             overflow-y: auto;
             max-height: calc(100vh * 0.70 - 50px);
             margin-bottom: $marginunit * -1;
-            padding: 0 20px 20px 20px;
+            padding: 0 #{$marginunit * 2} #{$marginunit * 2} #{$marginunit * 2};
             background-color: transparent;
+            position: relative;
         }
 
         .collection.carlist.expanded {
             max-height: calc(100vh * 0.70 - 250px);
+            height: 500px;
         }
 
         .collection-item.car {
@@ -137,8 +140,8 @@
 
             h4 {
                 font-size: $font-size-sub-headline;
-                margin: 0;
-                line-height: $font-size-sub-headline;
+                margin: #{(-1 * ceil($font-size-sub-headline / 4))} 0 0 0;
+                line-height: $font-size-sub-headline + ceil($font-size-sub-headline / 4);
                 text-transform: capitalize;  
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -158,6 +161,10 @@
 
         .collection.carlist {
             display: none;
+        }
+        
+        .filter-selector {
+            margin-bottom: 16px;
         }
     }
 
