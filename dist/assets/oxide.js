@@ -2226,7 +2226,7 @@ define('oxide/templates/-car-list', ['exports'], function (exports) {
           hasRendered: false,
           build: function build(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("                ");
+            var el1 = dom.createTextNode("                    ");
             dom.appendChild(el0, el1);
             var el1 = dom.createComment("");
             dom.appendChild(el0, el1);
@@ -2310,7 +2310,7 @@ define('oxide/templates/-car-list', ['exports'], function (exports) {
           hasRendered: false,
           build: function build(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("                ");
+            var el1 = dom.createTextNode("                    ");
             dom.appendChild(el0, el1);
             var el1 = dom.createComment("");
             dom.appendChild(el0, el1);
@@ -2449,13 +2449,20 @@ define('oxide/templates/-car-list', ['exports'], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n        ");
         dom.appendChild(el2, el3);
-        var el3 = dom.createElement("ul");
-        dom.setAttribute(el3,"class","carlist collection");
-        var el4 = dom.createTextNode("\n");
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3,"class","collection-wrapper");
+        var el4 = dom.createTextNode("\n            ");
         dom.appendChild(el3, el4);
-        var el4 = dom.createComment("");
+        var el4 = dom.createElement("ul");
+        dom.setAttribute(el4,"class","carlist collection");
+        var el5 = dom.createTextNode("\n");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("            ");
+        dom.appendChild(el4, el5);
         dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("        ");
+        var el4 = dom.createTextNode("\n        ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n    ");
@@ -2489,7 +2496,7 @@ define('oxide/templates/-car-list', ['exports'], function (exports) {
         var element0 = dom.childAt(fragment, [0, 1]);
         var element1 = dom.childAt(element0, [1, 3]);
         var morph0 = dom.createMorphAt(dom.childAt(element0, [3, 1, 1]),1,1);
-        var morph1 = dom.createMorphAt(dom.childAt(element0, [5]),1,1);
+        var morph1 = dom.createMorphAt(dom.childAt(element0, [5, 1]),1,1);
         element(env, element1, context, "action", ["toggleVehicleList"], {});
         inline(env, morph0, context, "input", [], {"type": "checkbox", "id": "showOnlyActiveCars", "checked": get(env, context, "showOnlyActiveCars")});
         block(env, morph1, context, "if", [get(env, context, "showOnlyActiveCars")], {}, child0, child1);
@@ -9353,7 +9360,7 @@ catch(err) {
 if (runningTests) {
   require("oxide/tests/test-helper");
 } else {
-  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"API_HOST":"http://connected-car-api.azurewebsites.net","name":"oxide","version":"0.0.0.311f59b0"});
+  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"API_HOST":"http://connected-car-api.azurewebsites.net","name":"oxide","version":"0.0.0.1afb624b"});
 }
 
 /* jshint ignore:end */

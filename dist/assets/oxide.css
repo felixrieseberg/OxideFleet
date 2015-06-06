@@ -8185,8 +8185,8 @@ div.preview {
     /* Provides guaranteed padding inside scroll-overflow collections 
            without misaligning scroll bar */ }
     .cards .card .card-title {
-      padding: 18px 16px 13px;
-      line-height: 20px;
+      padding: 13px 16px 13px;
+      line-height: 25px;
       font-weight: normal;
       color: #000000;
       overflow: hidden;
@@ -8204,9 +8204,9 @@ div.preview {
       padding: 0;
       border-radius: 0; }
     .cards .card .filter-selector {
-      padding-left: 19px;
-      margin-top: -6px; }
-    .cards .card .collection::before {
+      padding-left: 16px;
+      margin: -8px 0 8px 0; }
+    .cards .card .collection-wrapper::before {
       content: "";
       position: absolute;
       height: 8px;
@@ -8228,7 +8228,7 @@ div.preview {
       /* W3C */
       filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 );
       /* IE6-9 */ }
-    .cards .card .collection::after {
+    .cards .card .collection-wrapper::after {
       content: "";
       position: absolute;
       height: 30px;
@@ -8265,18 +8265,20 @@ div.preview {
     overflow-y: auto;
     max-height: calc(100vh * 0.70 - 50px);
     margin-bottom: -8px;
-    padding: 0 20px 20px 20px;
-    background-color: transparent; }
+    padding: 0 16px 16px 16px;
+    background-color: transparent;
+    position: relative; }
   .cards .card.vehicle-list .collection.carlist.expanded {
-    max-height: calc(100vh * 0.70 - 250px); }
+    max-height: calc(100vh * 0.70 - 250px);
+    height: 500px; }
   .cards .card.vehicle-list .collection-item.car {
     padding-left: 0;
     padding-top: 7px;
     padding-bottom: 1px; }
     .cards .card.vehicle-list .collection-item.car h4 {
       font-size: 14px;
-      margin: 0;
-      line-height: 14px;
+      margin: -4px 0 0 0;
+      line-height: 18px;
       text-transform: capitalize;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -8287,6 +8289,8 @@ div.preview {
     margin-bottom: 0; }
   .cards .card.vehicle-list.collapsed .collection.carlist {
     display: none; }
+  .cards .card.vehicle-list.collapsed .filter-selector {
+    margin-bottom: 16px; }
   .cards .card.car-selected .card-title {
     background-color: #DCF0FD; }
   .cards .card.car-selected .card-content .info {
