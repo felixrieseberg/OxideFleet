@@ -8274,7 +8274,8 @@ div.preview {
   .cards .card.vehicle-list .collection-item.car {
     padding-left: 0;
     padding-top: 7px;
-    padding-bottom: 1px; }
+    padding-bottom: 1px;
+    max-height: 43px; }
     .cards .card.vehicle-list .collection-item.car h4 {
       font-size: 14px;
       margin: -4px 0 0 0;

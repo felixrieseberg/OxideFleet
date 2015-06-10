@@ -9360,7 +9360,7 @@ catch(err) {
 if (runningTests) {
   require("oxide/tests/test-helper");
 } else {
-  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"API_HOST":"http://connected-car-api.azurewebsites.net","name":"oxide","version":"0.0.0.1afb624b"});
+  require("oxide/app")["default"].create({"nitrogen":{"host":"api.nitrogen.io","protocol":"https","http_port":443,"log_levels":["warn","error"]},"API_HOST":"http://connected-car-api.azurewebsites.net","name":"oxide","version":"0.0.0.82a06ec8"});
 }
 
 /* jshint ignore:end */
