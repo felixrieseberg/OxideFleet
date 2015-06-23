@@ -256,11 +256,6 @@ export default Ember.ArrayController.extend({
                 },
                 pathLocations, path, pin, i;
 
-            this.set('speed', Math.round(locations[locations.length - 1].speed));
-            this.set('lastLocation', lastLocation);
-            this.set('lat', lat.toFixed(4));
-            this.set('lon', lon.toFixed(4));
-
             for (i = 0; i < mapEntityTracker.length; i += 1) {
                 if (mapEntityTracker[i].name === name) {
                     path = map.entities.removeAt(mapEntityTracker[i].path);
@@ -461,8 +456,8 @@ export default Ember.ArrayController.extend({
             // Center map on beginning of path
             if (events && events.length > 0) {
                 this.send('centerMap', {
-                    'latitude': events[0].get('location').get('longitude'),
-                    'longitude': events[0].get('location').get('latitude')
+                    'latitude': events[0].get('location').get('latitude'),
+                    'longitude': events[0].get('location').get('longitude')
                 });
             }
         },
