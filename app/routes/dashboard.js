@@ -6,6 +6,19 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         return this.store.find('device');
     },
 
+    afterModel: function (devices) {
+        var promises = [];
+
+        // Preload the vehicles
+        for (var i = 0; i < devices.content.length; i = i + 1) {
+            promises.push(new Promise(resolve => {
+                devices.content[i].get('vehicle').then(() => resolve());
+            }));
+        }
+
+        return Ember.RSVP.all(promises);
+    },
+
     actions: {
         /**
          * Toggle the side/hamburger navigation
