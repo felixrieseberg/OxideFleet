@@ -121,7 +121,7 @@
     .card.vehicle-list {
         .collection.carlist {
             overflow-y: auto;
-            max-height: calc(100vh * 0.70 - 50px);
+            max-height: calc(100vh * 0.6 - 50px);
             margin-bottom: $marginunit * -1;
             padding: 0 #{$marginunit * 2} #{$marginunit * 2} #{$marginunit * 2};
             background-color: transparent;
@@ -129,7 +129,7 @@
         }
 
         .collection.carlist.expanded {
-            max-height: calc(100vh * 0.70 - 250px);
+            max-height: calc(100vh * 0.6 - 250px);
             height: 500px;
         }
 
