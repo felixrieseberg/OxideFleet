@@ -40,6 +40,7 @@
     "ember-export-application-global": "1.0.2",
     "ember-json-api": "git+https://git@github.com/eneuhauser/ember-json-api.git#jsonapi-rc3",
     "ember-localstorage-adapter": "0.5.3",
+    "ember-notify": "^3.3.4",
     "express": "^4.12.3",
     "glob": "^4.5.3",
     "grunt": "^0.4.5",
